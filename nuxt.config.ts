@@ -185,5 +185,9 @@ export default defineNuxtConfig({
       type: "module",
       suppressWarnings: true,
     },
+    client: {
+      installPrompt: true,
+      periodicSyncForUpdates: 60 * 60 // check for updates every hour
+    }
   },
 })
