@@ -111,7 +111,13 @@ export default defineNuxtConfig({
     supabaseSecretKey: process.env.SUPABASE_SECRET_KEY,
 
     whitelistedDomains: process.env.WHITELISTED_DOMAINS,
-    production: process.env.NODE_ENV === 'development' ? false : true
+    production: process.env.NODE_ENV === 'development' ? false : true,
+
+    vapidPublicKey: process.env.VAPID_PUBLIC_KEY,
+    vapidPrivateKey: process.env.VAPID_PRIVATE_KEY,
+    public: {
+      vapidPublicKey: process.env.VAPID_PUBLIC_KEY
+    },
 
   },
 

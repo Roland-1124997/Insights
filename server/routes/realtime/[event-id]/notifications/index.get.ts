@@ -1,12 +1,15 @@
 
-export default defineSupabaseEventHandler(async (event) => {
+export default defineSupabaseEventHandler(async (event, { user }) => {
 
     const emitter = getImapEmitter();
 
     const eventStream = createEventStream(event);
 
-    const push = (payload: unknown) => {
+    const push = async (payload: any) => {
+
+        if(payload.events.incoming) await useSendNotification(payload, user.id)
         eventStream.push(JSON.stringify(payload));
+
     };
 
     emitter.on('new', push);

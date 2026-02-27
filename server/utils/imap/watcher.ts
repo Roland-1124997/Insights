@@ -1,7 +1,6 @@
 import { consola } from "consola";
 import { EventEmitter } from 'events';
 import { setTimeout as wait } from 'timers/promises';
-import { randomUUID } from "crypto";
 
 import type { ImapFlow } from 'imapflow';
 
@@ -75,14 +74,17 @@ export const startImapWatcher = async () => {
                         source: true
                     })
 
-                    imapEmitter.emit('new', {
+                    const mailobject = {
                         data: data,
                         events: {
                             incoming: event === 'exists',
                             deleted: event === 'expunge',
                         },
                         unseen
-                    });
+                    }
+
+                    imapEmitter.emit('new', mailobject);
+
                 };
                 eventHandlers.set(event, handler);
                 client!.on(event as any, handler);

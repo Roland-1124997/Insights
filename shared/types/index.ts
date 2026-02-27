@@ -110,7 +110,7 @@ export type Buttons = {
     description?: string,
     isSmall?: boolean,
     isButton?: boolean,
-    onClick?: 'triggerFileSelect' | 'refresh',
+    onClick?: 'triggerFileSelect' | 'refresh' | 'subscribe' | 'unsubscribe'
 }
 
 export type ToolBar = {

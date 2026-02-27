@@ -1,3 +1,5 @@
+import { url } from "inspector";
+import webpush from "web-push";
 
 export const useMakePagination = (itemsPerPage: number = 16, page: number = 1) => {
 
@@ -44,4 +46,32 @@ export const formatSize = (bytes: number): string => {
     const size = bytes / Math.pow(base, unitIndex);
 
     return `${size.toFixed(2)} ${units[unitIndex]}`;
+};
+
+export const useSendNotification = async (payload: any, user_id: string) => {
+
+    const { vapidPublicKey, vapidPrivateKey } = useRuntimeConfig()
+
+    webpush.setVapidDetails(
+        'mailto:example@yourdomain.org',
+        vapidPublicKey,
+        vapidPrivateKey
+    );
+
+    const server = useSupaBaseServer()
+    const { data, error } = await server.from('subscriptions').select("*").eq("user_id", user_id).single()
+
+    if (error) return;
+
+    const body = JSON.stringify({
+        title: payload.data.subject,
+        message: (payload.data.preview as string).substring(0, 100) + "...",
+        url: `/berichten?id=${payload.data.id}`,
+        unseen: payload.unseen,
+    })
+
+    webpush.sendNotification(data.subscription as any, body)
+        .then(() => console.log('Notification sent'))
+        .catch(err => console.error('Error sending notification:', err));
+
 };

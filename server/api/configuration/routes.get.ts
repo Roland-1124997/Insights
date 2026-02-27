@@ -14,7 +14,9 @@ const createSearch = (context: string) => ({
     placeholder: `Zoek in ${context}...`,
 });
 
-const routes = cachedFunction((): Record<string, RouteType> => {
+
+
+const routes = (subscriptionActive: boolean): Record<string, RouteType> => {
 
     return {
         "/": {
@@ -49,6 +51,12 @@ const routes = cachedFunction((): Record<string, RouteType> => {
                         description: "Bestanden synchroniseren",
                         isButton: true,
                         onClick: "refresh",
+                    }),
+                    createButton({
+                        iconName: subscriptionActive ? "ri:notification-off-line" : "ri:notification-3-line",
+                        description: "Notificaties beheren",
+                        isButton: true,
+                        onClick: subscriptionActive ? "unsubscribe" : "subscribe",
                     }),
                 ],
                 filters: [
@@ -124,10 +132,14 @@ const routes = cachedFunction((): Record<string, RouteType> => {
             iconName: "akar-icons:telescope",
         }
     }
-}, {
-    maxAge: 60 * 60,
-    name: 'route-configuration',
-});
+}
 
-export default defineSupabaseEventHandler( (event) => routes());
+export default defineSupabaseEventHandler( async (event, { user, server }) => {
+    
+    const { data, error } = await server.from('subscriptions').select().eq("user_id", user.id).single()
+    
+    const subscriptionActive = !!data?.subscription
+    return routes(subscriptionActive)
+
+});
 

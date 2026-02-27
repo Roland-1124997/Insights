@@ -143,6 +143,34 @@ export type Database = {
                 }
                 Relationships: []
             }
+
+
+            subscriptions: {
+                Row: {
+                    id: string
+                    subscription: Json | null
+                    user_id: string
+                }
+                Insert: {
+                    id?: string
+                    subscription?: Json | null
+                    user_id: string
+                }
+                Update: {
+                    id?: string
+                    subscription?: Json | null
+                    user_id?: string
+                }
+                Relationships: []
+            },
+
+
+
+
+
+
+
+
             navigator_sessions: {
                 Row: {
                     city: string | null

@@ -14,8 +14,6 @@ export const useNotifications = defineStore("useNotifications", () => {
     const { addToast } = useToast();
     const { setBadge } = useBadge();
 
-    const { requestPermission, showNotification } = useNotification();
-
     const uri = "/api/notifications";
     const Request = useApiHandler<ApiResponse<any>>(uri);
 
@@ -171,11 +169,6 @@ export const useNotifications = defineStore("useNotifications", () => {
             if(data) updateMessageInList(data);
 
             await updateUnseenCount(unseen);
-            
-            if (unseen > 0 && events.incoming) await showNotification(data.subject, {
-                body: data.preview,
-                icon: "/icons/icon_512.png",
-            });
             
         });
 
@@ -412,7 +405,6 @@ export const useNotifications = defineStore("useNotifications", () => {
         markAsSeen,
         markAsUnseen,
         deleteMessage,
-        requestPermission,
         refresh,
         compose,
         selectMessage,

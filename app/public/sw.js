@@ -55,4 +55,22 @@ registerRoute(
     })
 );
 
+self.addEventListener("push", async (event) => {
+    const { title, message, url, unseen } = await event.data.json();
 
+    navigator.setAppBadge(unseen);
+
+    await self.registration.showNotification(title, {
+        body: message,
+        icon: "/icons/icon_512.png",
+        data: { url },
+    });
+});
+
+self.addEventListener("notificationclick", (event) => {
+    event.notification.close();
+
+    event.waitUntil(clients.matchAll({ type: "window" }).then(() => {
+        return clients.openWindow(event.notification.data.url);
+    }));
+});
