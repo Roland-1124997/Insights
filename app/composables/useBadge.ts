@@ -4,8 +4,8 @@ export const useBadge = () => {
         if(import.meta.server) return;
 
         try {
-            if (count > 0) await (navigator as any).setAppBadge(count);
-            else await (navigator as any).clearAppBadge();
+            if (count > 0) await navigator.setAppBadge(count);
+            else await navigator.clearAppBadge();
 
         } catch (error) {
             console.error('Failed to set app badge:', error);
@@ -16,7 +16,7 @@ export const useBadge = () => {
         if (import.meta.server) return;
 
         try {
-            await (navigator as any).clearAppBadge();
+            await navigator.clearAppBadge();
 
         } catch (error) {
             console.error('Failed to clear app badge:', error);
