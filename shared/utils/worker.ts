@@ -1,6 +1,6 @@
 export const getProviderName = (subscription: any) => {
 
-    if (!subscription) return "none"
+    if (!subscription) return null
 
     const endpoint = subscription.endpoint
 

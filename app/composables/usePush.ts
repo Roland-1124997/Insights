@@ -1,6 +1,9 @@
 
 export const usePush = async () => {
 
+    const { vapidPublicKey } = useRuntimeConfig().public
+    const vapidKey = vapidPublicKey?.trim().replace(/['",]/g, '')
+
     const url = "/api/integrations/subscription"
     const { Post, Delete } = useApiHandler(url)
 
@@ -39,9 +42,6 @@ export const usePush = async () => {
             const registration = await navigator.serviceWorker.ready
             if (!registration) return
 
-            const { vapidPublicKey } = useRuntimeConfig().public
-            const vapidKey = vapidPublicKey?.trim().replace(/['",]/g, '')
-
             const subscription = await registration.pushManager.subscribe({
                 userVisibleOnly: true,
                 applicationServerKey: urlBase64ToUint8Array(vapidKey)
@@ -50,7 +50,7 @@ export const usePush = async () => {
             if (!subscription) return
 
             const res = await Post({ body: { subscription } })
-
+            
             if (res !== undefined) {
                 addToast({
                     message: "Subscribed to push notifications successfully.",
@@ -119,31 +119,21 @@ export const usePush = async () => {
 
     const syncSubscription = async () => {
 
-        try {
-            if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-                return
-            }
+        postToWorker("SET_VAPID_KEY", { vapidKey: urlBase64ToUint8Array(vapidKey) })
 
-            const registration = await navigator.serviceWorker.ready
-            const subscription = await registration.pushManager.getSubscription()
-
-            if (!subscription && active.value) {
-
-                const { vapidPublicKey } = useRuntimeConfig().public
-                const vapidKey = vapidPublicKey?.trim().replace(/['",]/g, '')
-
-                const newSubscription = await registration.pushManager.subscribe({
-                    userVisibleOnly: true,
-                    applicationServerKey: urlBase64ToUint8Array(vapidKey)
-                })
-
-                if (provider.value === getProviderName(newSubscription)) await Post({ body: { subscription: newSubscription } })
-
-            }
-        } catch (error) { }
     }
 
     return { subscribe, unsubscribe, syncSubscription, active }
+}
+
+const postToWorker = async (type: string, payload: Record<string, unknown>) => {
+
+    const registration = await navigator.serviceWorker.getRegistration();
+
+    if (registration?.active) registration.active.postMessage({
+        type, payload
+    });
+    
 }
 
 const urlBase64ToUint8Array = (base64String: string) => {

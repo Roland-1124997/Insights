@@ -1,20 +1,18 @@
 <template>
-    <ClientOnly>
-      <VitePwaManifest />
-    </ClientOnly>
-    <NuxtRouteAnnouncer />
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
+	<ClientOnly>
+		<VitePwaManifest />
+	</ClientOnly>
+	<NuxtRouteAnnouncer />
+	<NuxtLayout>
+		<NuxtPage />
+	</NuxtLayout>
 </template>
 
 <script setup lang="ts">
 
   const { syncSubscription } = await usePush()
 
-  onMounted(async () => {
-    await syncSubscription()
-  })
-
+	onMounted(async () => {
+    await syncSubscription();
+	});
 </script>
-
