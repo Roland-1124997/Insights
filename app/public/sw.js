@@ -70,12 +70,12 @@ const checkSubscription = async () => {
 const scheduleNextCheck = () => {
     const now = new Date();
     const nextRun = new Date(now);
-    nextRun.setMinutes(Math.ceil(now.getMinutes() / 5) * 5, 0, 0);
+    nextRun.setMinutes(Math.ceil(now.getMinutes() / 2) * 2, 0, 0);
 
     const delay = nextRun.getTime() - now.getTime();
     setTimeout(() => {
         checkSubscription();
-        setInterval(checkSubscription, 1 * 60 * 1000);
+        setInterval(checkSubscription, 2 * 60 * 1000);
     }, delay);
 };
 
