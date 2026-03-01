@@ -75,7 +75,7 @@ const scheduleNextCheck = () => {
     const delay = nextRun.getTime() - now.getTime();
     setTimeout(() => {
         checkSubscription();
-        setInterval(checkSubscription, 5 * 60 * 1000);
+        setInterval(checkSubscription, 1 * 60 * 1000);
     }, delay);
 };
 
