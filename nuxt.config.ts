@@ -148,8 +148,8 @@ export default defineNuxtConfig({
     strategies: "injectManifest",
     registerType: 'autoUpdate',
     manifest: {
-      name: "dashboard",
-      short_name: "dashboard",
+      name: "Insights",
+      short_name: "Insights",
       description: "Personal dashboard application",
       orientation: "portrait",
       background_color: "#FFFFFF",
@@ -158,6 +158,22 @@ export default defineNuxtConfig({
       theme_color: "#FFFFFF",
       display: "standalone",
       display_override: ["window-controls-overlay", "standalone", "minimal-ui", "fullscreen", "browser"],
+      screenshots: [
+        {
+          "src": "screenshots/desktop.png",
+          "sizes": "2557x1414",
+          "type": "image/png",
+          "form_factor": "wide",
+          "label": "Desktop screen showing main dashboard with various widgets and charts"
+        },
+        {
+          "src": "screenshots/mobile.png",
+          "sizes": "708x1439",
+          "type": "image/png",
+          "platform": "ios",
+          "label": "Mobile screen showing main navigation and featured content"
+        }
+      ],
       icons: [
         {
           src: "icons/icon_120.png",
