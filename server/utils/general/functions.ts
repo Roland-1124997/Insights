@@ -75,7 +75,6 @@ export const useSendServiceWorkerPushEvent = async (payload: any) => {
     if(!error) for (const data of subscriptions) {
 
         webpush.sendNotification({ endpoint: data.endpoint, keys: data.keys } as any, JSON.stringify(payload))
-            .then(() => consola.info('[Notification] Notification sent successfully'))
             .catch(err => consola.error('[Notification] Error sending notification:', err));
 
     }
