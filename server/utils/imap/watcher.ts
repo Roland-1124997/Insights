@@ -50,10 +50,7 @@ const IDLE_TIMEOUT = 25 * 60 * 1000; // 25 minutes (IMAP spec is 29 min, we reco
 const MAX_RETRY_DELAY = 30_000;
 
 export const startImapWatcher = async () => {
-    if (started) {
-        consola.info('[IMAP Watcher] Already started, skipping...');
-        return;
-    }
+    if (started) return;
 
     started = true;
     stopped = false;
@@ -76,9 +73,7 @@ export const startImapWatcher = async () => {
             if (client.authenticated) {
                 await client.logout();
             }
-        } catch (error) {
-            consola.error('[IMAP Watcher] Cleanup error:', error);
-        }
+        } catch (error) { }
     };
 
     const connectAndWatch = async () => {
@@ -110,12 +105,11 @@ export const startImapWatcher = async () => {
 
             // Handle connection errors
             client.on('error', (err: Error) => {
-                consola.error('[IMAP Watcher] Client error:', err);
                 stopped = true; // Trigger reconnect
             });
 
             client.on('close', () => {
-                consola.warn('[IMAP Watcher] Connection closed');
+                consola.info('[IMAP Watcher] Connection closed');
             });
 
             // IDLE loop with timeout protection
@@ -134,7 +128,6 @@ export const startImapWatcher = async () => {
                         break; // Break to reconnect
                     }
                 } catch (error) {
-                    consola.error('[IMAP Watcher] IDLE error:', error);
                     break; // Break to reconnect
                 }
             }
@@ -157,7 +150,6 @@ export const startImapWatcher = async () => {
                 await connectAndWatch();
 
                 if (stopped) {
-                    consola.info('[IMAP Watcher] Stopped, not reconnecting');
                     break;
                 }
 
@@ -168,27 +160,22 @@ export const startImapWatcher = async () => {
                 await wait(delay);
 
             } catch (error) {
-                consola.error('[IMAP Watcher] Connection error:', error);
                 await wait(5000); // Wait before retry
             }
         }
 
         started = false;
-        consola.info('[IMAP Watcher] Exited reconnection loop');
     })();
 };
 
 export const stopImapWatcher = async () => {
-    consola.info('[IMAP Watcher] Stopping watcher...');
     stopped = true;
 
     // Force close current client if exists
     if (currentClient) {
         try {
             await currentClient.logout();
-        } catch (error) {
-            consola.error('[IMAP Watcher] Error during logout:', error);
-        }
+        } catch (error) { }
         currentClient = null;
     }
 
