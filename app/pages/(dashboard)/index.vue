@@ -18,18 +18,18 @@
 			</article>
 
 			<article class="w-full col-span-1 p-6 bg-white border rounded-lg">
-				<h2 class="mb-3 text-xl font-bold">Meest gebruikte apparaten</h2>
+				<h2 class="mb-1 text-xl font-bold">Meest gebruikte apparaten</h2>
+				<p class="mb-1 text-sm text-gray-600">Meest gebruikte apparaten van je bezoekers</p>
 
 				<NuxtLink to="/statistieken/apparaten" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline"> Meer details <icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" /> </NuxtLink>
-
 				<UtilsAnalyticsChartsDevices :metrics="store.metrics" :data="store.metrics?.devices" />
 			</article>
 
 			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-3">
 				<div class="flex flex-col justify-between w-full md:items-center md:flex-row">
-					<div class="mb-3 md:mb-6">
+					<div class="mb-1 md:mb-6">
 						<h2 class="mb-1 text-xl font-bold">Breakdown per pagina</h2>
-						<p class="text-sm text-gray-600">Een overzicht van de belangrijkste statistieken per pagina,</p>
+						<p class="text-sm text-gray-600">Meest bezochte pagina's van je website</p>
 					</div>
 
 					<NuxtLink to="/statistieken/pagina's" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline"> Meer details <icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" /> </NuxtLink>
@@ -46,10 +46,8 @@
 			</article>
 
 			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-1">
-				<div class="mb-3">
-					<h2 class="mb-1 text-xl font-bold">Top landen</h2>
-					<p class="text-sm text-gray-600">De landen waaruit je meeste bezoekers komen,</p>
-				</div>
+				<h2 class="mb-1 text-xl font-bold">Top landen</h2>
+				<p class="mb-1 text-sm text-gray-600">De landen waaruit je meeste bezoekers komen,</p>
 
 				<NuxtLink to="/statistieken/landen" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline"> Meer details <icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" /> </NuxtLink>
 
@@ -88,7 +86,7 @@
 			},
 		],
 	});
-	
+
 	const store = useAnalytics();
 	const { filter } = useFilter();
 </script>
