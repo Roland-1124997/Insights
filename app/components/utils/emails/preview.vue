@@ -7,7 +7,7 @@
 				</button>
 			</div>
 			<div class="space-y-3 md:mt-2">
-				<h1 id="message-subject" class="text-xl font-bold leading-tight text-gray-900 text-balance md:text-2xl">
+				<h1 id="message-subject" class="text-xl font-bold leading-tight text-gray-900 line-clamp-1 text-balance md:text-2xl">
 					{{ store.selected.subject || "(Geen onderwerp)" }}
 				</h1>
 
@@ -29,7 +29,9 @@
 		<div class="flex-1 py-2 overflow-y-auto md:p-4" aria-label="Bericht inhoud">
 			<article class="prose text-gray-800 max-w-none">
 				<div class="text-balance">
-					<div v-html="store.selected.html" class="space-y-3 text-balance viewer"></div>
+					<div class="w-full h-[46vh] border border-gray-200 rounded overflow-hidden">
+						<iframe :srcdoc="store.selected.html" sandbox="" :title="store.selected.subject" class="w-full h-full"></iframe>
+					</div>
 				</div>
 			</article>
 		</div>
@@ -45,8 +47,6 @@
 </template>
 
 <script setup lang="ts">
-
-    const store = useNotifications()
-    store.openMessageById((store.activeMessageId as string) || "");
-	
+	const store = useNotifications();
+	store.openMessageById((store.activeMessageId as string) || "");
 </script>

@@ -26,7 +26,7 @@
 		<div class="flex-1 py-2 overflow-y-auto max-h-[50vh] pb-4 md:p-4" aria-label="Bericht inhoud">
 			<article class="prose text-gray-800 max-w-none">
 				<div class="text-balance">
-					<div v-html="props.message.html" class="space-y-3 text-balance viewer"></div>
+					<iframe :srcdoc="props.message.html" sandbox="" :title="props.message.html" class="w-full h-[46vh]"></iframe>
 				</div>
 			</article>
 		</div>
