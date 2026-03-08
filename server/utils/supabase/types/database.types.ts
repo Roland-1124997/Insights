@@ -146,26 +146,26 @@ export type Database = {
             subscriptions: {
                 Row: {
                     created_at: string
-                    endpoint: string | null
+                    endpoint: string
                     url_provider: string | null
                     id: string
-                    keys: Json | null
+                    keys: string
                     user_id: string | null
                 }
                 Insert: {
                     created_at?: string
-                    endpoint?: string | null
+                    endpoint?: string
                     url_provider?: string | null
                     id?: string
-                    keys?: Json | null
+                    keys?: string
                     user_id?: string | null
                 }
                 Update: {
                     created_at?: string
-                    endpoint?: string | null
+                    endpoint?: string
                     url_provider?: string | null
                     id?: string
-                    keys?: Json | null
+                    keys?: string
                     user_id?: string | null
                 }
                 Relationships: []

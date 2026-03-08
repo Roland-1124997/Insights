@@ -98,7 +98,10 @@ export const paginate = (repositories: Repositories, repositoriesPerPage: number
     };
 };
 
-export const useEncryptValue = (value: string) => {
+export const useEncryptValue = (value: string, stringify: boolean = false) => {
+
+    value = stringify ? JSON.stringify(value) : value;
+
     const key = config.SaltToken;
     const cipher = crypto.createCipheriv('aes-256-cbc', key, Buffer.alloc(16));
     let encrypted = cipher.update(value, 'utf8', 'hex');
@@ -106,12 +109,12 @@ export const useEncryptValue = (value: string) => {
     return encrypted;
 };
 
-export const useDecryptValue = (encryptedValue: string) => {
+export const useDecryptValue = (encryptedValue: string, parse: boolean = false) => {
     const key = config.SaltToken;
     const decipher = crypto.createDecipheriv('aes-256-cbc', key, Buffer.alloc(16));
     let decrypted = decipher.update(encryptedValue, 'hex', 'utf8');
     decrypted += decipher.final('utf8');
-    return decrypted;
+    return parse ? JSON.parse(decrypted) : decrypted;
 };
 
 export const useSaveInstall = async (

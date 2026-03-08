@@ -11,20 +11,20 @@ export const useMakePagination = (itemsPerPage: number = 16, page: number = 1) =
 }
 
 export const types: FileType[] = [
-    { extension: "png",     label: "Afbeelding",        color: "#1e40af",   background: "#eff6ff" },
-    { extension: "jpg",     label: "Afbeelding",        color: "#1e40af",   background: "#eff6ff" },
-    { extension: "jpeg",    label: "Afbeelding",        color: "#1e40af",   background: "#eff6ff" },
-    { extension: "gif",     label: "Afbeelding",        color: "#1e40af",   background: "#eff6ff" },
-    { extension: "webp",    label: "Afbeelding",        color: "#1e40af",   background: "#eff6ff" },
-    { extension: "pdf",     label: "PDF Document",      color: "#991b1b",   background: "#fef2f2" },
-    { extension: "doc",     label: "Word Document",     color: "#3730a3",   background: "#eef2ff" },
-    { extension: "docx",    label: "Word Document",     color: "#3730a3",   background: "#eef2ff" },
-    { extension: "xls",     label: "Excel Document",    color: "#166534",   background: "#f0fdf4" },
-    { extension: "xlsx",    label: "Excel Document",    color: "#166534",   background: "#f0fdf4" },
-    { extension: "ppt",     label: "PowerPoint",        color: "#9a3412",   background: "#fff7ed" },
-    { extension: "pptx",    label: "PowerPoint",        color: "#9a3412",   background: "#fff7ed" },
-    { extension: "txt",     label: "Tekst Document",     color: "#1f2937",   background: "#f9fafb" },
-    { extension: "zip",     label: "ZIP Archief",       color: "#6b21a8",   background: "#faf5ff" },
+    { extension: "png", label: "Afbeelding", color: "#1e40af", background: "#eff6ff" },
+    { extension: "jpg", label: "Afbeelding", color: "#1e40af", background: "#eff6ff" },
+    { extension: "jpeg", label: "Afbeelding", color: "#1e40af", background: "#eff6ff" },
+    { extension: "gif", label: "Afbeelding", color: "#1e40af", background: "#eff6ff" },
+    { extension: "webp", label: "Afbeelding", color: "#1e40af", background: "#eff6ff" },
+    { extension: "pdf", label: "PDF Document", color: "#991b1b", background: "#fef2f2" },
+    { extension: "doc", label: "Word Document", color: "#3730a3", background: "#eef2ff" },
+    { extension: "docx", label: "Word Document", color: "#3730a3", background: "#eef2ff" },
+    { extension: "xls", label: "Excel Document", color: "#166534", background: "#f0fdf4" },
+    { extension: "xlsx", label: "Excel Document", color: "#166534", background: "#f0fdf4" },
+    { extension: "ppt", label: "PowerPoint", color: "#9a3412", background: "#fff7ed" },
+    { extension: "pptx", label: "PowerPoint", color: "#9a3412", background: "#fff7ed" },
+    { extension: "txt", label: "Tekst Document", color: "#1f2937", background: "#f9fafb" },
+    { extension: "zip", label: "ZIP Archief", color: "#6b21a8", background: "#faf5ff" },
 ];
 
 const getProperty = (types: FileType[], extension: string, property: "label" | "color" | 'background'): string => {
@@ -72,10 +72,14 @@ export const useSendServiceWorkerPushEvent = async (payload: any) => {
 
     const { data: subscriptions, error } = await useGetVapidDetails()
 
-    if(!error) for (const data of subscriptions) {
+    if (!error) for (const data of subscriptions) {
 
-        webpush.sendNotification({ endpoint: data.endpoint, keys: data.keys } as any, JSON.stringify(payload))
-            .catch(err => consola.error('[Notification] Error sending notification:', err));
+        webpush.sendNotification({ 
+            endpoint: useDecryptValue(data.endpoint), 
+            keys: useDecryptValue(data.keys, true) 
+        }, JSON.stringify(payload))
+        
+        .catch(err => consola.error('[Notification] Error sending notification:', err));
 
     }
 

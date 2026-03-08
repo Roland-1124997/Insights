@@ -1,5 +1,5 @@
 <template>
-	<div :class="!disablePwaPrompt ? 'flex-col' : 'flex'" class="fixed top-0 left-0 flex items-start justify-center w-full h-screen overflow-x-hidden overflow-y-visible">
+	<div :class="!disablePwaPrompt ? 'flex-col' : 'flex'" class="fixed top-0 left-0 flex items-start justify-center w-full h-screen overflow-hidden">
 		<ClientOnly>
 			<UtilsInstallPrompt v-if="!disablePwaPrompt" />
 		</ClientOnly>

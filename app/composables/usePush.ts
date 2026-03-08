@@ -11,7 +11,7 @@ export const usePush = async () => {
     const active = ref(false)
 
     const channel = new BroadcastChannel('sw-messages');
-    
+
     channel.addEventListener('message', event => {
         const { type, payload } = event.data
         if (type === "SUBSCRIPTION_UPDATED") active.value = payload.active
@@ -52,16 +52,22 @@ export const usePush = async () => {
 
             if (!subscription) return
 
-            const res = await Post({ body: subscription })
+            const { error } = await Post({ body: subscription })
 
-            if (res !== undefined) {
-                addToast({
-                    message: "Subscribed to push notifications successfully.",
-                    type: "success",
-                    duration: 5000,
-                })
-                active.value = true
-            }
+            if (error) return addToast({
+                message: `Subscription to push notifications failed`,
+                type: "error",
+                duration: 5000,
+            })
+
+            addToast({
+                message: "Subscribed to push notifications successfully.",
+                type: "success",
+                duration: 5000,
+            })
+
+            active.value = true
+
         } catch (error) {
             addToast({
                 message: `An error occurred: ${error}`,
@@ -102,7 +108,13 @@ export const usePush = async () => {
                 throw new Error("Failed to unsubscribe from push")
             }
 
-            await Delete()
+            const { error } = await Delete()
+
+            if (error) return addToast({
+                message: `Failed to remove server subscription: ${error}`,
+                type: "error",
+                duration: 5000,
+            })
 
             addToast({
                 message: "Unsubscribed from push notifications successfully.",
