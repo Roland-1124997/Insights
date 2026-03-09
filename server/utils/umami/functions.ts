@@ -1,4 +1,4 @@
-const { UMAMI_API_KEY } = useRuntimeConfig();
+const { UMAMI_API_KEY, production } = useRuntimeConfig();
 
 const headers = { "x-umami-api-key": UMAMI_API_KEY };
 const baseUrl = `https://api.umami.is/v1/websites/d10b0ef2-b433-4f78-8f78-724e711e541a`;
@@ -48,22 +48,24 @@ export const formulateDates = (filter: string) => {
     const month = nowDate.getMonth();
     const day = nowDate.getDate();
 
-    let startAt = new Date(year, month, day, 0, 0, 0, 0).getTime();
-    let endAt = new Date(year, month, day, 23, 59, 59, 999).getTime();
+    const oneHour = production ? -60 * 60 * 1000 : 0; // Op production 1 uur aftrekken
+
+    let startAt = new Date(year, month, day, 0, 0, 0, 0).getTime() + oneHour;
+    let endAt = new Date(year, month, day, 23, 59, 59, 999).getTime() + oneHour;
 
     if (filter === 'week') {
-        startAt = new Date(year, month, day - nowDate.getDay(), 0, 0, 0, 0).getTime()
-        endAt = new Date(year, month, day + (6 - nowDate.getDay()), 23, 59, 59, 999).getTime()
+        startAt = new Date(year, month, day - nowDate.getDay(), 0, 0, 0, 0).getTime() + oneHour;
+        endAt = new Date(year, month, day + (6 - nowDate.getDay()), 23, 59, 59, 999).getTime() + oneHour;
     }
 
     if (filter === 'maand') {
-        startAt = new Date(year, month, 1, 0, 0, 0, 0).getTime();
-        endAt = new Date(year, month + 1, 0, 23, 59, 59, 999).getTime();
+        startAt = new Date(year, month, 1, 0, 0, 0, 0).getTime() + oneHour;
+        endAt = new Date(year, month + 1, 0, 23, 59, 59, 999).getTime() + oneHour;
     }
 
     if (filter === 'jaar') {
-        startAt = new Date(year, 0, 1, 0, 0, 0, 0).getTime();
-        endAt = new Date(year, 11, 31, 23, 59, 59, 999).getTime();
+        startAt = new Date(year, 0, 1, 0, 0, 0, 0).getTime() + oneHour;
+        endAt = new Date(year, 11, 31, 23, 59, 59, 999).getTime() + oneHour;
     }
 
     return { startAt, endAt };
