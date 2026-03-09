@@ -41,7 +41,8 @@ export const useFetchAnalytics = defineCachedFunction(async (key: string, query:
 
 export const formulateDates = (filter: string) => {
 
-    const nowDate = new Date();
+    const timezone = 'Europe/Amsterdam';
+    const nowDate = new Date(new Date().toLocaleString('en-US', { timeZone: timezone }));
 
     const year = nowDate.getFullYear();
     const month = nowDate.getMonth();
