@@ -3,7 +3,7 @@
 		<h1 class="mb-1 text-2xl font-bold">Statistieken Landen</h1>
 		<p class="mb-6 text-sm text-gray-500">Hier kun je alle statistieken van de landen bekijken.</p>
 
-		<UtilsTable name="countries" :data="store.metrics?.countries.values" :categories />
+		<UtilsTable name="countries" :data="store.metrics?.countries.values || []" :categories />
 	</div>
 </template>
 

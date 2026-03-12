@@ -3,7 +3,7 @@
 		<h1 class="mb-1 text-2xl font-bold">Statistieken Apparaten</h1>
 		<p class="mb-6 text-sm text-gray-500">Hier kun je alle statistieken van de apparaten bekijken.</p>
 
-		<UtilsTable name="devices" :data="store.metrics?.devices.values" :categories />
+		<UtilsTable name="devices" :data="store.metrics?.devices.values || []" :categories />
 	</div>
 </template>
 

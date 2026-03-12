@@ -25,11 +25,7 @@
 				
 			</tbody>
 			<tbody v-else class="bg-white">
-				<tr>
-					<td colspan="100%" class="px-4 py-3 text-sm text-center text-gray-500">
-						Geen gegevens beschikbaar
-					</td>
-				</tr>
+				<UtilsTableRowSkeleton v-for="i in visable" :key="i" :categories :decorator="decorator" :isSmall :isOpen />
 			</tbody>
 		</table>
 	</div>

@@ -15,8 +15,8 @@
 			</button>
 		</nav>
 
-		<ClientOnly v-if="metrics">
-			<ChartsDonut :active="activedDevice" :data="data.values" :categories="data.categories" :height="300" :arc-width="40" />
+		<ClientOnly v-if="metrics && data.values.length >= 1">
+			<ChartsDonut :active="activedDevice" :data="data?.values" :categories="data.categories" :height="300" :arc-width="40" />
 			<template #fallback>
 				<div aria-hidden class="flex items-center justify-center mt-16 h-[300px]">
 					<div class="relative w-[19rem] h-[19rem]">

@@ -1,7 +1,7 @@
 <template>
 	<UtilsApp>
 		<UtilsNavigation>
-			<main class="flex-1 p-4 overflow-y-auto ">
+			<main class="flex-1 p-4 overflow-x-hidden overflow-y-auto ">
 				<div class="mx-auto">
 					<slot></slot>
 				</div>

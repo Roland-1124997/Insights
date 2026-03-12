@@ -3,7 +3,7 @@
 		<h1 class="mb-1 text-2xl font-bold">Statistieken Pagina's</h1>
 		<p class="mb-6 text-sm text-gray-500">Hier kun je alle statistieken van de pagina's bekijken.</p>
 
-		<UtilsTable name="pages" :data="store.metrics?.pages.values" :categories />
+		<UtilsTable name="pages" :data="store.metrics?.pages.values || []" :categories />
 	</div>
 </template>
 

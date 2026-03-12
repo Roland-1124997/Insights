@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<UtilsTable :name :data="data.slice(0, visable)" :categories :isSmall :isOpen :visable :loading/>
+		<UtilsTable :name :data="data?.slice(0, visable) || []" :categories :isSmall :isOpen :visable :loading/>
 	</div>
 </template>
 

@@ -3,18 +3,24 @@
 		<h1 class="hidden mb-6 text-2xl font-bold md:flex">Statistieken Overzicht</h1>
 
 		<section class="relative grid grid-cols-2 gap-3 md:grid-cols-4">
-			<ClientOnly>
-				<UtilsAnalyticsQuickView :data="store.statistics" />
-				<template #fallback>
-					<UtilsAnalyticsSkeleton />
-				</template>
-			</ClientOnly>
+			<template v-if="store.statistics">
+				<ClientOnly>
+					<UtilsAnalyticsQuickView :data="store.statistics || []" />
+					<template #fallback>
+						<UtilsAnalyticsSkeleton />
+					</template>
+				</ClientOnly>
+			</template>
+
+			<template v-else> 
+				<UtilsAnalyticsSkeleton />
+			</template>
 		</section>
 
 		<section class="grid w-full grid-cols-1 mt-3 gap-y-3 md:gap-3 md:grid-cols-3 h-fit pb-[5.5rem] md:pb-0">
 			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-2">
 				<h2 class="mb-1 text-xl font-bold">Meest bezochte pagina's</h2>
-				<UtilsAnalyticsChartsPages :metrics="store.metrics" :data="store.metrics?.pages" />
+				<UtilsAnalyticsChartsPages :metrics="store.metrics || []" :data="store.metrics?.pages || []" />
 			</article>
 
 			<article class="w-full col-span-1 p-6 bg-white border rounded-lg">
@@ -22,10 +28,10 @@
 				<p class="mb-1 text-sm text-gray-600">Meest gebruikte apparaten van je bezoekers</p>
 
 				<NuxtLink to="/statistieken/apparaten" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline"> Meer details <icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" /> </NuxtLink>
-				<UtilsAnalyticsChartsDevices :metrics="store.metrics" :data="store.metrics?.devices" />
+				<UtilsAnalyticsChartsDevices :metrics="store.metrics || []" :data="store.metrics?.devices || []" />
 			</article>
 
-			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-3">
+			 <article class="w-full col-span-1 p-6 border rounded-lg md:col-span-3">
 				<div class="flex flex-col justify-between w-full md:items-center md:flex-row">
 					<div class="mb-1 md:mb-6">
 						<h2 class="mb-1 text-xl font-bold">Breakdown per pagina</h2>
@@ -35,23 +41,23 @@
 					<NuxtLink to="/statistieken/pagina's" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline"> Meer details <icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" /> </NuxtLink>
 				</div>
 
-				<UtilsAnalyticsCardsViewer name="pages" :visable="6" :data="store.metrics?.pages.values" />
+				<UtilsAnalyticsCardsViewer name="pages" :visable="6" :data="store.metrics?.pages.values || []" />
 			</article>
 
 			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-2">
 				<h2 class="mb-1 text-xl font-bold">Bezoekers per land</h2>
 				<p class="mb-6 text-sm text-gray-600">Een visuele weergave van waar je bezoekers vandaan komen,</p>
-				<UtilsAnalyticsChartsWorld :metrics="store.metrics" :data="store.metrics?.countries.values" />
+				<UtilsAnalyticsChartsWorld :metrics="store.metrics || []" :data="store.metrics?.countries.values || []" />
 			</article>
 
-			<article class="w-full col-span-1 p-6 border rounded-lg md:col-span-1">
+			 <article class="w-full col-span-1 p-6 border rounded-lg md:col-span-1">
 				<h2 class="mb-1 text-xl font-bold">Top landen</h2>
 				<p class="mb-1 text-sm text-gray-600">De landen waaruit je meeste bezoekers komen,</p>
 
 				<NuxtLink to="/statistieken/landen" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline"> Meer details <icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" /> </NuxtLink>
 
 				<div class="pt-3">
-					<UtilsAnalyticsCardsViewer name="countries" :visable="3" :data="store.metrics?.countries.values" :isSmall="true" :isOpen="true" />
+					<UtilsAnalyticsCardsViewer name="countries" :visable="3" :data="store.metrics?.countries.values || []" :isSmall="true" :isOpen="true" />
 				</div>
 			</article>
 		</section>

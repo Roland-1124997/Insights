@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<ClientOnly v-if="metrics">
+		<ClientOnly v-if="metrics && data.length >= 1">
 			<div class="pt-3 overflow-hidden">
 				<div class="">
 					<LazyChartsWorldmap :data="data" :zoom-extent="[2.6, 45]" />
@@ -27,6 +27,8 @@
 <script setup lang="ts">
 	defineProps<{
 		metrics: object;
-		data: object;
+		data: Array<{
+			label: string;
+		}>;
 	}>();
 </script>
