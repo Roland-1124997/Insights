@@ -1,3 +1,5 @@
+import { invalidateStorageFilesCache } from '../../../utils/storage/functions';
+
 export default defineSupabaseEventHandler(async (event, { server }) => {
 
     const id = getRouterParam(event, "id")
@@ -8,10 +10,12 @@ export default defineSupabaseEventHandler(async (event, { server }) => {
 
     if (error || fetchError) return useReturnResponse(event, internalServerError)
 
-    if(attachments.length > 0) {
+    if (attachments.length > 0) {
         const paths = attachments?.map((item) => `/${item.name}`)
         await server.storage.from('stores').remove(paths)
     }
+
+    await invalidateStorageFilesCache();
 
     return useReturnResponse(event, {
         status: {

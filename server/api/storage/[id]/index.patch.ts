@@ -1,4 +1,6 @@
 
+import { invalidateStorageFilesCache } from '../../../utils/storage/functions';
+
 export default defineSupabaseEventHandler(async (event, { server }) => {
 
     const id = getRouterParams(event).id;
@@ -7,11 +9,13 @@ export default defineSupabaseEventHandler(async (event, { server }) => {
     const { data, error } = await server.from('attachments').select('*').eq('id', id).single();
     if (error || !data) return useReturnResponse(event, internalServerError);
 
-    const { error: insertError} = await server.from('attachments').update({
+    const { error: insertError } = await server.from('attachments').update({
         published: !data.published
     }).eq('name', data.name)
 
-    if (insertError) useReturnResponse(event, internalServerError)
+    if (insertError) return useReturnResponse(event, internalServerError)
+
+    await invalidateStorageFilesCache();
 
     return useReturnResponse(event, {
         status: {

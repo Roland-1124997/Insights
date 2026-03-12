@@ -1,3 +1,5 @@
+import { invalidateStorageFilesCache } from '../../utils/storage/functions';
+
 export default defineSupabaseEventHandler(async (event, { server }) => {
 
     const articleId = getQuery(event).articleId as string | undefined;
@@ -17,8 +19,8 @@ export default defineSupabaseEventHandler(async (event, { server }) => {
         })
 
         const { error: upsertError } = await server.from('attachments').upsert({
-            id: data?.id, 
-            name: data?.path || '', 
+            id: data?.id,
+            name: data?.path || '',
             published: published,
             article_id: articleId,
             updated_at: new Date().toISOString(),
@@ -42,6 +44,8 @@ export default defineSupabaseEventHandler(async (event, { server }) => {
             }
         });
     }
+
+    await invalidateStorageFilesCache();
 
     return useReturnResponse(event, {
         status: {

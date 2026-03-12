@@ -1,4 +1,6 @@
 
+import { invalidateStorageFilesCache } from '../../../utils/storage/functions';
+
 export default defineSupabaseEventHandler(async (event, { server }) => {
 
     const id = getRouterParams(event).id;
@@ -9,6 +11,8 @@ export default defineSupabaseEventHandler(async (event, { server }) => {
 
     const { error: storageError } = await server.storage.from('stores').remove([data.name]);
     if (storageError) return useReturnResponse(event, internalServerError);
+
+    await invalidateStorageFilesCache();
 
     return useReturnResponse(event, {
         status: {
