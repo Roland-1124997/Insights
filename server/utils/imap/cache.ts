@@ -80,20 +80,21 @@ export const buildImapMessagesResponse = (allMessages: any[], options: ImapMessa
         options.limit
     );
 
-    if (page > total || totalMessages === 0) {
-        return { data: null, unseen, error: true as const };
+    const pagination = {
+        current_page: page,
+        total_Pages: total,
     }
 
+    if (totalMessages === 0) return { data: null, unseen, pagination: null, error: true as const};
+    if (page > total || page < 1) return { data: null, unseen, pagination, error: true as const };
+    
     const startIndex = (page - 1) * options.limit;
     const paginatedMessages = messages.slice(startIndex, startIndex + options.limit);
 
     return {
         data: { messages: paginatedMessages },
-        unseen,
-        pagination: {
-            current_page: page,
-            total_Pages: total,
-        }
+        unseen, pagination, error: false as const
+
     };
 };
 

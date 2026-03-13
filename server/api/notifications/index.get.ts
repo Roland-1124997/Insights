@@ -3,78 +3,40 @@ export default defineSupabaseEventHandler(async (event, { server }) => {
     const search = String(getQuery(event).search || '');
     const filter = String(getQuery(event).filter || '');
 
-    const cached = await fetchImapMessagesFromStorageCache({
+    let response = await fetchImapMessagesFromStorageCache({
         limit: 4, page, filter, search
     });
 
-    if (cached) {
-        const { data, unseen, error, pagination } = cached as any;
+    if (!response) {
 
-        if (error || !data) return useReturnResponse(event, {
-            status: {
-                code: 200,
-                success: false,
-                message: 'Er zijn geen berichten gevonden',
-            },
-            data: {
-                messages: [],
-                unseen: unseen
-            }
-        })
+        const { imap_client, imap_error } = await useConnectClient();
+        if (imap_error || !imap_client) return useReturnResponse(event, internalServerError);
 
-        return useReturnResponse(event, {
-            status: {
-                code: 200,
-                success: true,
-                message: 'Berichten succesvol opgehaald',
-            },
-            pagination: {
-                page: pagination.current_page,
-                total: pagination.total_Pages,
-            },
-            data: {
-                ...data,
-                unseen
-            }
+        await useGetImapMailbox(imap_client, 'INBOX');
+
+        response = await fetchImapMessages(imap_client, {
+            limit: 4, page, filter, search
         });
+
+        await useCloseImapClient(imap_client);
+
     }
 
-    const { imap_client, imap_error } = await useConnectClient();
-    if (imap_error || !imap_client) return useReturnResponse(event, internalServerError);
-
-    await useGetImapMailbox(imap_client, 'INBOX');
-
-    const { data, unseen, error, pagination } = await fetchImapMessages(imap_client, {
-        limit: 4, page, filter, search
-    });
-
-    await useCloseImapClient(imap_client);
-
-    if (error || !data) return useReturnResponse(event, {
-        status: {
-            code: 200,
-            success: false,
-            message: 'Er zijn geen berichten gevonden',
-        },
-        data: {
-            messages: [],
-            unseen: unseen
-        }
-    })
+    const { data, unseen, error, pagination } = response;
 
     return useReturnResponse(event, {
         status: {
             code: 200,
-            success: true,
-            message: 'Berichten succesvol opgehaald',
+            success: (error || !data) ? false : true,
+            message: (error || !data) ? 'Er zijn geen berichten gevonden' : 'Berichten succesvol opgehaald',
         },
         pagination: {
-            page: pagination.current_page,
-            total: pagination.total_Pages,
+            page: pagination?.current_page || page,
+            total: pagination?.total_Pages || 1,
         },
         data: {
-            ...data,
-            unseen
+            messages: data?.messages || [],
+            unseen: unseen
         }
-    });
+    })
 });

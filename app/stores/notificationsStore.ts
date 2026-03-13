@@ -42,8 +42,9 @@ export const useNotifications = defineStore("useNotifications", () => {
 
     const updateMessageInList = (data: any, flagOnly?: boolean) => {
         const index = messages.value.findIndex((msg: any) => msg.uid === data.uid);
+        const currentPage = Number(useRoute().query.page || 1);
 
-        if (index === -1 && !flagOnly) {
+        if ((index === -1 && !flagOnly) && currentPage == 1) {
             messages.value.unshift(data);
             messages.value.pop();
         }
@@ -95,11 +96,17 @@ export const useNotifications = defineStore("useNotifications", () => {
 
         if (!Error && data) {
             loading.value = false;
+
+            const currentPage = Number(useRoute().query.page || 1)
+            const totalPages = data.pagination?.total || 1;
+
             pagination.value.page = data.pagination?.page || 1;
             pagination.value.total = data.pagination?.total || 1;
 
             messages.value = data.data?.messages || [];
             unseen.value = data.data?.unseen || 0;
+
+            if (currentPage > totalPages) return await toPage(totalPages);
 
         }
 
@@ -176,7 +183,11 @@ export const useNotifications = defineStore("useNotifications", () => {
             const { data, unseen, events } = JSON.parse(response)
 
             if (events.deleted) await refresh();
-            if (data) updateMessageInList(data);
+
+            if(data) {
+                if (events.update) updateMessageInList(data, true);
+                if (events.incoming) updateMessageInList(data);
+            }
 
             updateUnseenCount(unseen);
 

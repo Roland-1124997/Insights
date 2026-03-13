@@ -16,6 +16,7 @@ export default defineSupabaseEventHandler(async (event) => {
         return useReturnResponse(event, internalServerError);
     }
 
+    await removeImapMessageFromCache(id);
     await useCloseImapClient(imap_client);
 
     return useReturnResponse(event, {
