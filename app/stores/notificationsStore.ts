@@ -40,22 +40,34 @@ export const useNotifications = defineStore("useNotifications", () => {
         return null;
     };
 
-    const updateMessageInList = (data: any) => {
+    const updateMessageInList = (data: any, flagOnly?: boolean) => {
         const index = messages.value.findIndex((msg: any) => msg.uid === data.uid);
 
-        if (index === -1) {
+        if (index === -1 && !flagOnly) {
             messages.value.unshift(data);
             messages.value.pop();
         }
 
         else {
             const oldMessage = messages.value[index];
+            const updatedMessage = flagOnly
+                ? {
+                    ...oldMessage,
+                    flags: data.flags,
+                }
+                : {
+                    ...oldMessage,
+                    ...data,
+                };
 
-            messages.value[index] = {
-                ...data, threadId: oldMessage?.threadId
+            messages.value[index] = updatedMessage;
+
+            if (selected.value?.uid === data.uid) {
+                selected.value = updatedMessage;
             }
+
         }
-        
+
     };
 
     const updateUnseenCount = async (count: number) => {
@@ -141,8 +153,6 @@ export const useNotifications = defineStore("useNotifications", () => {
         }
     }
 
-
-
     const realTime = async () => {
 
         const event_id = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -166,10 +176,10 @@ export const useNotifications = defineStore("useNotifications", () => {
             const { data, unseen, events } = JSON.parse(response)
 
             if (events.deleted) await refresh();
-            if(data) updateMessageInList(data);
+            if (data) updateMessageInList(data);
 
-            await updateUnseenCount(unseen);
-            
+            updateUnseenCount(unseen);
+
         });
 
         if (Error.value) error.value = Error.value;
@@ -181,19 +191,35 @@ export const useNotifications = defineStore("useNotifications", () => {
 
         if ((message.flags).includes("\\Seen")) return
 
+        updateUnseenCount(unseen.value - 1);
+        updateMessageInList({
+            uid: message.uid,
+            flags: ['\\Seen']
+        }, true);
+        
         const { data, error } = await Request.Patch({
             extends: `/${message.uid}`,
             query: { action: "markAsSeen" },
         })
 
-        if (error) return addToast({
-            type: "error",
-            message: `Fout bij het markeren van de notificatie als gelezen:`,
-        });
+        if (error) { 
 
+            updateUnseenCount(unseen.value + 1);
+            updateMessageInList({
+                uid: message.uid,
+                flags: []
+            }, true);
+            
+
+            return addToast({
+                type: "error",
+                message: `Fout bij het markeren van de notificatie als gelezen:`,
+            });
+        }
+            
         if (data) {
-            updateMessageInList(data.data.message);
-            await updateUnseenCount(data.data.unseen);
+            updateMessageInList(data.data.message, true);
+            updateUnseenCount(data.data.unseen);
         }
     };
 
@@ -201,19 +227,37 @@ export const useNotifications = defineStore("useNotifications", () => {
 
         if (!(message.flags).includes("\\Seen")) return
 
+        updateUnseenCount(unseen.value + 1);
+        updateMessageInList({
+            uid: message.uid,
+            flags: []
+        }, true);
+        
+
         const { data, error } = await Request.Patch({
             extends: `/${message.uid}`,
             query: { action: "markAsUnseen" },
         })
 
-        if (error) return addToast({
-            type: "error",
-            message: `Fout bij het markeren van de notificatie als ongelezen:`,
-        });
+        if (error) {
 
+            updateUnseenCount(unseen.value - 1);
+            updateMessageInList({
+                uid: message.uid,
+                flags: ['\\Seen']
+            }, true);
+            
+
+            return addToast({
+                type: "error",
+                message: `Fout bij het markeren van de notificatie als ongelezen:`,
+            });
+
+        }
+            
         if (data) {
-            updateMessageInList(data.data.message);
-            await updateUnseenCount(data.data.unseen);
+            updateMessageInList(data.data.message, true);
+            updateUnseenCount(data.data.unseen);
         }
 
     };

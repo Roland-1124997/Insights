@@ -28,8 +28,9 @@
 								<button
 									v-if="inbox.flags.includes('\\Seen')"
 									@click="
-										store.markAsUnseen(inbox);
 										inbox.showDropdown = false;
+										store.markAsUnseen(inbox);
+										
 									"
 									class="flex items-center w-full gap-2 px-3 py-2 text-sm text-left text-gray-700 transition-colors hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
 								>
@@ -39,8 +40,8 @@
 								<button
 									v-else
 									@click="
-										store.markAsSeen(inbox);
 										inbox.showDropdown = false;
+										store.markAsSeen(inbox);
 									"
 									class="flex items-center w-full gap-2 px-3 py-2 text-sm text-left text-gray-700 transition-colors hover:bg-gray-100 focus:outline-none focus:bg-gray-100"
 								>
@@ -49,8 +50,8 @@
 								</button>
 								<button
 									@click="
-										store.deleteMessage(inbox);
 										inbox.showDropdown = false;
+										store.deleteMessage(inbox);
 									"
 									class="flex items-center w-full gap-2 px-3 py-2 text-sm text-left text-red-600 transition-colors border-t border-gray-200 hover:bg-red-50 focus:outline-none focus:bg-red-50"
 								>
@@ -75,7 +76,5 @@
 </template>
 
 <script setup lang="ts">
-
-const store = useNotifications()
-
+	const store = useNotifications();
 </script>
