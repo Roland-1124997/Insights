@@ -76,13 +76,31 @@ export const useSendServiceWorkerPushEvent = async (payload: any) => {
 
     if (!error) for (const data of subscriptions) {
 
-        webpush.sendNotification({ 
-            endpoint: useDecryptValue(data.endpoint), 
-            keys: useDecryptValue(data.keys, true) 
-        }, JSON.stringify(payload))
-        
-        .catch(err => consola.error('[Notification] Error sending notification:', err));
+        const endpoint = useDecryptValue(data.endpoint)
+        const keys = useDecryptValue(data.keys, true)
 
+        webpush.sendNotification({ 
+            endpoint: endpoint, keys: keys 
+        }, JSON.stringify(payload))
+
+        .catch(error => {
+
+            const { message, statusMessage } = (useStatusCodes[error.statusCode]) || { message: "", statusMessage: "" };
+
+            consola.error(
+                '[Notification] Error sending notification:\n' +
+                JSON.stringify({
+                    user_id: data.user_id,
+                    subscription_id: data.id,
+                    statusCode: error.statusCode,
+                    statusMessage: statusMessage,
+                    message: message,
+                    time_caused_at: new Date().toLocaleString(),
+                }, null, 2)
+            )
+
+        })
+        
     }
 
 };
