@@ -1,4 +1,5 @@
 import { randomUUID } from "crypto";
+import chalk from "chalk";
 
 const { startAt, endAt } = formulateDates("week");
 const timezone = 'Europe/Amsterdam';
@@ -10,6 +11,8 @@ export default defineTask({
     },
     async run() {
 
+        console.log(`\n${chalk.black('[schedule]')} Running at: ${chalk.black(new Date().toLocaleString())}`);
+            
         const { data, error } = await useFetchAnalytics(`stats:week`, {
             startAt, endAt, unit: 'day',
             timezone

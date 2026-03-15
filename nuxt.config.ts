@@ -26,7 +26,8 @@ export default defineNuxtConfig({
   ],
   nitro: {
     scheduledTasks: {
-      '10 * * * *': ['analytics'],
+      '*/10 * * * *': ['analytics'],
+      '*/2 * * * *': ['wake-up'], // schedule a wake-up task every 2 minutes to service worker alive (ios hack)
       '0 1 1 */1 *': ['revalidate-imap-cache'],
       '0 12 */5 * *': ['supabase'],
       '30 22 * * 0': ['notifications']

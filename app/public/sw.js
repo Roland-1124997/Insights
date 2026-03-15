@@ -50,11 +50,12 @@ const subscribe = async () => {
 
 }
 
-const checkSubscription = async () => {
+const checkSubscription = async (reSubscribe) => {
     const registration = await self.registration;
     const subscription = await registration.pushManager.getSubscription();
 
     if (!subscription) return await subscribe();
+    else if (reSubscribe) subscription.unsubscribe().then(async () => await subscribe());
 };
 
 const postToClient = (type, payload) => channel.postMessage({ type, payload });
@@ -112,22 +113,29 @@ self.addEventListener("message", async (event) => {
     const { type, payload } = event.data
     if (type == "SET_VAPID_KEY") vapidKey = payload.vapidKey
     if (type == "SET_TOKEN_HEADER") headers = payload.headers
-    if (type == "CHECK_SUBSCRIPTION") await checkSubscription()
+    if (type == "CHECK_SUBSCRIPTION") await checkSubscription(true)
 
 });
 
 self.addEventListener("push", async (event) => {
 
-    const { data, events } = await event.data.json()
+    event.waitUntil((async () => {
 
-    if (events.update || data.badgeCount) navigator.setAppBadge(data.badgeCount);
-    if (events.incoming) await self.registration.showNotification(data.title, {
-        body: data.message,
-        icon: "/icons/icon_512.png",
-        badge: "/icons/icon_512.png",
-        data: { url: data.url },
-        tag: data.id,
-    });
+        const { data, events } = await event.data.json()
+        if (events.sync) {
+            postToClient("SYNC_EVENT", { message: data.id });
+        } else {
+
+            if (events.update || data.badgeCount) navigator.setAppBadge(data.badgeCount);
+            if (events.incoming) await self.registration.showNotification(data.title, {
+                body: data.message,
+                icon: "/icons/icon_512.png",
+                badge: "/icons/icon_512.png",
+                data: { url: data.url },
+                tag: data.id,
+            });
+        }
+    })());
 
 });
 
@@ -139,10 +147,10 @@ self.addEventListener("notificationclick", (event) => {
     }));
 });
 
-self.addEventListener("activate", async (event) => {
+self.addEventListener("activate", (event) => {
 
     setInterval(async () => {
-        await checkSubscription();
+        event.waitUntil(checkSubscription())
     }, 300000);
 
 });
