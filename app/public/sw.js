@@ -2,7 +2,7 @@
 import { clientsClaim } from "workbox-core";
 import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
-import { StaleWhileRevalidate, NetworkFirst } from "workbox-strategies";
+import { StaleWhileRevalidate, NetworkFirst, CacheFirst } from "workbox-strategies";
 
 self.skipWaiting();
 clientsClaim();
@@ -61,6 +61,20 @@ const checkSubscription = async (reSubscribe) => {
 const postToClient = (type, payload) => channel.postMessage({ type, payload });
 
 registerRoute(
+    ({ url }) => url.pathname === "/ping.txt",
+    new CacheFirst({
+        cacheName: 'ping-cache',
+        plugins: [
+            {
+                cacheableResponse: {
+                    statuses: [200],
+                }
+            }
+        ]
+    })
+)
+
+registerRoute(
     ({ url }) => url.pathname.includes('/icons/'),
     new StaleWhileRevalidate({
         cacheName: 'image-cache',
@@ -113,7 +127,7 @@ self.addEventListener("message", async (event) => {
     const { type, payload } = event.data
     if (type == "SET_VAPID_KEY") vapidKey = payload.vapidKey
     if (type == "SET_TOKEN_HEADER") headers = payload.headers
-    if (type == "CHECK_SUBSCRIPTION") await checkSubscription(true)
+    if (type == "CHECK_SUBSCRIPTION") await checkSubscription(false)
 
 });
 
@@ -122,19 +136,16 @@ self.addEventListener("push", async (event) => {
     event.waitUntil((async () => {
 
         const { data, events } = await event.data.json()
-        if (events.sync) {
-            postToClient("SYNC_EVENT", { message: data.id });
-        } else {
 
-            if (events.update || data.badgeCount) navigator.setAppBadge(data.badgeCount);
-            if (events.incoming) await self.registration.showNotification(data.title, {
-                body: data.message,
-                icon: "/icons/icon_512.png",
-                badge: "/icons/icon_512.png",
-                data: { url: data.url },
-                tag: data.id,
-            });
-        }
+        if (events.update || data.badgeCount) navigator.setAppBadge(data.badgeCount);
+        if (events.incoming) await self.registration.showNotification(data.title, {
+            body: data.message,
+            icon: "/icons/icon_512.png",
+            badge: "/icons/icon_512.png",
+            data: { url: data.url },
+            tag: data.id,
+        });
+
     })());
 
 });
@@ -150,7 +161,12 @@ self.addEventListener("notificationclick", (event) => {
 self.addEventListener("activate", (event) => {
 
     setInterval(async () => {
-        event.waitUntil(checkSubscription())
+        await checkSubscription()
     }, 300000);
 
 });
+
+setInterval(function () {
+    fetch('/ping.txt')
+}, 20000)
+
