@@ -62,7 +62,7 @@ const useGetVapidDetails = async () => {
     );
 
     const server = useSupaBaseServer()
-    const { data: subscriptions, error } = await server.from('subscriptions').select("*")
+    const { data: subscriptions, error } = await server.from('subscriptions').select("*").neq("expired", true)
 
     if (error) return { data: null, error }
 
@@ -81,7 +81,7 @@ export const useSendServiceWorkerPushEvent = async (payload: any) => {
         const keys = useDecryptValue(data.keys, true)
 
         webpush.sendNotification({ endpoint: endpoint, keys: keys }, JSON.stringify(payload)).catch(async (err: any) => {
-            await server.from("subscriptions").delete().eq("id", data.id)
+            await server.from("subscriptions").update({ expired: true }).eq("id", data.id)
         })
 
     }

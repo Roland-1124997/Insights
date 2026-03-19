@@ -152,6 +152,7 @@ export type Database = {
                     id: string
                     keys: string
                     user_id: string | null
+                    expired: boolean | null
                 }
                 Insert: {
                     created_at?: string
@@ -161,6 +162,7 @@ export type Database = {
                     id?: string
                     keys?: string
                     user_id?: string | null
+                    expired?: boolean | null
                 }
                 Update: {
                     created_at?: string
@@ -170,6 +172,7 @@ export type Database = {
                     id?: string
                     keys?: string
                     user_id?: string | null
+                    expired?: boolean | null
                 }
                 Relationships: []
             },
