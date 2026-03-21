@@ -1,6 +1,3 @@
-
-import { invalidateStorageFilesCache } from '../../../utils/storage/functions';
-
 export default defineSupabaseEventHandler(async (event, { server }) => {
 
     const id = getRouterParams(event).id;

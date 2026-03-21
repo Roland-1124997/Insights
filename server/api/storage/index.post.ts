@@ -1,5 +1,3 @@
-import { invalidateStorageFilesCache } from '../../utils/storage/functions';
-
 export default defineSupabaseEventHandler(async (event, { server }) => {
 
     const articleId = getQuery(event).articleId as string | undefined;

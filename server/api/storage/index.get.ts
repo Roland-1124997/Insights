@@ -1,5 +1,3 @@
-import { fetchStorageFiles } from '../../utils/storage/functions';
-
 export default defineSupabaseEventHandler(async (event, { server }) => {
 
     const page = Number(getQuery(event).page || 1);
