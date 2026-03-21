@@ -30,7 +30,7 @@
 								<div class="w-24 h-3 bg-gray-100 rounded"></div>
 							</div>
 							<div class="flex flex-shrink-0 gap-x-1">
-								<div v-for="j in 4" :key="'group1-btn-' + j" class="w-5 h-5 bg-gray-100 rounded"></div>
+								<div v-for="j in 3" :key="'group1-btn-' + j" class="w-6 h-6 bg-gray-100 rounded-lg"></div>
 							</div>
 						</div>
 					</div>
