@@ -17,13 +17,13 @@
 
 <script setup lang="ts">
 	useSeoMeta({
-		title: "Insights - Opslagruimte",
+		title: "Insights - Mediabank",
 		description: "Overzicht van opslag en bestanden.",
-		ogTitle: "Insights - Opslagruimte",
+		ogTitle: "Insights - Mediabank",
 		ogDescription: "Overzicht van opslag en bestanden.",
-		ogUrl: "/opslagruimte",
+		ogUrl: "/mediabank",
 		ogImage: "/icons/icon_512-blue.png",
-		twitterTitle: "Insights - Opslagruimte",
+		twitterTitle: "Insights - Mediabank",
 		twitterDescription: "Overzicht van opslag en bestanden.",
 		twitterImage: "/icons/icon_512-blue.png",
 		twitterCard: "summary",

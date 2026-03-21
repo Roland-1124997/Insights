@@ -94,8 +94,8 @@ const routes = defineCachedFunction((subscriptionActive: boolean): Record<string
                 store: 'useArticles',
             },
         },
-        "/opslagruimte": {
-            label: "Opslagruimte",
+        "/mediabank": {
+            label: "Mediabank",
             iconName: "akar-icons:folder",
             toolbar: {
                 fallbackFilter: 'alles',

@@ -70,7 +70,7 @@ export const useStorage = defineStore("useStorage", () => {
         loading.value = true;
 
         const route = useRoute();
-        const activePage = route.path === '/opslagruimte'
+        const activePage = route.path === '/mediabank'
 
         const params = {
             page: activePage ? (route.query.page || 1) : 1,
@@ -78,8 +78,7 @@ export const useStorage = defineStore("useStorage", () => {
             search: activePage ? (route.query.search || '') : ''
         } as { filter: string; page: number; search: string };
 
-        set('/opslagruimte', [params]);
-
+        set('/mediabank', [params]);
         const { data, error: Error } = await useFetch<ApiResponse<Record<string, FileData[]>>>(uri, {
             query: { ...params },
         });
@@ -181,16 +180,7 @@ export const useStorage = defineStore("useStorage", () => {
     };
 
     const preview = async (file: FileData) => {
-        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.platform);
-
-
-        if (isMobile) return await download(file, { mimetype: file.metadata.mimetype });
-
-        navigateTo(file.media, {
-            open: {
-                target: "_blank",
-            },
-        });
+        navigateTo(`/mediabank/${file.id}`);
     };
 
     const download = async (file: FileData, options?: { mimetype?: string }) => {
