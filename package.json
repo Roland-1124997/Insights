@@ -61,6 +61,7 @@
 		"tailwindcss-animate": "^1.0.7",
 		"uncsrf": "^1.2.0",
 		"vue": "^3.5.22",
+		"vue-pdf-embed": "^2.1.4",
 		"vue-router": "^4.5.1",
 		"web-push": "^3.6.7",
 		"y-protocols": "^1.0.6",
