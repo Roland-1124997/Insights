@@ -1,66 +1,73 @@
 export default defineSupabaseEventHandler(async (event, { server }) => {
+	const id = getRouterParam(event, "id");
+	if (!id) return useReturnResponse(event, badRequestError);
 
-    const id = getRouterParam(event, "id");
-    if (!id) return useReturnResponse(event, badRequestError);
+	const { publish } = getQuery(event);
 
-    const { publish } = getQuery(event);
+	if (publish != undefined) {
+		const { error } = await server
+			.from("artikelen")
+			.update({
+				published: publish === "true",
+			})
+			.eq("id", id);
 
-    if (publish != undefined) {
+		if (error) return useReturnResponse(event, internalServerError);
 
-        const { error } = await server.from('artikelen').update({
-            published: publish === 'true'
-        }).eq('id', id);
+		const { error: Error } = await server
+			.from("attachments")
+			.update({
+				published: publish === "true",
+			})
+			.eq("article_id", id);
 
-        if (error) return useReturnResponse(event, internalServerError);
+		if (!Error) await invalidateStorageFilesCache();
 
-        const { error: Error} = await server.from('attachments').update({
-            published: publish === 'true'
-        }).eq('article_id', id);
+		return useReturnResponse(event, {
+			status: {
+				code: 200,
+				message: `Artikel succesvol ${publish === "true" ? "gepubliceerd" : "gedepubliceerd"}.`,
+				success: true,
+			},
+		});
+	}
 
-        if (!Error) await invalidateStorageFilesCache();
+	const request = await readBody(event);
+	const { error: zodError } = await schema.article.backend.safeParseAsync(request);
 
-        return useReturnResponse(event, {
-            status: {
-                code: 200,
-                message: `Artikel succesvol ${publish === 'true' ? 'gepubliceerd' : 'gedepubliceerd'}.`,
-                success: true
-            }
-        })
-    }
+	if (zodError)
+		return useReturnResponse(event, {
+			...badRequestError,
+			error: {
+				type: "fields",
+				details: zodError.issues,
+			},
+		});
 
-    const request = await readBody(event);
-    const { error: zodError } = await schema.article.backend.safeParseAsync(request);
+	const { error } = await server
+		.from("artikelen")
+		.update({
+			title: request.title,
+			content: request.content,
+			description: request.description,
+			anchors: request.anchors,
+			words: request.words,
+			topics: request.topics,
+			read_time: `${Math.ceil(request.words / 200)}`,
+			updated_at: new Date().toISOString(),
+		})
+		.eq("id", id);
 
-    if (zodError) return useReturnResponse(event, {
-        ...badRequestError,
-        error: {
-            type: "fields",
-            details: zodError.issues
-        }
-    });
+	if (error) return useReturnResponse(event, internalServerError);
 
-    const { error } = await server.from('artikelen').update({
-        title: request.title,
-        content: request.content,
-        description: request.description,
-        anchors: request.anchors,
-        words: request.words,
-        topics: request.topics,
-        read_time: `${Math.ceil(request.words / 200)}`,
-        updated_at: new Date().toISOString(),
-    }).eq('id', id);
-
-    if (error) return useReturnResponse(event, internalServerError);
-
-    return useReturnResponse(event, {
-        status: {
-            code: 200,
-            message: 'Artikel succesvol bijgewerkt.',
-            success: true
-        },
-        data: {
-            id: id
-        }
-    })
-
+	return useReturnResponse(event, {
+		status: {
+			code: 200,
+			message: "Artikel succesvol bijgewerkt.",
+			success: true,
+		},
+		data: {
+			id: id,
+		},
+	});
 });

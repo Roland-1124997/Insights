@@ -21,13 +21,25 @@
 		</div>
 
 		<div class="flex flex-shrink-0 select-none gap-x-1">
-			<button @click="store.preview(file)" class="flex items-center justify-center transition-colors w-6 h-6 bg-gray-100 rounded-lg group-hover:bg-gray-200 hover:text-white hover:!bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300" title="Bekijk voorbeeld van bestand" aria-label="Bekijk voorbeeld van bestand">
+			<button
+				@click="store.preview(file)"
+				class="flex items-center justify-center transition-colors w-6 h-6 bg-gray-100 rounded-lg group-hover:bg-gray-200 hover:text-white hover:!bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300"
+				title="Bekijk voorbeeld van bestand"
+				aria-label="Bekijk voorbeeld van bestand">
 				<icon name="akar-icons:eye" class="w-[0.85rem] h-[0.85rem]" aria-hidden="true" />
 			</button>
-			<button :aria-label="file.published ? 'Bestand is zichtbaar' : 'Bestand is zichtbaar'" @click="store.patch(file)" class="flex items-center justify-center w-6 h-6 transition-colors bg-gray-100 rounded-lg group-hover:bg-gray-200 hover:text-white hover:!bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-300" :title="file.published ? 'Bestand is zichtbaar' : 'Bestand is verborgen'">
+			<button
+				:aria-label="file.published ? 'Bestand is zichtbaar' : 'Bestand is zichtbaar'"
+				@click="store.patch(file)"
+				class="flex items-center justify-center w-6 h-6 transition-colors bg-gray-100 rounded-lg group-hover:bg-gray-200 hover:text-white hover:!bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-300"
+				:title="file.published ? 'Bestand is zichtbaar' : 'Bestand is verborgen'">
 				<icon :name="file.published ? 'akar-icons:circle-check' : 'akar-icons:circle-x'" class="w-[0.85rem] h-[0.85rem]" aria-hidden="true" />
 			</button>
-			<button aria-label="Bestand verwijderen" @click="store.remove(file)" class="flex items-center justify-center w-6 h-6 transition-colors bg-gray-100 rounded-lg group-hover:bg-gray-200 hover:text-white hover:!bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300" title="Bestand verwijderen">
+			<button
+				aria-label="Bestand verwijderen"
+				@click="store.remove(file)"
+				class="flex items-center justify-center w-6 h-6 transition-colors bg-gray-100 rounded-lg group-hover:bg-gray-200 hover:text-white hover:!bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300"
+				title="Bestand verwijderen">
 				<icon name="akar-icons:circle-minus" class="w-[0.85rem] h-[0.85rem]" aria-hidden="true" />
 			</button>
 		</div>

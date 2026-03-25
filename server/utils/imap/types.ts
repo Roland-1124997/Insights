@@ -1,6 +1,6 @@
 export type ImapMessagesOptions = {
-    limit: number,
-    page: number,
-    filter?: string,
-    search?: string
+	limit: number;
+	page: number;
+	filter?: string;
+	search?: string;
 };

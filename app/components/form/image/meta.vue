@@ -10,7 +10,13 @@
 				<div class="flex flex-col justify-between w-full space-y-6">
 					<div class="space-y-6">
 						<div class="space-y-1">
-							<UtilsInput :initial-value="props.content.title" iconName="akar-icons:text-align-left" name="title" label="Bijschrift" placeholder="Voeg een bijschrift toe voor deze afbeelding" :required="true" />
+							<UtilsInput
+								:initial-value="props.content.title"
+								iconName="akar-icons:text-align-left"
+								name="title"
+								label="Bijschrift"
+								placeholder="Voeg een bijschrift toe voor deze afbeelding"
+								:required="true" />
 							<p class="text-xs text-gray-500 pl-0.5">Deze tekst wordt onder de afbeelding weergegeven</p>
 						</div>
 
@@ -22,7 +28,9 @@
 				</div>
 			</div>
 
-			<button type="submit" class="flex mt-3 items-center justify-center w-full gap-2.5 px-5 py-3.5 text-sm font-semibold text-white transition-all duration-200 bg-blue-600 border-blue-600 rounded-xl outline-none select-none hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+			<button
+				type="submit"
+				class="flex mt-3 items-center justify-center w-full gap-2.5 px-5 py-3.5 text-sm font-semibold text-white transition-all duration-200 bg-blue-600 border-blue-600 rounded-xl outline-none select-none hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
 				<icon name="akar-icons:save" class="w-5 h-5" aria-hidden="true" />
 				<span>Opslaan</span>
 			</button>

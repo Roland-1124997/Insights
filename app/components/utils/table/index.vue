@@ -6,23 +6,23 @@
 					<th class="px-4 py-3 text-sm font-medium tracking-wider text-left text-gray-700 uppercase">
 						{{ categories[0]?.label }}
 					</th>
-					<th v-for="category in categories.slice(1, categories.length)" :key="category.value" class="py-3 text-sm font-medium tracking-wider text-center text-gray-700 uppercase" :class="decorator(category.value)">
+					<th
+						v-for="category in categories.slice(1, categories.length)"
+						:key="category.value"
+						class="py-3 text-sm font-medium tracking-wider text-center text-gray-700 uppercase"
+						:class="decorator(category.value)">
 						{{ category.label }}
 					</th>
 				</tr>
 			</thead>
 			<tbody v-if="data.length >= 1 && !loading" class="bg-white divide-y divide-gray-200">
-
 				<ClientOnly>
-
 					<UtilsTableRow v-for="meta in data" :key="meta.label" :data="meta" :categories :name :decorator="decorator" :isSmall :isOpen />
-			
+
 					<template #fallback>
 						<UtilsTableRowSkeleton v-for="i in visable" :key="i" :categories :decorator="decorator" :isSmall :isOpen />
 					</template>
-
 				</ClientOnly>
-				
 			</tbody>
 			<tbody v-else class="bg-white">
 				<UtilsTableRowSkeleton v-for="i in visable" :key="i" :categories :decorator="decorator" :isSmall :isOpen />
@@ -71,9 +71,8 @@
 	});
 
 	const decorator = (value: string) => {
-		
 		if (props.isSmall) return "hidden";
-		
+
 		const classes: Record<string, string> = {
 			weergaven: "hidden md:table-cell",
 			bezoekers: "hidden sm:table-cell",
@@ -83,6 +82,4 @@
 		};
 		return classes[value] || "";
 	};
-
-	
 </script>

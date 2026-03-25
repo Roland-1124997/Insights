@@ -2,21 +2,23 @@
 	<field :name="name" v-slot="{ field, meta }">
 		<div class="group">
 			<label :class="hideLabel ? ' sr-only' : ''" class="flex items-center justify-between mb-2 text-sm font-medium text-gray-700 select-none" :for="name">
-
 				<div>
-					{{ label }} <span class="text-red-700">{{ required ? "* " : "" }}</span>
+					{{ label }}
+					<span class="text-red-700">{{ required ? "* " : "" }}</span>
 					<transition name="fade">
-						<span v-if="meta.validated && !meta.valid" class="text-red-700">
-							(<ErrorMessage :name="name" />)
-						</span>
+						<span v-if="meta.validated && !meta.valid" class="text-red-700"> (<ErrorMessage :name="name" />) </span>
 					</transition>
 				</div>
-				
 			</label>
 
-			
-			<textarea v-bind="field" :disabled :id="name" :placeholder autocomplete="on" class="w-full p-3 h-[12vh] text-gray-900 transition border resize-none rounded-xl bg-white/80 focus:outline-none focus:ring-2 disabled:opacity-60 disabled:cursor-not-allowed placeholder:text-gray-400" :class="meta.validated && !meta.valid ? 'focus:ring-red-500/60 focus:border-red-500/60 border-red-500 ' : 'focus:ring-indigo-500/60 focus:border-indigo-500/60'" />
-			
+			<textarea
+				v-bind="field"
+				:disabled
+				:id="name"
+				:placeholder
+				autocomplete="on"
+				class="w-full p-3 h-[12vh] text-gray-900 transition border resize-none rounded-xl bg-white/80 focus:outline-none focus:ring-2 disabled:opacity-60 disabled:cursor-not-allowed placeholder:text-gray-400"
+				:class="meta.validated && !meta.valid ? 'focus:ring-red-500/60 focus:border-red-500/60 border-red-500 ' : 'focus:ring-indigo-500/60 focus:border-indigo-500/60'" />
 		</div>
 	</field>
 </template>
@@ -34,12 +36,13 @@
 		hideLabel: { type: Boolean, default: false },
 	});
 
-	const { value } = useField<string | Array<any> | Number>(`${name}`);
+	const { value } = useField<string | Array<any> | number>(`${name}`);
 
-	watch(() => initialValue,
-		(initial) => value.value = initial, { immediate: true }
+	watch(
+		() => initialValue,
+		(initial) => (value.value = initial),
+		{ immediate: true },
 	);
-		
 </script>
 
 <style scoped>
@@ -51,5 +54,4 @@
 	.fade-leave-to {
 		opacity: 0;
 	}
-
 </style>

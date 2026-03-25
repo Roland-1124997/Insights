@@ -1,6 +1,5 @@
 <template>
 	<div>
-		
 		<ClientOnly v-if="metrics && data.values.length >= 1">
 			<div class="md:hidden">
 				<ChartsGroup :data="data?.values?.slice(0, 3) || []" :categories="data.categories" :height="250" :y_axis="['bezoekers', 'weergaven', 'bezoeken']" />
@@ -38,14 +37,11 @@
 </template>
 
 <script setup lang="ts">
-
-    defineProps<{
-        metrics: object,
-        data: {
-            categories: Record<string, { name: string; color: string; }>,
-            values: number[][]
-        }
-    }>()
-
-    
+	defineProps<{
+		metrics: object;
+		data: {
+			categories: Record<string, { name: string; color: string }>;
+			values: number[][];
+		};
+	}>();
 </script>

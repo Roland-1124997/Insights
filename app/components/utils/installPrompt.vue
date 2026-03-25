@@ -1,5 +1,11 @@
 <template>
-	<Transition enter-active-class="transition duration-300 ease-out" enter-from-class="transform translate-y-[-100%]" enter-to-class="transform translate-y-0" leave-active-class="transition duration-200 ease-in" leave-from-class="transform translate-y-0" leave-to-class="transform translate-y-[-100%]">
+	<Transition
+		enter-active-class="transition duration-300 ease-out"
+		enter-from-class="transform translate-y-[-100%]"
+		enter-to-class="transform translate-y-0"
+		leave-active-class="transition duration-200 ease-in"
+		leave-from-class="transform translate-y-0"
+		leave-to-class="transform translate-y-[-100%]">
 		<div v-if="pwa?.showInstallPrompt" class="relative w-full bg-blue-600 border-b border-blue-800">
 			<div class="px-4 mx-auto">
 				<div class="flex items-center justify-between py-2">
@@ -14,8 +20,13 @@
 					</div>
 
 					<div class="flex items-center gap-2 ml-4">
-						<button @click="handleInstall" class="px-2 py-1 text-xs font-medium text-blue-600 transition-colors duration-200 bg-white rounded-lg shadow-sm hover:bg-blue-50 sm:text-sm">Installeren</button>
-						<button @click="dismissPrompt" class="flex items-center justify-center p-1.5 transition-colors duration-200 rounded-lg text-white/80 hover:text-white hover:bg-white/10" aria-label="Sluiten">
+						<button @click="handleInstall" class="px-2 py-1 text-xs font-medium text-blue-600 transition-colors duration-200 bg-white rounded-lg shadow-sm hover:bg-blue-50 sm:text-sm">
+							Installeren
+						</button>
+						<button
+							@click="dismissPrompt"
+							class="flex items-center justify-center p-1.5 transition-colors duration-200 rounded-lg text-white/80 hover:text-white hover:bg-white/10"
+							aria-label="Sluiten">
 							<Icon name="akar-icons:x-small" class="w-4 h-4" />
 						</button>
 					</div>
@@ -33,6 +44,6 @@
 	};
 
 	const dismissPrompt = () => {
-		pwa?.cancelInstall()
+		pwa?.cancelInstall();
 	};
 </script>

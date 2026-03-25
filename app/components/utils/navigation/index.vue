@@ -1,7 +1,6 @@
 <template>
+	<UtilsNavigationSidebar v-model:isMobileMenuOpen="isMobileMenuOpen" :routes />
 
-	<UtilsNavigationSidebar v-model:isMobileMenuOpen="isMobileMenuOpen" :routes/>
-		
 	<div class="flex flex-col flex-1 w-full overflow-hidden">
 		<header class="z-40 flex items-center justify-between h-16 px-4 bg-white border-b lg:px-6">
 			<div class="flex items-center gap-4">
@@ -19,22 +18,19 @@
 			</div>
 		</header>
 
-		<UtilsNavigationToolbar :toolbar :related  />
+		<UtilsNavigationToolbar :toolbar :related />
 
 		<slot></slot>
 	</div>
 </template>
 
 <script setup lang="ts">
-
 	const { error, routes, toolbar, related, refresh } = await useApiRoutes();
 
 	const notifications = useNotifications();
 	const isMobileMenuOpen = ref(false);
 
 	onMounted(async () => {
-		if(error.value) await refresh();
+		if (error.value) await refresh();
 	});
-
 </script>
-

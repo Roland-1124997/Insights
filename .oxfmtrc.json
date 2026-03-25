@@ -1,0 +1,10 @@
+{
+	"$schema": "./node_modules/oxfmt/configuration_schema.json",
+	"ignorePatterns": [],
+	"useTabs": true,
+	"tabWidth": 2,
+	"bracketSpacing": true,
+	"bracketSameLine": true,
+	"printWidth": 200,
+	"vueIndentScriptAndStyle": true,
+}

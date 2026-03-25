@@ -35,7 +35,10 @@
 				<div class="flex items-center justify-between mb-4">
 					<div>
 						<h2 class="text-xl font-bold text-gray-900">Actieve Sessies</h2>
-						<p class="mt-1 text-sm text-gray-600">{{ account.sessions?.length || 0 }} actieve {{ account.sessions?.length === 1 ? "sessie" : "sessies" }}</p>
+						<p class="mt-1 text-sm text-gray-600">
+							{{ account.sessions?.length || 0 }} actieve
+							{{ account.sessions?.length === 1 ? "sessie" : "sessies" }}
+						</p>
 					</div>
 				</div>
 
@@ -51,7 +54,11 @@
 									</div>
 
 									<div class="flex flex-wrap items-center gap-2 select-none">
-										<button v-if="!store.isCurrentSession(session.id)" @click="account.Delete(session.id)" class="inline-flex items-center px-2.5 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded-full outline-none focus:outline-none focus:ring-2 focus:ring-red-300" aria-label="Verwijder sessie">
+										<button
+											v-if="!store.isCurrentSession(session.id)"
+											@click="account.Delete(session.id)"
+											class="inline-flex items-center px-2.5 py-1 text-xs font-semibold text-red-700 bg-red-100 rounded-full outline-none focus:outline-none focus:ring-2 focus:ring-red-300"
+											aria-label="Verwijder sessie">
 											<icon name="akar-icons:circle-fill" class="w-2 h-2 mr-1.5" />
 											Sessie verwijderen
 										</button>

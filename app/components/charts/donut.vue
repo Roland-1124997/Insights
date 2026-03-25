@@ -40,13 +40,20 @@
 </script>
 
 <template>
-	<DonutChart :data="localData" :height :categories="localCategories" :radius="160" :pad-angle="0.1"
-		:arc-width="arcWidth" :legend-position="LegendPosition.TopLeft" :hide-legend="false"
+	<DonutChart
+		:data="localData"
+		:height
+		:categories="localCategories"
+		:radius="160"
+		:pad-angle="0.1"
+		:arc-width="arcWidth"
+		:legend-position="LegendPosition.TopLeft"
+		:hide-legend="false"
 		:legend-style="{ marginBottom: '2rem' }">
 		<div class="text-center">
 			<div class="text-lg font-semibold capitalize">{{ active }}</div>
 			<div class="text-muted">
-				{{useFormatDuration(localData.reduce((a, b) => a + b, 0))}}
+				{{ useFormatDuration(localData.reduce((a, b) => a + b, 0)) }}
 			</div>
 		</div>
 

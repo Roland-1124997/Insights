@@ -1,33 +1,37 @@
 export default defineSupabaseEventHandler(async (event, { user, server }) => {
+	const id = getRouterParam(event, "id");
+	if (!id) return useReturnResponse(event, badRequestError);
 
-    const id = getRouterParam(event, "id");
-    if (!id) return useReturnResponse(event, badRequestError);
+	const request = await readBody(event);
+	const { error: zodError } = await schema.subscription.backend.safeParseAsync(request);
 
-    const request = await readBody(event)
-    const { error: zodError } = await schema.subscription.backend.safeParseAsync(request);
+	if (zodError)
+		return useReturnResponse(event, {
+			...badRequestError,
+			error: {
+				type: "fields",
+				details: zodError.issues,
+			},
+		});
 
-    if (zodError) return useReturnResponse(event, {
-        ...badRequestError,
-        error: {
-            type: "fields",
-            details: zodError.issues
-        }
-    });
+	const { error } = await server
+		.from("subscriptions")
+		.update({
+			endpoint: useEncryptValue(request.endpoint),
+			keys: useEncryptValue(request.keys, true),
+			updated_at: new Date(),
+			expired: false,
+		})
+		.eq("id", id)
+		.eq("user_id", user.id);
 
-    const { error } = await server.from('subscriptions').update({
-        endpoint: useEncryptValue(request.endpoint), 
-        keys: useEncryptValue(request.keys, true),
-        updated_at: new Date(), expired: false
-    }).eq("id", id).eq("user_id", user.id)
+	if (error) return useReturnResponse(event, internalServerError);
 
-    if (error) return useReturnResponse(event, internalServerError)
-
-    return useReturnResponse(event, {
-        status: {
-            success: true,
-            code: 200,
-            message: "OK",
-        }
-    })
-
+	return useReturnResponse(event, {
+		status: {
+			success: true,
+			code: 200,
+			message: "OK",
+		},
+	});
 });

@@ -1,19 +1,32 @@
 <template>
 	<div class="relative w-full mb-3 md:mb-auto">
 		<div class="relative w-full">
-			<button type="button" @click="toggleDropdown" class="w-full p-3 pl-10 text-left text-gray-900 transition border rounded-xl bg-white/80 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/60 focus:border-indigo-500/60 disabled:opacity-60 disabled:cursor-not-allowed" :class="{ 'ring-2 ring-indigo-500/60 border-indigo-500/60': isOpen }">
+			<button
+				type="button"
+				@click="toggleDropdown"
+				class="w-full p-3 pl-10 text-left text-gray-900 transition border rounded-xl bg-white/80 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/60 focus:border-indigo-500/60 disabled:opacity-60 disabled:cursor-not-allowed"
+				:class="{ 'ring-2 ring-indigo-500/60 border-indigo-500/60': isOpen }">
 				<span v-if="selected" class="block truncate">
 					{{ content.find((r) => r.id === selected)?.full_name }}
 				</span>
 				<span v-else class="block text-gray-600">Kies een repository...</span>
-				<icon name="mdi:chevron-down" class="absolute w-5 h-5 text-gray-900 transition-transform transform -translate-y-1/2 pointer-events-none right-3 top-1/2" :class="{ 'rotate-180': isOpen }" aria-hidden="true" />
+				<icon
+					name="mdi:chevron-down"
+					class="absolute w-5 h-5 text-gray-900 transition-transform transform -translate-y-1/2 pointer-events-none right-3 top-1/2"
+					:class="{ 'rotate-180': isOpen }"
+					aria-hidden="true" />
 			</button>
 
 			<icon name="bxl:github" class="absolute w-5 h-5 text-gray-900 transform -translate-y-1/2 pointer-events-none left-3 top-1/2" aria-hidden="true" />
 
 			<div v-if="isOpen" class="absolute z-50 w-full mt-3 overflow-auto bg-white ring-2 ring-indigo-500/60 border rounded-xl max-h-[13rem] -top-[14.5rem] md:top-auto scroll-snap-y">
 				<ul class="">
-					<li v-for="repo in content" :key="repo.id" @click="selectOption(repo.id)" class="px-3 py-2 transition-colors border-t border-indigo-100 cursor-pointer first:border-t-0 hover:bg-indigo-50 scroll-snap-align" :class="{ 'bg-indigo-100 font-medium': selected === repo.id }">
+					<li
+						v-for="repo in content"
+						:key="repo.id"
+						@click="selectOption(repo.id)"
+						class="px-3 py-2 transition-colors border-t border-indigo-100 cursor-pointer first:border-t-0 hover:bg-indigo-50 scroll-snap-align"
+						:class="{ 'bg-indigo-100 font-medium': selected === repo.id }">
 						{{ repo.full_name }}
 					</li>
 				</ul>
@@ -46,7 +59,6 @@
 </template>
 
 <script setup lang="ts">
-	
 	interface Repo {
 		id: number;
 		name: string;

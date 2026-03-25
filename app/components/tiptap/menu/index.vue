@@ -1,10 +1,8 @@
 <template>
-	<div class="select-none ">
+	<div class="select-none">
 		<div v-for="(item, index) in list" :key="index">
 			<div class="divider" v-if="item.type === 'divider'" :key="`divider${index}`"></div>
-			<TiptapMenuList v-else :action="item.action ?? (() => {})"
-				:icon="item.icon || ''" :title="item.title || ''" :key="index" v-bind="item" :editable
-			/>
+			<TiptapMenuList v-else :action="item.action ?? (() => {})" :icon="item.icon || ''" :title="item.title || ''" :key="index" v-bind="item" :editable />
 		</div>
 	</div>
 </template>
@@ -19,7 +17,6 @@
 		editor: Editor;
 		hidden?: Array<string>;
 		editable?: boolean;
-		
 	}>();
 
 	const list = ref([
@@ -104,7 +101,6 @@
 			icon: "fluent:image-edit-24-regular",
 			title: "Image Meta",
 			action: () => {
-				
 				const { alt, src, title } = editor.getAttributes("image");
 
 				create({
@@ -113,7 +109,9 @@
 					component: "ImageMeta",
 					props: {
 						content: {
-							src, alt, title,
+							src,
+							alt,
+							title,
 						},
 						onConfirm: (attrs: { title: string; alt: string }) => {
 							const Attrs = { ...attrs, src };
@@ -122,7 +120,6 @@
 						},
 					},
 				});
-				
 			},
 			isActive: () => editor.isActive("image"),
 			isBlocked: () => !editor.isActive("image"),
@@ -203,7 +200,7 @@
 				} else
 					addToast({
 						type: "error",
-						message: 'er is een fout opgetreden bij het ophalen van repositories',
+						message: "er is een fout opgetreden bij het ophalen van repositories",
 					});
 			},
 		},

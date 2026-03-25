@@ -3,118 +3,115 @@
 @tailwind utilities;
 
 * {
-    font-family: 'Livvic';
+	font-family: "Livvic";
 }
 
 :root {
-    --vis-donut-background-color: transparent !important;
-    --vis-map-feature-color: #f4f4f4 !important;
-    --vis-map-boundary-color: #85a3c9 !important;
+	--vis-donut-background-color: transparent !important;
+	--vis-map-feature-color: #f4f4f4 !important;
+	--vis-map-boundary-color: #85a3c9 !important;
 }
 
 ::-webkit-scrollbar {
-    @apply hidden
+	@apply hidden;
 }
 
 html {
-    min-height: calc(100% + env(safe-area-inset-top));
-    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+	min-height: calc(100% + env(safe-area-inset-top));
+	padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
 }
 
 body {
-    -webkit-tap-highlight-color: transparent;
-    -webkit-touch-callout: none;
-    @apply bg-white
+	-webkit-tap-highlight-color: transparent;
+	-webkit-touch-callout: none;
+	@apply bg-white;
 }
 
-
 .tiptap {
-    @apply outline-none appearance-none
+	@apply outline-none appearance-none;
 }
 
 .TipTapLink {
-    @apply text-[#1d4ed8] text-lg underline truncate
+	@apply text-[#1d4ed8] text-lg underline truncate;
 }
 
-
 .tiptap p {
-    @apply text-base text-balance;
+	@apply text-base text-balance;
 }
 
 .bullet_class {
-    @apply pl-5 list-disc list-outside;
+	@apply pl-5 list-disc list-outside;
 }
 
 .order_class {
-    @apply pl-6 list-decimal list-outside;
+	@apply pl-6 list-decimal list-outside;
 }
 
 li::marker {
-    @apply text-[#1d4ed8];
+	@apply text-[#1d4ed8];
 }
 
 .tiptap .is-empty::before {
-    @apply float-left text-gray-400 pointer-events-none;
-    content: attr(data-placeholder);
-    height: 0;
+	@apply float-left text-gray-400 pointer-events-none;
+	content: attr(data-placeholder);
+	height: 0;
 }
 
-.tiptap>*+* {
-    margin-top: 0.50em;
+.tiptap > * + * {
+	margin-top: 0.5em;
 }
 
 .tiptap h1 {
-    @apply text-2xl font-bold text-black text-balance;
+	@apply text-2xl font-bold text-black text-balance;
 }
 
 .tiptap h2 {
-    @apply text-xl font-semibold text-gray-800 text-balance;
+	@apply text-xl font-semibold text-gray-800 text-balance;
 }
 
 .tiptap h3 {
-    @apply text-lg font-semibold text-gray-800 text-balance;
+	@apply text-lg font-semibold text-gray-800 text-balance;
 }
 
 .tiptap h4 {
-    @apply text-base italic font-semibold text-gray-600 text-balance;
+	@apply text-base italic font-semibold text-gray-600 text-balance;
 }
 
 .tiptap p {
-    @apply text-base;
+	@apply text-base;
 }
 
 .viewer p {
-    @apply text-base text-balance;
+	@apply text-base text-balance;
 }
 
 .tiptap ul {
-    @apply pl-5 list-disc list-outside;
+	@apply pl-5 list-disc list-outside;
 }
 
 .tiptap ol {
-    @apply pl-6 list-decimal list-outside;
+	@apply pl-6 list-decimal list-outside;
 }
 
 .tiptap img {
-    @apply w-[99%] m-auto my-3 rounded-lg border bg-gray-50 md:min-h-[20vh];
-    
+	@apply w-[99%] m-auto my-3 rounded-lg border bg-gray-50 md:min-h-[20vh];
 }
 
 .tiptap.ProseMirror img.ProseMirror-selectednode {
-    @apply inset-0 select-none outline ring-2 ring-blue-600 outline-blue-600;
+	@apply inset-0 select-none outline ring-2 ring-blue-600 outline-blue-600;
 }
 
 .tiptap pre {
-    @apply px-4 py-3 my-6 font-mono text-white bg-black rounded-lg;
+	@apply px-4 py-3 my-6 font-mono text-white bg-black rounded-lg;
 }
 
 .tiptap code {
-    @apply p-0 text-xs bg-transparent text-inherit;
+	@apply p-0 text-xs bg-transparent text-inherit;
 }
 
 .hljs-comment,
 .hljs-quote {
-    @apply text-[#616161];
+	@apply text-[#616161];
 }
 
 .hljs-variable,
@@ -126,7 +123,7 @@ li::marker {
 .hljs-link,
 .hljs-selector-id,
 .hljs-selector-class {
-    @apply text-[#f98181];
+	@apply text-[#f98181];
 }
 
 .hljs-number,
@@ -136,170 +133,169 @@ li::marker {
 .hljs-literal,
 .hljs-type,
 .hljs-params {
-    @apply text-[#fbbc88];
+	@apply text-[#fbbc88];
 }
 
 .hljs-string,
 .hljs-symbol,
 .hljs-bullet {
-    @apply text-[#b9f18d];
+	@apply text-[#b9f18d];
 }
 
 .hljs-title,
 .hljs-section {
-    @apply text-[#faf594];
+	@apply text-[#faf594];
 }
 
 .hljs-keyword,
 .hljs-selector-tag {
-    @apply text-[#70cff8];
+	@apply text-[#70cff8];
 }
 
 .hljs-emphasis {
-    @apply italic;
+	@apply italic;
 }
 
 .hljs-strong {
-    @apply font-bold;
+	@apply font-bold;
 }
 
 .hljs-template-tag,
 .hljs-template-variable {
-    @apply text-[#c792ea];
+	@apply text-[#c792ea];
 }
 
 .hljs-attribute {
-    @apply text-[#ffcb6b];
+	@apply text-[#ffcb6b];
 }
 
 .hljs-tag {
-    @apply text-[#82aaff];
+	@apply text-[#82aaff];
 }
 
 .hljs-name {
-    @apply text-[#ff7eb6];
+	@apply text-[#ff7eb6];
 }
 
 .hljs-string {
-    @apply text-[#c3e88d];
+	@apply text-[#c3e88d];
 }
 
 .hljs-keyword {
-    @apply text-[#89ddff];
+	@apply text-[#89ddff];
 }
 
 .hljs-comment {
-    @apply text-[#546e7a];
+	@apply text-[#546e7a];
 }
 
 .tiptap .details {
-    @apply flex gap-1 p-2 my-4 list-none border border-gray-300 rounded-lg;
+	@apply flex gap-1 p-2 my-4 list-none border border-gray-300 rounded-lg;
 }
 
 .tiptap .details summary {
-    @apply font-bold;
+	@apply font-bold;
 }
 
-.tiptap .details>button {
-    @apply flex items-center justify-center bg-transparent rounded w-5 h-5 overflow-hidden text-xs leading-none mt-[0.1rem] p-0;
+.tiptap .details > button {
+	@apply flex items-center justify-center bg-transparent rounded w-5 h-5 overflow-hidden text-xs leading-none mt-[0.1rem] p-0;
 }
 
-.tiptap .details>button:hover {
-    @apply bg-gray-300;
+.tiptap .details > button:hover {
+	@apply bg-gray-300;
 }
 
-.tiptap .details>button::before {
-    content: '▶';
+.tiptap .details > button::before {
+	content: "▶";
 }
 
-.tiptap .details.is-open>button::before {
-    transform: rotate(90deg);
+.tiptap .details.is-open > button::before {
+	transform: rotate(90deg);
 }
 
-.tiptap .details>div {
-    @apply flex flex-col w-full gap-1;
+.tiptap .details > div {
+	@apply flex flex-col w-full gap-1;
 }
 
-.tiptap .details>div>[data-type='detailsContent']> :last-child {
-    @apply mb-2;
+.tiptap .details > div > [data-type="detailsContent"] > :last-child {
+	@apply mb-2;
 }
 
 .tiptap .details .details {
-    @apply my-2;
+	@apply my-2;
 }
 
 .viewer a {
-    @apply text-[#1d4ed8] text-lg underline truncate
+	@apply text-[#1d4ed8] text-lg underline truncate;
 }
 
 .viewer .p2 {
-    @apply hidden;
+	@apply hidden;
 }
 
 .viewer ul {
-    @apply pl-5 list-disc list-outside;
+	@apply pl-5 list-disc list-outside;
 }
 
 .viewer ol {
-    @apply pl-6 list-decimal list-outside;
+	@apply pl-6 list-decimal list-outside;
 }
 
 .connection-view {
-    @apply font-mono my-4 hover:bg-neutral-800 select-none 
+	@apply font-mono my-4 hover:bg-neutral-800 select-none;
 }
 
 .connection-view a {
-    @apply hover:text-gray-300 
+	@apply hover:text-gray-300;
 }
 
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-    @apply border outline-none appearance-none autofill;
+	@apply border outline-none appearance-none autofill;
 }
 
 .btn-Input-Error {
-    @apply border-red-300 text-[#262626] bg-red-50
+	@apply border-red-300 text-[#262626] bg-red-50;
 }
 
 .btn-Input-Error-without-bg {
-    @apply border-red-300 text-[#262626]
+	@apply border-red-300 text-[#262626];
 }
 
 .btn-Input-Error-without-bg:focus {
-    @apply border-red-300 outline-none ring-1 ring-red-300;
+	@apply border-red-300 outline-none ring-1 ring-red-300;
 }
 
 .btn-Input-Error:focus {
-    @apply border-red-300 outline-none ring-1 ring-red-300;
+	@apply border-red-300 outline-none ring-1 ring-red-300;
 }
 
 .btn-Input-Error:-webkit-autofill,
 .btn-Input-Error:-webkit-autofill:hover,
 .btn-Input-Error:-webkit-autofill:focus {
-    @apply border outline-none appearance-none autofill-error;
+	@apply border outline-none appearance-none autofill-error;
 }
 
 @layer utilities {
-    .autofill {
-        -webkit-box-shadow: 0 0 0 30px #e7eff3 inset !important;
-        -webkit-text-fill-color: #262626 !important;
-        box-shadow: 0 0 0 30px #e7eff3 inset !important;
-        background-clip: content-box !important;
-    }
+	.autofill {
+		-webkit-box-shadow: 0 0 0 30px #e7eff3 inset !important;
+		-webkit-text-fill-color: #262626 !important;
+		box-shadow: 0 0 0 30px #e7eff3 inset !important;
+		background-clip: content-box !important;
+	}
 
-    .otpLight {
-        -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
-        -webkit-text-fill-color: #000000 !important;
-        box-shadow: 0 0 0 30px #ffffff inset !important;
-        background-clip: content-box !important;
-    }
+	.otpLight {
+		-webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+		-webkit-text-fill-color: #000000 !important;
+		box-shadow: 0 0 0 30px #ffffff inset !important;
+		background-clip: content-box !important;
+	}
 
-    .autofill-error {
-        -webkit-box-shadow: 0 0 0 30px #fef2f2 inset !important;
-        -webkit-text-fill-color: #262626 !important;
-        box-shadow: 0 0 0 30px #fef2f2 inset !important;
-        background-clip: content-box !important;
-    }
-
+	.autofill-error {
+		-webkit-box-shadow: 0 0 0 30px #fef2f2 inset !important;
+		-webkit-text-fill-color: #262626 !important;
+		box-shadow: 0 0 0 30px #fef2f2 inset !important;
+		background-clip: content-box !important;
+	}
 }

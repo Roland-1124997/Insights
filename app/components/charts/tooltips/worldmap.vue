@@ -10,15 +10,14 @@
 		<p v-if="data.count > 0" class="text-sm">In deze periode zijn de volgende statistieken geregistreerd:</p>
 		<p v-else class="mb-4 text-sm text-gray-500">Er zijn geen statistieken geregistreerd voor dit land in deze periode.</p>
 
-		<div v-if="data.count > 0" class="mt-4 ">
-			
+		<div v-if="data.count > 0" class="mt-4">
 			<p class="text-sm text-gray-500">
 				<strong>{{ useFormatDuration(data.count || 0) }}</strong> unieke bezoeker{{ data.count !== 1 ? "s" : "" }}
 			</p>
 			<p class="text-sm text-gray-500">
 				<strong>{{ useFormatDuration(data.visits || 0) }}</strong> bezoek{{ data.visits !== 1 ? "en" : "" }}
 			</p>
-            <p class="text-sm text-gray-500">
+			<p class="text-sm text-gray-500">
 				<strong>{{ useFormatDuration(data.views || 0) }}</strong> weergave{{ data.views !== 1 ? "s" : "" }}
 			</p>
 		</div>

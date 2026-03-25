@@ -4,7 +4,7 @@
 			<icon name="akar-icons:file" class="w-8 h-8 text-gray-400" />
 		</div>
 
-		<span v-if="(filter && filter != 'alles') && search">
+		<span v-if="filter && filter != 'alles' && search">
 			<p class="mb-1 text-base font-semibold text-gray-900">Geen documenten gevonden</p>
 			<p class="mb-2 text-sm text-gray-700">Er zijn geen documenten die overeenkomen met je zoekopdracht en geselecteerde filter.</p>
 			<div class="flex items-center justify-center w-full gap-2">
@@ -49,8 +49,6 @@
 </template>
 
 <script setup lang="ts">
-
-    const { search } = useSearch();
+	const { search } = useSearch();
 	const { filter } = useFilter();
-
 </script>

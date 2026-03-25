@@ -1,12 +1,12 @@
 <template>
 	<div>
-		<UtilsTable :name :data="data?.slice(0, visable) || []" :categories :isSmall :isOpen :visable :loading/>
+		<UtilsTable :name :data="data?.slice(0, visable) || []" :categories :isSmall :isOpen :visable :loading />
 	</div>
 </template>
 
 <script setup lang="ts">
 	const { name } = defineProps<{
-        isSmall?: boolean;
+		isSmall?: boolean;
 		isOpen?: boolean;
 		visable: number;
 		data: [

@@ -7,9 +7,21 @@
 					<template v-else-if="isPDF">
 						<div class="relative h-[61vh] md:h-[64.5vh] overflow-y-scroll overflow-x-hidden">
 							<ClientOnly>
-								<VuePdfEmbed class="h-full transition-opacity duration-300" :class="pdfReady ? 'opacity-100' : 'opacity-0'" annotation-layer text-layer :source="file.media" @rendered="handlePdfRendered" />
+								<VuePdfEmbed
+									class="h-full transition-opacity duration-300"
+									:class="pdfReady ? 'opacity-100' : 'opacity-0'"
+									annotation-layer
+									text-layer
+									:source="file.media"
+									@rendered="handlePdfRendered" />
 
-								<transition enter-active-class="transition-opacity duration-300" leave-active-class="transition-opacity duration-300" enter-from-class="opacity-0" enter-to-class="opacity-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
+								<transition
+									enter-active-class="transition-opacity duration-300"
+									leave-active-class="transition-opacity duration-300"
+									enter-from-class="opacity-0"
+									enter-to-class="opacity-100"
+									leave-from-class="opacity-100"
+									leave-to-class="opacity-0">
 									<div v-if="!pdfReady" class="absolute inset-0 flex items-center justify-center text-sm text-gray-600">Preview laden...</div>
 								</transition>
 
@@ -35,7 +47,9 @@
 
 					<p class="text-sm text-slate-700">{{ file.id }}</p>
 
-					<button @click="store.download(file)" class="flex items-center justify-center gap-3 p-2 px-6 text-blue-600 transition-colors duration-150 bg-white border border-blue-500 rounded-lg outline-none select-none w-fit hover:bg-blue-50 hover:text-blue-700 hover:border-blue-600 hover focus:text-blue-700 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
+					<button
+						@click="store.download(file)"
+						class="flex items-center justify-center gap-3 p-2 px-6 text-blue-600 transition-colors duration-150 bg-white border border-blue-500 rounded-lg outline-none select-none w-fit hover:bg-blue-50 hover:text-blue-700 hover:border-blue-600 hover focus:text-blue-700 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
 						<icon name="akar-icons:cloud-download" class="w-4 h-4" aria-hidden="true" />
 						<span> Download </span>
 					</button>
@@ -49,11 +63,15 @@
 					<dl class="relative grid gap-3 text-sm">
 						<div class="p-3 border rounded-xl border-slate-200 bg-slate-50/80">
 							<h3 class="text-xs font-semibold tracking-wide uppercase text-slate-500">Artikel</h3>
-							<dd class="mt-1 font-medium text-balance text-slate-900">{{ file.article_name || "Geen koppeling" }}</dd>
+							<dd class="mt-1 font-medium text-balance text-slate-900">
+								{{ file.article_name || "Geen koppeling" }}
+							</dd>
 						</div>
 						<div class="p-3 border rounded-xl border-slate-200 bg-slate-50/80">
 							<h3 class="text-xs font-semibold tracking-wide uppercase text-slate-500">Pad</h3>
-							<dd class="mt-1 font-medium break-all text-balance text-slate-900">{{ file.media }}</dd>
+							<dd class="mt-1 font-medium break-all text-balance text-slate-900">
+								{{ file.media }}
+							</dd>
 						</div>
 					</dl>
 				</div>
@@ -64,23 +82,47 @@
 					<dl class="relative grid gap-3 text-sm md:grid-cols-2">
 						<div class="p-3 border rounded-xl border-slate-200 bg-slate-50/80">
 							<h3 class="text-xs font-semibold tracking-wide uppercase text-slate-500">Type</h3>
-							<p class="mt-1 font-medium text-slate-900">{{ file.metadata?.label || "-" }}</p>
+							<p class="mt-1 font-medium text-slate-900">
+								{{ file.metadata?.label || "-" }}
+							</p>
 						</div>
 						<div class="p-3 border rounded-xl border-slate-200 bg-slate-50/80">
 							<h3 class="text-xs font-semibold tracking-wide uppercase text-slate-500">MIME</h3>
-							<p class="mt-1 font-medium break-all text-slate-900">{{ file.metadata?.mimetype || "-" }}</p>
+							<p class="mt-1 font-medium break-all text-slate-900">
+								{{ file.metadata?.mimetype || "-" }}
+							</p>
 						</div>
 						<div class="p-3 border rounded-xl border-slate-200 bg-slate-50/80">
 							<h3 class="text-xs font-semibold tracking-wide uppercase text-slate-500">Grootte</h3>
-							<p class="mt-1 font-medium text-slate-900">{{ file.metadata?.size || "-" }}</p>
+							<p class="mt-1 font-medium text-slate-900">
+								{{ file.metadata?.size || "-" }}
+							</p>
 						</div>
 						<div class="p-3 border rounded-xl border-slate-200 bg-slate-50/80 md:col-span-2">
 							<h3 class="text-xs font-semibold tracking-wide uppercase text-slate-500">Aangemaakt</h3>
-							<NuxtTime class="block mt-1 font-medium text-slate-900" locale="nl" weekday="long" year="numeric" month="short" day="2-digit" hour="2-digit" minute="2-digit" :datetime="file.metadata.created_at" />
+							<NuxtTime
+								class="block mt-1 font-medium text-slate-900"
+								locale="nl"
+								weekday="long"
+								year="numeric"
+								month="short"
+								day="2-digit"
+								hour="2-digit"
+								minute="2-digit"
+								:datetime="file.metadata.created_at" />
 						</div>
 						<div class="p-3 border rounded-xl border-slate-200 bg-slate-50/80 md:col-span-2">
 							<h3 class="text-xs font-semibold tracking-wide uppercase text-slate-500">Bijgewerkt</h3>
-							<NuxtTime class="block mt-1 font-medium text-slate-900" locale="nl" weekday="long" year="numeric" month="short" day="2-digit" hour="2-digit" minute="2-digit" :datetime="file.metadata.updated_at" />
+							<NuxtTime
+								class="block mt-1 font-medium text-slate-900"
+								locale="nl"
+								weekday="long"
+								year="numeric"
+								month="short"
+								day="2-digit"
+								hour="2-digit"
+								minute="2-digit"
+								:datetime="file.metadata.updated_at" />
 						</div>
 					</dl>
 				</div>
@@ -138,9 +180,12 @@
 
 	const pdfReady = ref(false);
 
-	watch(() => file.value?.media,() => {
-		pdfReady.value = false;
-	});
+	watch(
+		() => file.value?.media,
+		() => {
+			pdfReady.value = false;
+		},
+	);
 
 	const handlePdfRendered = () => {
 		pdfReady.value = true;

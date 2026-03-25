@@ -1,6 +1,5 @@
-export default defineSupabaseEventHandler(async (event) => {
-    
-    const { result } = await runTask("notifications");
+export default defineSupabaseEventHandler(async () => {
+	const { result } = await runTask("notifications");
 
-    return { result };
+	return { result };
 });

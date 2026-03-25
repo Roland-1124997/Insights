@@ -6,7 +6,11 @@
 			<div class="flex flex-col flex-1 w-full overflow-hidden">
 				<header class="z-40 flex items-center justify-between h-16 px-4 bg-white border-b lg:px-6">
 					<div class="flex items-center gap-4">
-						<button v-if="Object.keys(routes).length > 0" aria-label="open sidebar navigatie" @click="isMobileMenuOpen = true" class="flex items-center justify-center p-2 rounded-lg lg:hidden hover:bg-gray-100">
+						<button
+							v-if="Object.keys(routes).length > 0"
+							aria-label="open sidebar navigatie"
+							@click="isMobileMenuOpen = true"
+							class="flex items-center justify-center p-2 rounded-lg lg:hidden hover:bg-gray-100">
 							<Icon name="akar-icons:text-align-justified" class="w-5 h-5" />
 							<span class="sr-only">Open menu</span>
 						</button>

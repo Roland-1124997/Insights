@@ -6,7 +6,29 @@
 			<div class="flex justify-center w-full gap-2">
 				<label v-for="(digit, idx) in digits" :key="idx" :for="`code-${idx}`" class="flex-1">
 					<span class="sr-only">Cijfer {{ idx + 1 }} van 6</span>
-					<input :id="`code-${idx}`" :name="`code-${idx}`" ref="inputs" type="text" inputmode="numeric" placeholder="0" autocomplete="one-time-code" maxlength="1" :aria-label="`Cijfer ${idx + 1} van 6`" :aria-invalid="meta.validated && !meta.valid" :aria-describedby="meta.validated && !meta.valid ? 'code-error' : undefined" class="w-full p-3 text-2xl font-medium text-center transition border select-none rounded-xl bg-white/80 placeholder:text-gray-400 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed" :class="meta.validated && !meta.valid ? 'border-red-500 focus:ring-2 focus:ring-red-500/60 focus:border-red-500 text-red-800' : 'border-gray-400 focus:ring-2 focus:ring-indigo-500/60 focus:border-indigo-500 text-gray-900'" :value="digits[idx]" @input="onInput($event, idx)" @keydown.backspace="onBackspace($event, idx)" @focus="onFocus(idx)" @paste="onPaste($event)" />
+					<input
+						:id="`code-${idx}`"
+						:name="`code-${idx}`"
+						ref="inputs"
+						type="text"
+						inputmode="numeric"
+						placeholder="0"
+						autocomplete="one-time-code"
+						maxlength="1"
+						:aria-label="`Cijfer ${idx + 1} van 6`"
+						:aria-invalid="meta.validated && !meta.valid"
+						:aria-describedby="meta.validated && !meta.valid ? 'code-error' : undefined"
+						class="w-full p-3 text-2xl font-medium text-center transition border select-none rounded-xl bg-white/80 placeholder:text-gray-400 focus:outline-none disabled:opacity-60 disabled:cursor-not-allowed"
+						:class="
+							meta.validated && !meta.valid
+								? 'border-red-500 focus:ring-2 focus:ring-red-500/60 focus:border-red-500 text-red-800'
+								: 'border-gray-400 focus:ring-2 focus:ring-indigo-500/60 focus:border-indigo-500 text-gray-900'
+						"
+						:value="digits[idx]"
+						@input="onInput($event, idx)"
+						@keydown.backspace="onBackspace($event, idx)"
+						@focus="onFocus(idx)"
+						@paste="onPaste($event)" />
 				</label>
 			</div>
 

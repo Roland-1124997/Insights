@@ -1,47 +1,41 @@
-const error = ref<any | null>(null);
+const error = ref<ErrorResponse | null>(null);
 
 export const useApiRoutes = async () => {
+	const routes = useState<Record<string, RouteType>>("api-routes", () => ({}));
+	const route = useRoute();
+	const current = ref<string>(route.path);
 
-    const routes = useState<Record<string, RouteType>>('api-routes', () => ({}));
-    const route = useRoute();
-    const current = ref<string>(route.path);
+	const toolbar = computed(() => {
+		current.value = route.path;
+		return routes.value[current.value]?.toolbar;
+	});
 
-    const toolbar = computed(() => {
-        current.value = route.path;
-        return routes.value[current.value]?.toolbar;
-    });
+	const related = computed(() => {
+		current.value = route.path;
+		return routes.value[current.value]?.related || null;
+	});
 
-    const related = computed(() => {
-        current.value = route.path;
-        return routes.value[current.value]?.related || null;
-    });
+	const refresh = async () => {
+		const request = useApiHandler<Record<string, RouteType>>("/api/configuration/routes");
 
-    
-    const refresh = async () => {
+		const { data, error: Error } = await request.Get();
 
-        const request = useApiHandler<Record<string, RouteType>>("/api/configuration/routes");
+		if (!Error && data) routes.value = data;
+		else error.value = Error;
+	};
 
-        const { data, error: Error } = await request.Get();
+	const { data, error: Error } = await useFetch<Record<string, RouteType>>("/api/configuration/routes", {
+		key: "api-routes-fetch",
+	});
 
-        if (!Error && data) routes.value = data;
-        else error.value = Error;
+	if (!Error.value && data.value) routes.value = data.value;
+	else error.value = Error.value as unknown as ErrorResponse;
 
-    }
-
-    const { data, error: Error } = await useFetch<Record<string, RouteType>>("/api/configuration/routes", {
-        key: 'api-routes-fetch',
-    });
-
-    if (!Error.value && data.value) routes.value = data.value;
-    else error.value = Error.value;
-
-    return {
-        error,
-        routes,
-        toolbar,
-        related,
-        refresh
-    };
-}
-
-
+	return {
+		error,
+		routes,
+		toolbar,
+		related,
+		refresh,
+	};
+};

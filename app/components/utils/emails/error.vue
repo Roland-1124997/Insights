@@ -9,8 +9,7 @@
 </template>
 
 <script setup lang="ts">
-
-    const { search } = useSearch();
+	const { search } = useSearch();
 	const { filter } = useFilter();
 
 	const displayMessage = () => {
@@ -28,7 +27,4 @@
 
 		return "Probeer een andere zoekterm";
 	};
-
-
-
 </script>

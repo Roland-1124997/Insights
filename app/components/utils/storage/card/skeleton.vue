@@ -1,12 +1,10 @@
 <template>
 	<div class="pb-[5.5rem] md:pb-0">
 		<div class="space-y-3">
-			
 			<div class="sticky top-0 z-20 flex items-center justify-between px-4 py-2 mb-3 border rounded-lg bg-blue-50 w-fit md:px-4 animate-pulse">
 				<div class="w-24 h-5 bg-blue-200 rounded"></div>
 			</div>
 
-			
 			<div class="space-y-3">
 				<div class="flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg w-fit animate-pulse">
 					<div class="w-4 h-4 bg-gray-200 rounded"></div>
@@ -37,7 +35,6 @@
 				</div>
 			</div>
 
-			
 			<div class="space-y-3">
 				<div class="flex items-center gap-2 px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg w-fit animate-pulse">
 					<div class="w-4 h-4 bg-gray-200 rounded"></div>

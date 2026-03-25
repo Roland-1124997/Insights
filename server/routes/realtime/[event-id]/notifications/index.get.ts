@@ -1,22 +1,17 @@
+export default defineSupabaseEventHandler(async (event) => {
+	const emitter = getImapEmitter();
 
-export default defineSupabaseEventHandler(async (event, { user }) => {
+	const eventStream = createEventStream(event);
 
-    const emitter = getImapEmitter();
+	const push = async (payload: any) => {
+		await eventStream.push(JSON.stringify(payload));
+	};
 
-    const eventStream = createEventStream(event);
+	emitter.on("new", push);
 
-    const push = async (payload: any) => {
+	eventStream.onClosed(async () => {
+		emitter.off("new", push);
+	});
 
-        eventStream.push(JSON.stringify(payload));
-
-    };
-
-    emitter.on('new', push);
-
-    eventStream.onClosed(async () => {
-        emitter.off('new', push);
-    });
-
-    return eventStream.send();
-
+	return eventStream.send();
 });

@@ -1,35 +1,27 @@
-
 const isTableEnabled = ref<boolean>(false);
 
 export const useTable = () => {
+	const router = useRouter();
+	const route = useRoute();
 
-    const router = useRouter();
-    const route = useRoute();
+	isTableEnabled.value = (route.query.table as string) === "true" ? true : false;
 
-    isTableEnabled.value = route.query.table as string === "true" ? true : false;
+	const togleTable = () => {
+		isTableEnabled.value = !isTableEnabled.value;
 
-    const togleTable = () => {
+		const query = { ...route.query };
 
-        isTableEnabled.value = !isTableEnabled.value;
+		if (isTableEnabled.value) {
+			query.table = "true";
+		} else {
+			delete query.table;
+		}
 
-        const query = { ...route.query };
+		router.replace({ query }).catch(() => {});
+	};
 
-        if (isTableEnabled.value) {
-            query.table = "true";
-        }
-
-        else {
-            delete query.table;
-        }
-
-        router.replace({ query });
-
-    }
-
-    return {
-        isTableEnabled,
-        togleTable,
-    };
-
+	return {
+		isTableEnabled,
+		togleTable,
+	};
 };
-

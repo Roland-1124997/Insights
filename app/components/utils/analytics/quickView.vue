@@ -5,9 +5,13 @@
 				<icon :name="statistic.icon" class="w-5 h-5 md:w-6 md:h-6" aria-hidden="true" />
 			</div>
 			<div class="flex-1 min-w-0">
-				<h2 class="text-xs font-semibold text-gray-600 truncate md:text-sm">{{ statistic.label }}</h2>
+				<h2 class="text-xs font-semibold text-gray-600 truncate md:text-sm">
+					{{ statistic.label }}
+				</h2>
 				<div class="flex items-center justify-between gap-2">
-					<h3 class="text-base font-extrabold text-gray-900 truncate md:text-xl">{{ useFormatDuration(statistic.value, statistic.format) }}</h3>
+					<h3 class="text-base font-extrabold text-gray-900 truncate md:text-xl">
+						{{ useFormatDuration(statistic.value, statistic.format) }}
+					</h3>
 
 					<p :title="`${useFormatDuration(statistic.difference, statistic.format)}`" class="shrink-0">
 						<span :class="statistic.positive ? 'text-green-800' : 'text-red-800'" class="text-xs font-medium md:text-sm">
@@ -21,7 +25,6 @@
 	</template>
 
 	<UtilsAnalyticsSkeleton v-else />
-
 </template>
 
 <script setup lang="ts">

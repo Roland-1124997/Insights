@@ -13,7 +13,11 @@
 				</div>
 
 				<div class="flex flex-col gap-3 mt-5 sm:flex-row">
-					<button type="submit" :disabled="loading" aria-label="Bevestigen" class="relative inline-flex items-center justify-center w-full gap-2 px-4 py-3 text-white transition bg-red-600 hover:bg-red-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-300 disabled:cursor-not-allowed disabled:opacity-60">
+					<button
+						type="submit"
+						:disabled="loading"
+						aria-label="Bevestigen"
+						class="relative inline-flex items-center justify-center w-full gap-2 px-4 py-3 text-white transition bg-red-600 hover:bg-red-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-300 disabled:cursor-not-allowed disabled:opacity-60">
 						<span v-if="!loading" class="inline-flex items-center gap-2">
 							<Icon name="akar-icons:check" />
 							{{ props.message.confirm }}
@@ -24,7 +28,11 @@
 						</span>
 					</button>
 
-					<button :disabled="loading" type="button" @click.stop="props.onCancel()" class="relative inline-flex items-center justify-center w-full gap-2 px-4 py-3 text-blue-600 transition border border-blue-600 hover:border-blue-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:cursor-not-allowed disabled:opacity-60">
+					<button
+						:disabled="loading"
+						type="button"
+						@click.stop="props.onCancel()"
+						class="relative inline-flex items-center justify-center w-full gap-2 px-4 py-3 text-blue-600 transition border border-blue-600 hover:border-blue-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:cursor-not-allowed disabled:opacity-60">
 						<span class="inline-flex items-center gap-2">
 							<Icon name="akar-icons:cross" />
 							{{ props.message.cancel }}

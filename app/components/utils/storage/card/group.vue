@@ -9,7 +9,10 @@
 	</div>
 
 	<div class="grid gap-3 md:grid-cols-2">
-		<div v-for="(file, index) in files" :key="index" class="z-10 flex items-center w-full gap-3 p-3 transition-all bg-white border border-gray-200 rounded-lg hover:bg-gray-50 group hover:border-gray-300">
+		<div
+			v-for="(file, index) in files"
+			:key="index"
+			class="z-10 flex items-center w-full gap-3 p-3 transition-all bg-white border border-gray-200 rounded-lg hover:bg-gray-50 group hover:border-gray-300">
 			<UtilsStorageCard :file />
 		</div>
 	</div>

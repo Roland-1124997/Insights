@@ -1,103 +1,88 @@
-import type { LocationQueryValue } from 'vue-router';
+import type { LocationQueryValue } from "vue-router";
 
 const search = ref<string | null>(null);
 const { clear, get, LastEntry, set } = useHistory();
 
-export const useSearch = (
-    options?: {
-        localSearch?: Ref<string | null>;
-        callback?: (
-            params: {
-                filter: string;
-                search: string;
-                page: number
-            }
-        ) => Promise<void>,
-    }) => {
+export const useSearch = (options?: { localSearch?: Ref<string | null>; callback?: (params: { filter: string; search: string; page: number }) => Promise<void> }) => {
+	const router = useRouter();
+	const route = useRoute();
 
-    const router = useRouter();
-    const route = useRoute();
+	search.value = (route.query.search as string) || null;
+	if (options?.localSearch) options.localSearch.value = search.value;
 
-    search.value = route.query.search as string || null;
-    if (options?.localSearch) options.localSearch.value = search.value;
+	const execute = async (value: string) => {
+		if (options?.callback) {
+			await new Promise((resolve) => setTimeout(resolve, 300));
 
-    const execute = async (value: string) => {
+			await options.callback({
+				filter: (route.query.filter as string) || "alles",
+				search: value,
+				page: route.query.page ? parseInt(route.query.page as string) : 1,
+			});
+		}
+	};
 
-        if (options?.callback) {
+	watch(
+		() => route.path,
+		async () => {
+			const lastEntry = LastEntry(route.path);
+			search.value = lastEntry?.search || null;
+			if (options?.localSearch) options.localSearch.value = search.value;
 
-            await new Promise(resolve => setTimeout(resolve, 300));
+			router
+				.push({
+					query: {
+						...route.query,
+						search: search.value || undefined,
+					},
+				})
+				.catch(() => {});
+		},
+	);
 
-            await options.callback({
-                filter: route.query.filter as string || 'alles',
-                search: value,
-                page: route.query.page ? parseInt(route.query.page as string) : 1,
-            });
-        }
-    }
+	const setSearch = async (value: string | LocationQueryValue[] | null) => {
+		const query = { ...route.query };
+		const lastEntry = LastEntry(route.path);
 
-    watch(() => route.path, async () => {
-        const lastEntry = LastEntry(route.path);
-        search.value = lastEntry?.search || null;
-        if (options?.localSearch) options.localSearch.value = search.value;
+		const last = lastEntry?.search || null;
+		if (value === last) return;
 
-        router.push({
-            query: {
-                ...route.query,
-                search: search.value || undefined,
-            }
-        });
+		set(route.path, [
+			{
+				search: (route.query.serch as string) || (value as string) || "",
+				filter: (route.query.filter as string) || "",
+				page: route.query.page ? parseInt(route.query.page as string) : 1,
+			},
+		]);
 
-    });
+		if (!value) {
+			if (value === lastEntry?.search) return;
+			await execute("");
 
-    const setSearch = async (value: string | LocationQueryValue[] | null) => {
+			search.value = "";
+			delete query.search;
 
-        const query = { ...route.query };
-        const lastEntry = LastEntry(route.path);
+			router.replace({ query }).catch(() => {});
+		} else {
+			if (value === lastEntry?.search) return;
+			await execute(value as string);
 
-        const last = lastEntry?.search || null;
-        if (value === last) return;
+			search.value = value as string;
+			query.search = search.value;
+			delete query.page;
 
-        set(route.path, [
-            {
-                search: route.query.serch as string || value as string || "",
-                filter: route.query.filter as string || "",
-                page: route.query.page ? parseInt(route.query.page as string) : 1,
-            }
-        ]);
+			router.replace({ query }).catch(() => {});
+		}
+	};
 
-        if (!value) {
-
-            if (value === lastEntry?.search) return
-            await execute('');
-
-            search.value = '';
-            delete query.search;
-
-            router.replace({ query });
-        }
-
-        else {
-
-            if (value === lastEntry?.search) return
-            await execute(value as string);
-
-            search.value = value as string;
-            query.search = search.value;
-            delete query.page;
-
-            router.replace({ query });
-        }
-    }
-
-    return {
-        search,
-        history: {
-            LastEntry: (path: string) => LastEntry(path),
-            clear: (path: string) => clear(path),
-            get: (path: string) => get(path),
-            set: (path: string, entries: any[]) => set(path, entries),
-        },
-        setSearch,
-    };
-
+	return {
+		search,
+		history: {
+			LastEntry: (path: string) => LastEntry(path),
+			clear: (path: string) => clear(path),
+			get: (path: string) => get(path),
+			set: (path: string, entries: any[]) => set(path, entries),
+		},
+		setSearch,
+	};
 };

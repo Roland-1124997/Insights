@@ -1,7 +1,7 @@
 <template>
 	<UtilsApp>
 		<UtilsNavigation>
-			<main class="flex-1 p-4 overflow-x-hidden overflow-y-auto ">
+			<main class="flex-1 p-4 overflow-x-hidden overflow-y-auto">
 				<div class="mx-auto">
 					<slot></slot>
 				</div>
@@ -11,9 +11,8 @@
 </template>
 
 <script setup lang="ts">
-
 	useSearch();
-	useFilter()
+	useFilter();
 
 	const account = useAccount();
 	const store = useAnalytics();
@@ -26,11 +25,14 @@
 
 	const { related } = await useApiRoutes();
 
-	watch(() => route.path, async () => {
-		if(route.path !== '/artikelen/opstellen') articles.clearSavedPayload()
-		if(related.value) await store.setShared(related.value)
-
-	}, { immediate: true } )
+	watch(
+		() => route.path,
+		async () => {
+			if (route.path !== "/artikelen/opstellen") articles.clearSavedPayload();
+			if (related.value) await store.setShared(related.value);
+		},
+		{ immediate: true },
+	);
 
 	store.initialPayload();
 	account.initialPayload();
@@ -42,20 +44,16 @@
 	const { close } = await notifications.realTime();
 
 	onMounted(async () => {
-
 		session.setCloseFunction(close);
 
 		await syncSubscription();
 
-		if(store.error) store.refresh()
-		if(account.error) account.refresh()
-		if(articles.error) articles.refresh()
-		if(storageStore.error) storageStore.refresh()
-		if(notifications.error) notifications.refresh()
-
+		if (store.error) store.refresh();
+		if (account.error) account.refresh();
+		if (articles.error) articles.refresh();
+		if (storageStore.error) storageStore.refresh();
+		if (notifications.error) notifications.refresh();
 	});
 
 	onUnmounted(() => close());
-
 </script>
-

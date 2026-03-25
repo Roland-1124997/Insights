@@ -27,7 +27,10 @@
 				<h2 class="mb-1 text-xl font-bold">Meest gebruikte apparaten</h2>
 				<p class="mb-1 text-sm text-gray-600">Meest gebruikte apparaten van je bezoekers</p>
 
-				<NuxtLink to="/statistieken/apparaten" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline"> Meer details <icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" /> </NuxtLink>
+				<NuxtLink to="/statistieken/apparaten" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline">
+					Meer details
+					<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
+				</NuxtLink>
 				<UtilsAnalyticsChartsDevices :metrics="store.metrics || []" :data="store.metrics?.devices || []" />
 			</article>
 
@@ -38,7 +41,10 @@
 						<p class="text-sm text-gray-600">Meest bezochte pagina's van je website</p>
 					</div>
 
-					<NuxtLink to="/statistieken/pagina's" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline"> Meer details <icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" /> </NuxtLink>
+					<NuxtLink to="/statistieken/pagina's" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline">
+						Meer details
+						<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
+					</NuxtLink>
 				</div>
 
 				<UtilsAnalyticsCardsViewer name="pages" :visable="6" :data="store.metrics?.pages.values || []" />
@@ -54,7 +60,10 @@
 				<h2 class="mb-1 text-xl font-bold">Top landen</h2>
 				<p class="mb-1 text-sm text-gray-600">De landen waaruit je meeste bezoekers komen,</p>
 
-				<NuxtLink to="/statistieken/landen" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline"> Meer details <icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" /> </NuxtLink>
+				<NuxtLink to="/statistieken/landen" class="inline-flex items-center mb-4 text-sm font-medium text-blue-600 hover:underline">
+					Meer details
+					<icon name="akar-icons:arrow-right" class="w-4 h-4 ml-1" />
+				</NuxtLink>
 
 				<div class="pt-3">
 					<UtilsAnalyticsCardsViewer name="countries" :visable="3" :data="store.metrics?.countries.values || []" :isSmall="true" :isOpen="true" />
