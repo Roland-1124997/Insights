@@ -12,13 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: pnpm/action-setup@v4
-
       - uses: actions/setup-node@v6
         with:
           node-version: lts/*
-          cache: pnpm
+          cache: npm
 
-      # Or yarn, npm, etc.
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run fmt:check
+      - run: npm install --frozen-lockfile
+      - run: npm run fmt:check
