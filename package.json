@@ -14,8 +14,9 @@
 		"lint": "oxlint",
 		"lint:fix": "oxlint --fix",
 		"lint:suggestions": "oxlint --fix-suggestions",
-		"fmt": "oxfmt",
-		"fmt:check": "oxfmt --check"
+		"fmt": "oxfmt --no-error-on-unmatched-pattern",
+		"fmt:check": "oxfmt --check",
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"@nuxt/a11y": "^1.0.0-alpha.1",
@@ -89,6 +90,7 @@
 		"@vite-pwa/nuxt": "^1.1.1",
 		"class-variance-authority": "^0.7.1",
 		"clsx": "^2.1.1",
+		"husky": "^9.1.7",
 		"oxfmt": "^0.42.0",
 		"oxlint": "^1.57.0",
 		"oxlint-tsgolint": "^0.17.4",
