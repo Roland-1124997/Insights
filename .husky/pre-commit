@@ -1,2 +1,2 @@
 npm run fmt
-git update-index --again
+git add -A

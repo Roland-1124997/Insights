@@ -20,7 +20,7 @@ export const useArticles = defineStore("useArticles", () => {
 		const oldArticle = articles.value[index as number];
 
 		if (!oldArticle) return;
-		
+
 		const updatedArticle = {
 			...oldArticle,
 			id: oldArticle.id,
@@ -28,7 +28,6 @@ export const useArticles = defineStore("useArticles", () => {
 		} as Article;
 
 		articles.value![index as number] = updatedArticle;
-		
 	};
 
 	const storedPayload = useLocalStorage<string | null>("articles:payload", null);
@@ -134,7 +133,8 @@ export const useArticles = defineStore("useArticles", () => {
 		const published = !article.published;
 
 		updateArticlesInList({
-			id, published
+			id,
+			published,
 		});
 
 		const { error } = await Request.Patch({
@@ -144,7 +144,8 @@ export const useArticles = defineStore("useArticles", () => {
 
 		if (error) {
 			updateArticlesInList({
-				id, published: article.published
+				id,
+				published: article.published,
 			});
 
 			return addToast({
@@ -154,14 +155,12 @@ export const useArticles = defineStore("useArticles", () => {
 			});
 		}
 
-		
 		addToast({
 			message: `Artikel ${title} succesvol ${published ? "gepubliceerd" : "gedepubliceerd"}.`,
 			type: "success",
 		});
 
 		await storage.refresh();
-		
 	};
 
 	return {

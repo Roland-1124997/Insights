@@ -37,7 +37,7 @@ export const useStorage = defineStore("useStorage", () => {
 		const oldFile = files.value[data.article_name]![index as number];
 
 		if (!oldFile) return;
-		
+
 		const updatedFile = {
 			...oldFile,
 			id: oldFile.id,
@@ -137,13 +137,14 @@ export const useStorage = defineStore("useStorage", () => {
 	};
 
 	const patch = async (file: FileData) => {
-
 		const id = file.id;
 		const published = !file.published;
 		const article_name = file.article_name;
-		
+
 		updateFilesInList({
-			article_name, id, published
+			article_name,
+			id,
+			published,
 		});
 
 		const { error } = await Request.Patch({
@@ -153,7 +154,9 @@ export const useStorage = defineStore("useStorage", () => {
 
 		if (error) {
 			updateFilesInList({
-				article_name, id, published: file.published,
+				article_name,
+				id,
+				published: file.published,
 			});
 
 			return addToast({
@@ -163,13 +166,10 @@ export const useStorage = defineStore("useStorage", () => {
 			});
 		}
 
-		
 		addToast({
 			message: `Bestand ${!file.published ? "succesvol zichtbaar gemaakt" : "succesvol verborgen"}.`,
 			type: "info",
 		});
-		
-
 	};
 
 	const remove = async (file: FileData) => {
