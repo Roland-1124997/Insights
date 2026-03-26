@@ -76,9 +76,8 @@ export const useGetRepositories = async (token: string, per_page: number) => {
 
 	const { data, error } = await useFetchRepositories(token, per_page);
 	if (data) await stored.setItem(cacheKey, data, { ttl: 60 * 5 });
-	
-	return { data, error };
 
+	return { data, error };
 };
 
 export const useEncryptValue = (value: string, stringify: boolean = false) => {
