@@ -24,6 +24,9 @@ export const useApiHandler = <G>(url: FetchUrl) => {
 
 		const extendedUrl = options?.extends ? `${url as string}${options.extends as string}` : url;
 
+		// @ts-ignore - extendedUrl is a union type (string | Request) from the ternary conditional.
+		// When passed to $fetch, TypeScript attempts to match it against all Nuxt routes,
+		// creating circular type checking that causes "Excessive stack depth" errors.
 		const fetch = $fetch(extendedUrl, {
 			...options,
 		}) as Promise<T>;

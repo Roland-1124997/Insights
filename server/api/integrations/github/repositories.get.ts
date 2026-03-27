@@ -6,7 +6,7 @@ export default defineSupabaseEventHandler(async (event, { user, server }) => {
 
 	const currentPage = Number(getQuery(event).page ?? 1);
 
-	const { data: repo, error: repo_error } = await useGetRepositories(connection.token, per_page, currentPage);
+	const { data: repo, error: repo_error } = await useGetRepositories(connection.token, per_page);
 
 	if (repo)
 		return useReturnResponse(event, {
@@ -26,7 +26,7 @@ export default defineSupabaseEventHandler(async (event, { user, server }) => {
 		const { data: refresh_connection } = await useRefreshGithubConnections(server, user, connection.installation_id);
 
 		if (refresh_connection) {
-			const { data: repo, error: repo_error } = await useGetRepositories(refresh_connection.token, per_page, currentPage);
+			const { data: repo, error: repo_error } = await useGetRepositories(refresh_connection.token, per_page);
 			if (repo_error) return useReturnResponse(event, notFoundError);
 
 			if (repo)

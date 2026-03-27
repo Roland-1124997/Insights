@@ -1,3 +1,4 @@
+// @ts-ignore - incorrect typescript(TS2595) error for consola in this context
 import { consola } from "consola";
 
 import { warmupImapCache } from "../utils/imap/watcher";
