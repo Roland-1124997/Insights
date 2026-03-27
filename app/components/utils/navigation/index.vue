@@ -18,9 +18,12 @@
 			</div>
 		</header>
 
-		<UtilsNavigationToolbar :toolbar :related />
-
-		<slot></slot>
+		<TransitionGroup name="page">
+			<div class="flex flex-col flex-1 w-full overflow-hidden" v-if="!isLoading">
+				<UtilsNavigationToolbar :toolbar :related />
+				<slot></slot>
+			</div>
+		</TransitionGroup>
 	</div>
 </template>
 
@@ -33,4 +36,30 @@
 	onMounted(async () => {
 		if (error.value) await refresh();
 	});
+
+	const isLoading = ref(false);
+	const route = useRoute();
+
+	watch(
+		() => route.path,
+		(path) => {
+			isLoading.value = true;
+
+			setTimeout(() => {
+				isLoading.value = false;
+			}, 200);
+		},
+	);
 </script>
+
+<style>
+	.page-enter-active,
+	.page-leave-active {
+		transition: all 0.2s ease-in-out;
+	}
+
+	.page-enter-from,
+	.page-leave-to {
+		opacity: 0;
+	}
+</style>
