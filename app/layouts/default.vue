@@ -43,6 +43,13 @@
 
 	const { close } = await notifications.realTime();
 
+	const isVisible = ref(true);
+
+	const handleVisibilityChange = () => {
+		isVisible.value = document.visibilityState === "visible";
+		if (isVisible.value) session.refreshSession();
+	};
+
 	onMounted(async () => {
 		session.setCloseFunction(close);
 
@@ -53,7 +60,12 @@
 		if (articles.error) articles.refresh();
 		if (storageStore.error) storageStore.refresh();
 		if (notifications.error) notifications.refresh();
+
+		document.addEventListener("visibilitychange", handleVisibilityChange);
 	});
 
-	onUnmounted(() => close());
+	onUnmounted(() => {
+		close();
+		document.removeEventListener("visibilitychange", handleVisibilityChange);
+	});
 </script>
