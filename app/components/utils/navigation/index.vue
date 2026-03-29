@@ -46,7 +46,7 @@
 	const route = useRoute();
 	const router = useRouter();
 
-	const { LastEntry } = useHistory();
+	const { LastEntry, set } = useHistory();
 
 	const fallbackFilter = computed(() => toolbar.value?.fallbackFilter || null);
 
@@ -62,7 +62,9 @@
 					filter: lastEntry.filter && lastEntry.filter != fallbackFilter.value ? lastEntry.filter : undefined,
 					search: lastEntry.search || undefined,
 					page: lastEntry.page && Number(lastEntry.page) > 2 ? lastEntry.page : undefined,
-				};
+				} as { filter: string; search: string; page: number };
+
+				set(route.path, [query]);
 
 				router
 					.replace({
