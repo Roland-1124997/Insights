@@ -84,7 +84,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 
 		const query = {
 			page: params?.page || useRoute().query.page || pagination.value.page || 1,
-			filter: params?.filter || useRoute().query.filter || "all",
+			filter: params?.filter || useRoute().query.filter || "alles",
 			search: params?.search !== undefined ? params.search : useRoute().query.search || "",
 		} as { filter: string; page: number; search: string };
 
