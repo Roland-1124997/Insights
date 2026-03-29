@@ -23,7 +23,6 @@ export const useSearch = (options?: { localSearch?: Ref<string | null>; callback
 	};
 
 	const setSearch = async (value: string | LocationQueryValue[] | null) => {
-		
 		const query = { ...route.query } as { [key: string]: string | number | undefined };
 		const lastEntry = LastEntry(route.path);
 		delete query.page;
@@ -44,7 +43,7 @@ export const useSearch = (options?: { localSearch?: Ref<string | null>; callback
 		search.value = value as string;
 		query.search = search.value;
 
-		if(!current) delete query.search;
+		if (!current) delete query.search;
 
 		await execute(value as string);
 
