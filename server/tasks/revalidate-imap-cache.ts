@@ -19,6 +19,5 @@ export default defineTask({
 				await heartBeat.error();
 				return { result: "Error revalidating IMAP cache", error };
 			});
-
 	},
 });

@@ -152,19 +152,16 @@ export const useGetSubscriptionProviderUrl = (endpoint: string) => {
 let secretKey: Awaited<ReturnType<typeof importEncryptSecret>>;
 export const useSecretKey = async (options: ModuleOptions) => (secretKey ? secretKey : (secretKey = await importEncryptSecret(options.encryptSecret, options.encryptAlgorithm)));
 
-export const useHeartBeat = (name: 'analytics' | "endpoints" | 'imapCache' | 'notifications') => {
-
+export const useHeartBeat = (name: "analytics" | "endpoints" | "imapCache" | "notifications") => {
 	const { heartbeats } = useRuntimeConfig();
 	const base = "https://uptime.betterstack.com/api/v1/heartbeat/";
 
 	const heartBeatToken = heartbeats[name];
 
 	const send = async (report?: string) => await fetch(`${base}${heartBeatToken}${report ? `/${report}` : ""}`).catch(() => {});
-	
-	const error = async () => await send('fail')
-	const success = async () => await send()
-	
+
+	const error = async () => await send("fail");
+	const success = async () => await send();
+
 	return { error, success };
-
-
-}
+};

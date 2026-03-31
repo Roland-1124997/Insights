@@ -9,9 +9,8 @@ export default defineTask({
 		description: "sends a notification every week with visits page statistics",
 	},
 	async run() {
-
 		const heartBeat = useHeartBeat("notifications");
-		
+
 		const { data, error } = await useFetchAnalytics(`stats:week`, {
 			startAt,
 			endAt,

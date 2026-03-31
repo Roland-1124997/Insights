@@ -220,7 +220,7 @@ export type Database = {
 					id?: string;
 				};
 				Relationships: [];
-			}
+			};
 		};
 		Views: {
 			[_ in never]: never;
