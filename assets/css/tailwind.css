@@ -60,21 +60,20 @@ li::marker {
 .tiptap > * + * {
 	margin-top: 0.5em;
 }
-
 .tiptap h1 {
-	@apply mb-6 text-4xl md:text-[3rem] md:leading-10 font-bold text-black text-balance;
+	@apply mb-6 text-4xl md:text-[3rem] md:leading-10 font-bold text-black text-balance scroll-m-64;
 }
 
 .tiptap h2 {
-	@apply mb-2 text-2xl font-semibold text-gray-800 text-balance;
+	@apply mb-2 text-2xl font-semibold text-gray-800 text-balance scroll-m-[6.85rem];
 }
 
 .tiptap h3 {
-	@apply mb-2 text-lg font-semibold text-gray-800 text-balance;
+	@apply mb-2 text-lg font-semibold text-gray-800 text-balance scroll-m-[6.85rem];
 }
 
 .tiptap h4 {
-	@apply text-base italic font-semibold text-gray-600 text-balance;
+	@apply text-base italic font-semibold text-gray-600 text-balance scroll-m-[6.85rem];
 }
 
 .tiptap p {
