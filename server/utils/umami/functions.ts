@@ -69,8 +69,6 @@ const setReferenceDate = (filter: "dag" | "week" | "maand" | "jaar", previous: b
 	};
 };
 
-
-
 const calculateStartAndEndDates = (filter: "dag" | "week" | "maand" | "jaar", year: number, month: number, day: number) => {
 	let startAt = new Date(year, month, day, 0, 0, 0, 0).getTime();
 	let endAt = new Date(year, month, day, 23, 59, 59, 999).getTime();
