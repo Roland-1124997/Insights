@@ -6,7 +6,7 @@ export default defineSupabaseEventHandler(async (event) => {
 	String((getQuery(event).search as string) ?? "").toLowerCase();
 
 	let response = await fetchImapMessagesFromStorageCache({
-		limit: 4,
+		limit: 5,
 		page,
 		filter,
 		search,
@@ -19,7 +19,7 @@ export default defineSupabaseEventHandler(async (event) => {
 		await useGetImapMailbox(imap_client, "INBOX");
 
 		response = await fetchImapMessages(imap_client, {
-			limit: 4,
+			limit: 5,
 			page,
 			filter,
 			search,
