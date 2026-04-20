@@ -1,10 +1,13 @@
 <template>
 	<div
-		type="button"
 		v-for="inbox in store.messages"
+		:id="`inbox-${inbox.id}`"
 		:key="inbox.id"
 		@click="store.selectMessage(inbox)"
-		@keydown.enter="store.selectMessage(inbox)"
+		@keydown.enter.prevent="store.selectMessage(inbox)"
+		@keydown.space.prevent="store.selectMessage(inbox)"
+		role="button"
+		tabindex="0"
 		:class="[
 			'w-full md:p-4 p-3 px-4 text-left mb-2 border cursor-pointer transition-colors duration-150 rounded-lg',
 			store.selected?.id == inbox.id ? 'bg-blue-50 border-blue-200' : ' hover:bg-gray-50 border-gray-200 hover:border-gray-300',
