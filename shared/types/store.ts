@@ -4,7 +4,7 @@ import type { ErrorResponse } from "./api";
 export type StoreType = Store<
 	string,
 	{
-		refresh?: (params?: { filter?: string; page?: number; search?: string }) => Promise<void>;
+		refresh?: (params?: { filter?: string; page?: number; search?: string }, append?: boolean, indicator?: boolean, rebuildUntilPage?: boolean) => Promise<void>;
 		revalidate?: () => Promise<void>;
 		alert?: { value: number };
 		loading: boolean;

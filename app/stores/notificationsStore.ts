@@ -78,17 +78,56 @@ export const useNotifications = defineStore("useNotifications", () => {
 		() => (selected.value = null),
 	);
 
-	const refresh = async (params?: { filter?: string; page?: number; search?: string }) => {
-		loading.value = true;
+	const refresh = async (params?: { filter?: string; page?: number; search?: string }, append: boolean = false, indicator: boolean = true, rebuildUntilPage: boolean = false) => {
+		loading.value = !append || indicator;
 		await new Promise((resolve) => setTimeout(resolve, 300));
 
 		const query = {
-			page: params?.page || useRoute().query.page || pagination.value.page || 1,
+			page: Number(params?.page || useRoute().query.page || pagination.value.page || 1),
 			filter: params?.filter || useRoute().query.filter || "alles",
 			search: params?.search !== undefined ? params.search : useRoute().query.search || "",
 		} as { filter: string; page: number; search: string };
 
 		set("/berichten", [query]);
+
+		if (rebuildUntilPage && !append && query.page > 1) {
+			const rebuiltMessages: (Inbox & { showDropdown?: boolean })[] = [];
+			let lastUnseen = unseen.value;
+			let lastTotalPages = pagination.value.total;
+
+			for (let page = 1; page <= query.page; page++) {
+				const { data, error: Error } = await Request.Get({
+					query: { ...query, page },
+				});
+
+				if (Error || !data) {
+					loading.value = false;
+					error.value = Error;
+					addToast({
+						message: "Er is een fout opgetreden bij het verversen van de berichten.",
+						type: "error",
+					});
+					return;
+				}
+
+				lastUnseen = data.data?.unseen || 0;
+				lastTotalPages = data.pagination?.total || 1;
+
+				const existingIds = new Set(rebuiltMessages.map((msg) => msg.uid));
+				const nextMessages = (data.data?.messages || []).filter((msg) => !existingIds.has(msg.uid));
+				rebuiltMessages.push(...nextMessages);
+			}
+
+			messages.value = rebuiltMessages;
+			pagination.value.page = query.page;
+			pagination.value.total = lastTotalPages;
+			unseen.value = lastUnseen;
+			loading.value = false;
+
+			if (query.page > lastTotalPages) return await toPage(lastTotalPages);
+
+			return;
+		}
 
 		const { data, error: Error } = await Request.Get({
 			query: { ...query },
@@ -103,7 +142,14 @@ export const useNotifications = defineStore("useNotifications", () => {
 			pagination.value.page = data.pagination?.page || 1;
 			pagination.value.total = data.pagination?.total || 1;
 
-			messages.value = data.data?.messages || [];
+			if (append) {
+				const existingIds = new Set(messages.value.map((msg) => msg.uid));
+				const newMessages = (data.data?.messages || []).filter((msg) => !existingIds.has(msg.uid));
+
+				if ((data.data?.messages || []).length === 0) messages.value = newMessages;
+				else messages.value = [...messages.value, ...newMessages];
+			} else messages.value = data.data?.messages || [];
+
 			unseen.value = data.data?.unseen || 0;
 
 			if (currentPage > totalPages) return await toPage(totalPages);
@@ -131,6 +177,21 @@ export const useNotifications = defineStore("useNotifications", () => {
 
 		set("/berichten", [params]);
 
+		for (let page = 1; page <= params.page - 1; page++) {
+			const { data, error: Error } = await Request.Get({
+				query: { ...params, page },
+			});
+
+			if (!Error && data) {
+				if (page === 1) messages.value = data.data?.messages || [];
+				else {
+					const existingIds = new Set(messages.value.map((msg) => msg.uid));
+					const newMessages = (data.data?.messages || []).filter((msg) => !existingIds.has(msg.uid));
+					messages.value = [...messages.value, ...newMessages];
+				}
+			}
+		}
+
 		const { data, error: Error } = await useFetch<ApiResponse<any>>("/api/notifications", {
 			query: { ...params },
 		});
@@ -140,8 +201,14 @@ export const useNotifications = defineStore("useNotifications", () => {
 			pagination.value.page = data.value?.pagination?.page || 1;
 			pagination.value.total = data.value?.pagination?.total || 1;
 
-			messages.value = data.value?.data.messages || [];
+			const existingIds = new Set(messages.value.map((msg) => msg.uid));
+			const newMessages = (data.value.data?.messages || []).filter((msg: Inbox & { showDropdown?: boolean }) => !existingIds.has(msg.uid));
+
+			if ((data.value.data?.messages || []).length === 0) messages.value = newMessages;
+			else messages.value = [...messages.value, ...newMessages];
+
 			unseen.value = data.value?.data.unseen || 0;
+
 			await setBadge(unseen.value);
 		} else {
 			loading.value = false;
@@ -389,7 +456,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 				})
 				.catch(() => {});
 
-			await navigateToPage(pagination.value.page);
+			await navigateToPage(pagination.value.page, true, false);
 		}
 	};
 
@@ -429,12 +496,9 @@ export const useNotifications = defineStore("useNotifications", () => {
 		}
 	};
 
-	const navigateToPage = async (page: number) => {
-		loading.value = true;
+	const navigateToPage = async (page: number, append: boolean = false, indicator: boolean = true) => {
 		await new Promise((resolve) => setTimeout(resolve, 500));
-		await refresh({ page: page });
-
-		loading.value = false;
+		await refresh({ page: page }, append, indicator);
 	};
 
 	return {

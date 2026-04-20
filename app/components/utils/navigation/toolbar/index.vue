@@ -134,7 +134,7 @@
 
 	const checkClickAction = (btn: Buttons) => {
 		if (isFileSelectButton(btn)) triggerFileSelect();
-		else if (isRefreshButton(btn)) store.value.refresh?.();
+		else if (isRefreshButton(btn)) store.value.refresh?.(undefined, false, true, true);
 		else if (isRevalidateButton(btn)) store.value.revalidate?.();
 		else if (isSubscribeButton(btn) || isUnsubscribeButton(btn)) {
 			if (active.value) unsubscribe();
