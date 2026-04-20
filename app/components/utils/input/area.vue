@@ -18,7 +18,8 @@
 				:placeholder
 				autocomplete="on"
 				class="w-full p-3 h-[12vh] text-gray-900 transition border resize-none rounded-xl bg-white/80 focus:outline-none focus:ring-2 disabled:opacity-60 disabled:cursor-not-allowed placeholder:text-gray-400"
-				:class="meta.validated && !meta.valid ? 'focus:ring-red-500/60 focus:border-red-500/60 border-red-500 ' : 'focus:ring-indigo-500/60 focus:border-indigo-500/60'" />
+				:class="meta.validated && !meta.valid ? 'focus:ring-red-500/60 focus:border-red-500/60 border-red-500 ' : 'focus:ring-indigo-500/60 focus:border-indigo-500/60'">
+			</textarea>
 		</div>
 	</field>
 </template>
