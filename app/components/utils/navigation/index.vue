@@ -61,7 +61,7 @@
 				const query = {
 					filter: lastEntry.filter && lastEntry.filter != fallbackFilter.value ? lastEntry.filter : undefined,
 					search: lastEntry.search || undefined,
-					page: lastEntry.page && Number(lastEntry.page) > 2 ? lastEntry.page : undefined,
+					page: lastEntry.page && Number(lastEntry.page) > 1 ? lastEntry.page : undefined,
 				} as { filter: string; search: string; page: number };
 
 				router

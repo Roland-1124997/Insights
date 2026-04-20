@@ -81,7 +81,7 @@
 
 		if (lastEntry?.filter && lastEntry.filter != Route.toolbar?.fallbackFilter) params.set("filter", lastEntry.filter);
 		if (lastEntry?.search) params.set("search", lastEntry.search);
-		if (lastEntry?.page && Number(lastEntry.page) > 2) params.set("page", String(lastEntry.page));
+		if (lastEntry?.page && Number(lastEntry.page) > 1) params.set("page", String(lastEntry.page));
 
 		const queryString = params.toString();
 		return queryString ? `${to}?${queryString}` : to;
