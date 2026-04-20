@@ -7,6 +7,7 @@
 					<UtilsDisplayError label="berichten" IconName="akar-icons:inbox" v-if="store.messages.length === 0" />
 					<ClientOnly v-else>
 						<UtilsEmailsCard />
+						<UtilsEmailsCardSkeleton v-if="isLoading" />
 						<template #fallback>
 							<UtilsEmailsCardSkeleton />
 						</template>
@@ -50,7 +51,7 @@
 	const store = useNotifications();
 	const el = useTemplateRef("el");
 
-	useInfiniteScroll(el, () => store.nextPage(), {
+	const { isLoading } = useInfiniteScroll(el, () => store.nextPage(), {
 		canLoadMore: () => {
 			const currentPage = store.pagination.page;
 			const totalPages = store.pagination.total;

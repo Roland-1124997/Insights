@@ -1,6 +1,6 @@
 <template>
 	<div
-		v-for="n in 4"
+		v-for="n in count"
 		:key="n"
 		class="w-full h-[7.7rem] md:h-[8.15rem] md:p-4 p-3 px-4 text-left mb-2 border transition-colors duration-150 rounded-lg bg-gray-50 animate-pulse flex flex-col justify-between">
 		<div class="flex items-start gap-3 mt-1 select-none">
@@ -23,3 +23,12 @@
 		</div>
 	</div>
 </template>
+
+<script setup lang="ts">
+	defineProps({
+		count: {
+			type: Number,
+			default: 5,
+		},
+	});
+</script>
