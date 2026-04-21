@@ -22,6 +22,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 	const messages = ref<(Inbox & { showDropdown?: boolean })[]>([]);
 	const unseen = ref<number>(0);
 	const error = ref<ErrorResponse | null>(null);
+	const lastVisibleInboxId = ref<string | null>(null);
 
 	const route = useRoute();
 
@@ -30,6 +31,8 @@ export const useNotifications = defineStore("useNotifications", () => {
 	const alert = computed<{ value: number }>(() => {
 		return { value: unseen.value };
 	});
+
+	const setLastVisibleInboxId = (id: string | null) => (lastVisibleInboxId.value = id);
 
 	const storedPayload = useLocalStorage<string | null>("notification:payload", null);
 	const savePayload = async (payload: any) => (storedPayload.value = JSON.stringify(payload));
@@ -124,6 +127,16 @@ export const useNotifications = defineStore("useNotifications", () => {
 			unseen.value = lastUnseen;
 			loading.value = false;
 
+			setTimeout(() => {
+				const inboxItem = document.getElementById(`inbox-${selected.value?.id || lastVisibleInboxId.value}`);
+
+				inboxItem?.scrollIntoView({
+					behavior: "instant",
+					block: selected.value ? "start" : "nearest",
+					inline: selected.value ? "start" : "nearest",
+				});
+			}, 10);
+
 			if (query.page > lastTotalPages) return await toPage(lastTotalPages);
 
 			return;
@@ -176,21 +189,6 @@ export const useNotifications = defineStore("useNotifications", () => {
 		} as { filter: string; page: number; search: string };
 
 		set("/berichten", [params]);
-
-		for (let page = 1; page <= params.page - 1; page++) {
-			const { data, error: Error } = await Request.Get({
-				query: { ...params, page },
-			});
-
-			if (!Error && data) {
-				if (page === 1) messages.value = data.data?.messages || [];
-				else {
-					const existingIds = new Set(messages.value.map((msg) => msg.uid));
-					const newMessages = (data.data?.messages || []).filter((msg) => !existingIds.has(msg.uid));
-					messages.value = [...messages.value, ...newMessages];
-				}
-			}
-		}
 
 		const { data, error: Error } = await useFetch<ApiResponse<any>>("/api/notifications", {
 			query: { ...params },
@@ -509,6 +507,8 @@ export const useNotifications = defineStore("useNotifications", () => {
 		error,
 		activeMessageId,
 		pagination,
+		lastVisibleInboxId,
+		setLastVisibleInboxId,
 		openMessageById,
 		clearSavedPayload,
 		savePayload,

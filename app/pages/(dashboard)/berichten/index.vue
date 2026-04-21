@@ -6,7 +6,7 @@
 				<template v-else>
 					<UtilsDisplayError label="berichten" IconName="akar-icons:inbox" v-if="store.messages.length === 0" />
 					<ClientOnly v-else>
-						<UtilsEmailsCard />
+						<UtilsEmailsCard :parent="el" @lastVisibleChanged="onItemVisible" />
 						<UtilsEmailsCardSkeleton v-if="isLoading" />
 						<template #fallback>
 							<UtilsEmailsCardSkeleton />
@@ -60,4 +60,10 @@
 			return !loading && currentPage < totalPages;
 		},
 	});
+
+	const onItemVisible = (id: string | null) => {
+		if(id && !isLoading.value) store.setLastVisibleInboxId(id);
+	};
+
+	
 </script>
