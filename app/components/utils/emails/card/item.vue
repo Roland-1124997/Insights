@@ -12,7 +12,7 @@
 		]"
 		:data-visible="targetIsVisible">
 		<div ref="target" class="flex items-start gap-3 select-none">
-			<div class="flex-1">
+			<div :class="waiting ? ' opacity-0' : ''" class="flex-1">
 				<div class="flex items-center justify-between">
 					<div class="flex items-center gap-2">
 						<div v-if="!inbox.flags.includes('\\Seen')" class="flex-shrink-0 w-4 h-4 text-white bg-blue-500 rounded-full" role="status" aria-label="Ongelezen bericht"></div>
@@ -91,7 +91,17 @@
 </template>
 
 <script setup lang="ts">
+
 	type InboxItem = Inbox & { showDropdown?: boolean };
+
+	const waiting = ref(true);
+
+	new Promise((resolve) => {
+		setTimeout(() => {
+			waiting.value = false;
+		}, 5);
+	});
+
 
 	const emit = defineEmits<{
 		visibilityChanged: [id: string, isVisible: boolean];
