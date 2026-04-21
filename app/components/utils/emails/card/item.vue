@@ -91,7 +91,6 @@
 </template>
 
 <script setup lang="ts">
-
 	type InboxItem = Inbox & { showDropdown?: boolean };
 
 	const waiting = ref(true);
@@ -101,7 +100,6 @@
 			waiting.value = false;
 		}, 5);
 	});
-
 
 	const emit = defineEmits<{
 		visibilityChanged: [id: string, isVisible: boolean];
