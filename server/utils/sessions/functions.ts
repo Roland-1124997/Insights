@@ -3,6 +3,12 @@ import { SupabaseClient, Session, User, AuthError } from "@supabase/supabase-js"
 
 export type { SupabaseClient, Session, User };
 export type SupaBaseUser = User & { current_session_id: string; aal: string };
+type SessionLookupResult = {
+	data: { user: SupaBaseUser | null };
+	error: any;
+};
+
+const pendingSessionLookups = new Map<string, Promise<SessionLookupResult>>();
 
 export const validateAccessToken = (currentSession: Session | Omit<Session, "user">) => {
 	if (!currentSession?.access_token) {
@@ -18,7 +24,7 @@ export const validateAccessToken = (currentSession: Session | Omit<Session, "use
 };
 
 export const validateRefreshToken = (currentSession: Session | Omit<Session, "user">) => {
-	if (!currentSession?.access_token) {
+	if (!currentSession?.refresh_token) {
 		return {
 			valid: false,
 			error: {
@@ -49,36 +55,46 @@ export const useRefreshSession = async (client: SupabaseClient<Database>, curren
 };
 
 export const useGetSession = async (event: H3Event, client: SupabaseClient<Database>, currentSession: Session | Omit<Session, "user"> | null) => {
-	if (!currentSession)
+	if (!currentSession?.access_token)
 		return {
 			data: { user: null },
 			error: { message: "De gebruiker heeft geen active sessie", status: 401 },
 		};
 
-	const validation = validateAccessToken(currentSession);
-	if (!validation.valid)
+	const session_id = extractSessionId(currentSession) as string;
+	if (!session_id)
 		return {
 			data: { user: null },
-			error: validation.error,
+			error: { message: "De gebruiker heeft geen active sessie", status: 401 },
 		};
-
-	const session_id = extractSessionId(currentSession) as string;
 
 	const cachedResult = await useGetCachedUser(session_id);
 	if (cachedResult) return cachedResult;
 
-	const { data: supabaseUser, error } = await useFetchSupabaseUser(event, client, currentSession.access_token!, session_id);
+	const pendingLookup = pendingSessionLookups.get(session_id);
+	if (pendingLookup) return pendingLookup;
 
-	if (supabaseUser && !error) await useSetCachedUser(session_id, supabaseUser);
+	const lookupPromise = (async (): Promise<SessionLookupResult> => {
+		const { data: supabaseUser, error } = await useFetchSupabaseUser(event, client, currentSession.access_token!, session_id);
+		const user = supabaseUser ? { ...supabaseUser } : null;
 
-	return {
-		data: {
-			user: {
-				...supabaseUser,
+		if (user && !error) await useSetCachedUser(session_id, user);
+
+		return {
+			data: {
+				user,
 			},
-		},
-		error,
-	};
+			error,
+		};
+	})();
+
+	pendingSessionLookups.set(session_id, lookupPromise);
+
+	try {
+		return await lookupPromise;
+	} finally {
+		pendingSessionLookups.delete(session_id);
+	}
 };
 
 export const useDeleteSession = async (client: SupabaseClient<Database>, user: SupaBaseUser) => {

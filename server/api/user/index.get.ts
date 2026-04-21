@@ -2,13 +2,17 @@ export default defineEventHandler(async (event) => {
 	const client = await serverSupabaseClient(event);
 	const currentSession = await useGetCookies(event);
 
-	const { data, error } = await useGetSession(event, client, currentSession);
+	const { data, error: sessionError } = await useGetSession(event, client, currentSession);
 
-	if (error) {
-		const { data, error } = await useRefreshSession(client, currentSession);
-		if (!data.session || error) return useReturnResponse(event, unauthorizedError);
+	if (sessionError) {
+		const canRefresh = Boolean(currentSession?.refresh_token) && [401, 403].includes(Number(sessionError.status));
 
-		useSetCookies(event, data.session);
+		if (!canRefresh) return useReturnResponse(event, unauthorizedError);
+
+		const { data: refreshedData, error: refreshError } = await useRefreshSession(client, currentSession);
+		if (!refreshedData.session || refreshError) return useReturnResponse(event, unauthorizedError);
+
+		useSetCookies(event, refreshedData.session);
 
 		return useReturnResponse(event, {
 			status: {
@@ -16,7 +20,7 @@ export default defineEventHandler(async (event) => {
 				message: "Ok",
 				code: 200,
 			},
-			data: await useSetSessionData(event, data.user as SupaBaseUser),
+			data: await useSetSessionData(event, refreshedData.user as SupaBaseUser),
 		});
 	}
 
