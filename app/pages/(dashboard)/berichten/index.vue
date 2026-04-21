@@ -62,8 +62,6 @@
 	});
 
 	const onItemVisible = (id: string | null) => {
-		if(id && !isLoading.value) store.setLastVisibleInboxId(id);
+		if (id && !isLoading.value) store.setLastVisibleInboxId(id);
 	};
-
-	
 </script>
