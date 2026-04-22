@@ -13,6 +13,21 @@ let headers;
 const url = "/api/integrations/subscription";
 const channel = new BroadcastChannel("sw-messages");
 
+const pagesToCache = [
+	"/",
+	"/monitors",
+	"/berichten",
+	"/artikelen",
+	"/mediabank",
+	"/account",
+	"/portfolio",
+	"/statistieken/pagina's",
+	"/statistieken/landen",
+	"/statistieken/apparaten",
+	"/auth/login",
+	"/auth/verify",
+];
+
 const getSubscriptionStatus = async () => {
 	await fetch("/api/user");
 
@@ -59,9 +74,37 @@ const checkSubscription = async (reSubscribe) => {
 const postToClient = (type, payload) => channel.postMessage({ type, payload });
 
 registerRoute(
+	({ request, url }) => request.mode === "navigate" && pagesToCache.includes(url.pathname),
+	new NetworkFirst({
+		cacheName: "workbox-page-cache",
+		plugins: [
+			{
+				cacheableResponse: {
+					statuses: [200],
+				},
+			},
+		],
+	}),
+);
+
+registerRoute(
+	({ url }) => url.pathname.startsWith("/_nuxt/") && (url.pathname.endsWith(".js") || url.pathname.endsWith(".css")),
+	new NetworkFirst({
+		cacheName: "workbox-assets-cache-v1",
+		plugins: [
+			{
+				cacheableResponse: {
+					statuses: [200],
+				},
+			},
+		],
+	}),
+);
+
+registerRoute(
 	({ url }) => url.pathname === "/ping.txt",
 	new CacheFirst({
-		cacheName: "ping-cache",
+		cacheName: "workbox-ping-cache",
 		plugins: [
 			{
 				cacheableResponse: {
@@ -75,7 +118,7 @@ registerRoute(
 registerRoute(
 	({ url }) => url.pathname.includes("/icons/"),
 	new StaleWhileRevalidate({
-		cacheName: "image-cache",
+		cacheName: "workbox-image-cache",
 		plugins: [
 			{
 				cacheableResponse: {
@@ -92,7 +135,7 @@ registerRoute(
 		return pathSegments.length >= 3 && pathSegments[1] === "api" && pathSegments[2] !== "user";
 	},
 	new NetworkFirst({
-		cacheName: "api-cache",
+		cacheName: "workbox-api-cache",
 		plugins: [
 			{
 				cacheableResponse: {
@@ -109,7 +152,7 @@ registerRoute(
 		return pathSegments.length >= 3 && pathSegments[1] === "api" && pathSegments[2] == "user";
 	},
 	new NetworkFirst({
-		cacheName: "user-api-cache",
+		cacheName: "workbox-user-api-cache",
 		plugins: [
 			{
 				cacheableResponse: {
