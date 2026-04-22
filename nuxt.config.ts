@@ -28,7 +28,7 @@ export default defineNuxtConfig({
 	vite: {
 		build: {
 			// Verhoog de waarschuwing limiet voor chunk grootte, aangezien sommige libraries (zoals elk.js, vue.pdf) een grote footprint hebben
-			chunkSizeWarningLimit: 2200,
+			chunkSizeWarningLimit: 3000,
 			rollupOptions: {
 				output: {
 					manualChunks(id) {
