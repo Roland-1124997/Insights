@@ -1,5 +1,6 @@
-import { randomUUID } from "crypto";
+// @ts-ignore
 import { consola } from "consola";
+import { randomUUID } from "crypto";
 
 const { startAt, endAt } = formulateDates("week", true);
 const timezone = "Europe/Amsterdam";
