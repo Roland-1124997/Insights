@@ -111,36 +111,27 @@
 
 	const container = useTemplateRef("tiptap-container");
 
-	// hack to ensure there's no rendering issues with the buttons
 	onMounted(async () => {
 		setTimeout(() => {
-			let hasErrored = false;
+			const images = container.value?.querySelectorAll<HTMLImageElement>("img") || [];
 
-			const images = container.value?.querySelectorAll("img") || [];
+			for (const image of images) {
+				if (image.src.endsWith("/github.jpg")) continue;
 
-			images.forEach((image) => {
-				const placeholderSrc = "/github.jpg";
-				const originalSrc = image.src;
+				if (image.complete && image.naturalWidth === 0) {
+					image.src = "/github.jpg";
+					continue;
+				}
 
-				const cached = new Image();
-				cached.src = originalSrc;
-
-				cached.onload = () => {
-					image.src = originalSrc;
-				};
-
-				cached.onerror = () => {
-					image.src = placeholderSrc;
-					hasErrored = true;
-					image.onerror = null;
-				};
-			});
-
-			if (hasErrored)
-				addToast({
-					message: "Er zijn elke afbeelding in het artikel vervangen met een plaatshouder",
-					type: "error",
-				});
+				image.addEventListener(
+					"error",
+					() => {
+						if (image.src.endsWith("/github.jpg")) return;
+						image.src = "/github.jpg";
+					},
+					{ once: true },
+				);
+			}
 		}, 100);
 
 		if (!editId.value) await new Promise((resolve) => setTimeout(resolve, 100));

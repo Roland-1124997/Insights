@@ -197,6 +197,7 @@ export default defineNuxtConfig({
 		},
 		injectManifest: {
 			globPatterns: ["**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}"],
+			globIgnores: ["icons/**", "screenshots/**", "splash_screens/**", "apple-touch-icon*"],
 			maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10 MB
 		},
 		devOptions: {
