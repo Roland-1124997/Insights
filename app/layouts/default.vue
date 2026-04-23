@@ -1,5 +1,9 @@
 <template>
 	<UtilsApp>
+		<div aria-hidden class="absolute top-0 left-0 w-1 h-1 overflow-hidden">
+			<NuxtImg src="/github.jpg" />
+		</div>
+
 		<UtilsNavigation>
 			<main class="flex-1 p-4 overflow-x-hidden overflow-y-auto">
 				<div class="mx-auto">

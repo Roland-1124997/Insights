@@ -119,15 +119,24 @@
 			const images = container.value?.querySelectorAll("img") || [];
 
 			images.forEach((image) => {
-				image.src = "/github.jpg";
+				const placeholderSrc = "/github.jpg";
+				const originalSrc = image.src;
 
-				image.addEventListener("error", () => {
-					image.src = "/github.jpg";
+				const cached = new Image();
+				cached.src = originalSrc;
+
+				cached.onload = () => {
+					image.src = originalSrc;
+				};
+
+				cached.onerror = () => {
+					image.src = placeholderSrc;
 					hasErrored = true;
-				});
+					image.onerror = null;
+				};
 			});
 
-			if (!hasErrored)
+			if (hasErrored)
 				addToast({
 					message: "Er zijn elke afbeelding in het artikel vervangen met een plaatshouder",
 					type: "error",
@@ -139,8 +148,9 @@
 	});
 
 	if (editId.value) {
-		const { data } = await useFetch(`/api/articles/${editId.value}`);
-		if (data.value) content.value = store.getSavedPayload() || data.value.data.content;
+		const { data, error } = await useFetch(`/api/articles/${editId.value}`);
+		if (error.value) content.value = store.articles?.find((article) => article.id === editId.value)?.content || store.getSavedPayload();
+		else content.value = store.getSavedPayload() || data.value.data.content;
 	} else content.value = store.getSavedPayload();
 
 	const title = ref("");

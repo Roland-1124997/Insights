@@ -86,7 +86,14 @@
 	const store = useArticles();
 
 	const handleImageError = (event: Event) => {
-		const target = event.target as HTMLImageElement;
+		const target = event.currentTarget as HTMLImageElement;
+
+		if (target.src.endsWith("/github.jpg")) {
+			target.onerror = null;
+			return;
+		}
+
+		target.onerror = null;
 		target.src = "/github.jpg";
 	};
 </script>

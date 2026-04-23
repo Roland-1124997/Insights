@@ -24,6 +24,7 @@ const pages = [
 	"/monitors",
 	"/berichten",
 	"/artikelen",
+	"/artikelen/opstellen",
 	"/mediabank",
 	"/account",
 	"/portfolio",
@@ -36,7 +37,7 @@ const pages = [
 
 const routes = ["/api/umami/analytics", "/api/auth/account/sessions", "/api/articles", "/api/integrations/monitors/resources", "/api/notifications", "/api/storage"];
 
-const images = ["/github.jpg", "/svgs/icon_512-blue.svg", "/svgs/icon_512-white.svg", "/svgs/icon_512.svg"];
+const images = ["/github.jpg"];
 
 const isExactPageRoute = (pathname) => pages.some((page) => page === pathname);
 
