@@ -37,7 +37,11 @@
 				{{ article.description || "Geen beschrijving beschikbaar" }}
 			</p>
 
-			<img @error="handleImageError" :src="article?.thumbnail_url ? article?.thumbnail_url : '/github.jpg'" :alt="`Thumbnail voor ${article.title}`" class="object-cover object-top w-full h-40 mb-2 bg-white border rounded-lg select-none" />
+			<img
+				@error="handleImageError"
+				:src="article?.thumbnail_url ? article?.thumbnail_url : '/github.jpg'"
+				:alt="`Thumbnail voor ${article.title}`"
+				class="object-cover object-top w-full h-40 mb-2 bg-white border rounded-lg select-none" />
 
 			<div class="flex flex-wrap items-center gap-2 mb-2 select-none">
 				<span v-for="topic in article.topics" :key="topic" class="flex items-center gap-1 px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-md">
@@ -85,5 +89,4 @@
 		const target = event.target as HTMLImageElement;
 		target.src = "/github.jpg";
 	};
-
 </script>

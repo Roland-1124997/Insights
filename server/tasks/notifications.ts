@@ -22,7 +22,7 @@ export default defineTask({
 
 		if (error) {
 			await heartBeat.error();
-			return { result: "Error fetching analytics data" };
+			return { result: error };
 		}
 
 		const { message, title } = formatWeeklyStatsMessage(data);
