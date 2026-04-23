@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 * {
-	font-family: "Livvic";
+	font-family: "Zalando Sans", "sans-serif" !important;
 }
 
 :root {
