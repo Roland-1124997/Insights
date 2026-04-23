@@ -5,7 +5,7 @@ const catcher = async <T>(promise: Promise<T>) => {
 	} catch (error: any) {
 		return {
 			data: null,
-			error: (error.data.error || error.data || error) as ErrorResponse,
+			error: (error?.data?.error || error?.data || error) as ErrorResponse,
 		};
 	}
 };
