@@ -41,7 +41,7 @@
 								</FormBase>
 							</div>
 
-							<div id="tiptap-container" class="relative flex-1 min-h-0 p-2 overflow-x-hidden overflow-y-auto md:p-10">
+							<div ref="tiptap-container" class="relative flex-1 min-h-0 p-2 overflow-x-hidden overflow-y-auto md:p-10">
 								<drag-handle v-if="editor" :editor="editor" :compute-position-config="{ placement: 'left-start', strategy: 'absolute' }">
 									<div class="custom-drag-handle">
 										<icon name="fluent:re-order-dots-20-filled" class="w-4 h-4 text-gray-800" aria-hidden="true" />
@@ -109,8 +109,31 @@
 
 	const loaded = ref(true);
 
+	const container = useTemplateRef("tiptap-container");
+
 	// hack to ensure there's no rendering issues with the buttons
 	onMounted(async () => {
+		setTimeout(() => {
+			let hasErrored = false;
+
+			const images = container.value?.querySelectorAll("img") || [];
+
+			images.forEach((image) => {
+				image.src = "/github.jpg";
+
+				image.addEventListener("error", () => {
+					image.src = "/github.jpg";
+					hasErrored = true;
+				});
+			});
+
+			if (!hasErrored)
+				addToast({
+					message: "Er zijn elke afbeelding in het artikel vervangen met een plaatshouder",
+					type: "error",
+				});
+		}, 100);
+
 		if (!editId.value) await new Promise((resolve) => setTimeout(resolve, 100));
 		loaded.value = false;
 	});
@@ -165,8 +188,7 @@
 	};
 
 	const getScrollParent = () => {
-		const container = document.getElementById("tiptap-container");
-		return container ?? window;
+		return container.value ?? window;
 	};
 
 	// Debounce for future syncing or autosaving features

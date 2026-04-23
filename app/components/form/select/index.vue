@@ -106,7 +106,7 @@
 			<h1 class="mb-3 text-3xl font-bold">${repo.name.replaceAll("/", "-")}</h1>
 			<div class="flex items-center mb-4">${tagsHtml}</div>
 			<connection-view private="${repo.private}" html_url="${repo.html_url}" homepage="${repo.homepage}"> </connection-view>
-			<img src="https://t2.tudocdn.net/510706?w=1920" alt="GitHub " contenteditable="false" draggable="true">
+			<img src="/github.jpg" alt="GitHub " contenteditable="false" draggable="true">
 			<p class="mb-4 text-sm text-gray-700">${repo.description ?? ""}</p>
 		`;
 
