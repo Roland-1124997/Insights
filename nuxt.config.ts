@@ -12,7 +12,7 @@ export default defineNuxtConfig({
 			enabled: true,
 		},
 	},
-	modules: ["@nuxt/icon", "@nuxtjs/tailwindcss", "@vueuse/nuxt", "@nuxt/image", "@nuxtjs/supabase", "@pinia/nuxt", "@vite-pwa/nuxt", "nuxt-charts", "@vee-validate/nuxt", "@nuxt/a11y"],
+	modules: ["@nuxt/icon", "@nuxtjs/tailwindcss", "@vueuse/nuxt", "@nuxt/image", "@nuxtjs/supabase", "@pinia/nuxt", "@vite-pwa/nuxt", "nuxt-charts", "@vee-validate/nuxt", "@nuxt/a11y", "@nuxt/fonts"],
 	nitro: {
 		scheduledTasks: {
 			"*/10 * * * *": ["analytics", "endpoints"],
