@@ -195,6 +195,10 @@ export default defineNuxtConfig({
 				client_mode: ["navigate-existing", "auto"],
 			},
 		},
+		injectManifest: {
+			globPatterns: ["**/*.{js,json,css,html,txt,svg,png,ico,webp,woff,woff2,ttf,eot,otf,wasm}"],
+			maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10 MB
+		},
 		devOptions: {
 			enabled: true,
 			type: "module",

@@ -13,7 +13,13 @@ let headers;
 const url = "/api/integrations/subscription";
 const channel = new BroadcastChannel("sw-messages");
 
-const pagesToCache = [
+const PAGE_CACHE_NAME = "workbox-page-cache";
+const API_CACHE_NAME = "workbox-api-cache";
+const IMAGE_CACHE_NAME = "workbox-image-cache";
+const PING_CACHE_NAME = "workbox-ping-cache";
+const USER_CACHE_NAME = "workbox-user-cache";
+
+const pages = [
 	"/",
 	"/monitors",
 	"/berichten",
@@ -27,6 +33,10 @@ const pagesToCache = [
 	"/auth/login",
 	"/auth/verify",
 ];
+
+const routes = ["/api/umami/analytics", "/api/auth/account/sessions", "/api/articles", "/api/integrations/monitors/resources", "/api/notifications", "/api/storage"];
+
+const isExactPageRoute = (pathname) => pages.some((page) => page === pathname);
 
 const getSubscriptionStatus = async () => {
 	await fetch("/api/user");
@@ -74,23 +84,9 @@ const checkSubscription = async (reSubscribe) => {
 const postToClient = (type, payload) => channel.postMessage({ type, payload });
 
 registerRoute(
-	({ request, url }) => request.mode === "navigate" && pagesToCache.includes(url.pathname),
+	({ request, url }) => request.method === "GET" && isExactPageRoute(url.pathname),
 	new NetworkFirst({
-		cacheName: "workbox-page-cache",
-		plugins: [
-			{
-				cacheableResponse: {
-					statuses: [200],
-				},
-			},
-		],
-	}),
-);
-
-registerRoute(
-	({ url }) => url.pathname.startsWith("/_nuxt/") && (url.pathname.endsWith(".js") || url.pathname.endsWith(".css")),
-	new NetworkFirst({
-		cacheName: "workbox-assets-cache-v1",
+		cacheName: PAGE_CACHE_NAME,
 		plugins: [
 			{
 				cacheableResponse: {
@@ -104,7 +100,7 @@ registerRoute(
 registerRoute(
 	({ url }) => url.pathname === "/ping.txt",
 	new CacheFirst({
-		cacheName: "workbox-ping-cache",
+		cacheName: PING_CACHE_NAME,
 		plugins: [
 			{
 				cacheableResponse: {
@@ -118,7 +114,7 @@ registerRoute(
 registerRoute(
 	({ url }) => url.pathname.includes("/icons/"),
 	new StaleWhileRevalidate({
-		cacheName: "workbox-image-cache",
+		cacheName: IMAGE_CACHE_NAME,
 		plugins: [
 			{
 				cacheableResponse: {
@@ -135,7 +131,7 @@ registerRoute(
 		return pathSegments.length >= 3 && pathSegments[1] === "api" && pathSegments[2] !== "user";
 	},
 	new NetworkFirst({
-		cacheName: "workbox-api-cache",
+		cacheName: API_CACHE_NAME,
 		plugins: [
 			{
 				cacheableResponse: {
@@ -152,7 +148,7 @@ registerRoute(
 		return pathSegments.length >= 3 && pathSegments[1] === "api" && pathSegments[2] == "user";
 	},
 	new NetworkFirst({
-		cacheName: "workbox-user-api-cache",
+		cacheName: USER_CACHE_NAME,
 		plugins: [
 			{
 				cacheableResponse: {
@@ -162,6 +158,33 @@ registerRoute(
 		],
 	}),
 );
+
+self.addEventListener("install", async () => {
+	const cache = await caches.open(PAGE_CACHE_NAME);
+	const apiCache = await caches.open(API_CACHE_NAME);
+
+	for (const page of pages) {
+		fetch(page, { credentials: "same-origin" })
+			.then(async (response) => {
+				if (response.ok) await cache.put(page, response.clone());
+			})
+			.catch(() => {});
+	}
+
+	for (const route of routes) {
+		fetch(route, { credentials: "same-origin" })
+			.then(async (response) => {
+				if (response.ok) await apiCache.put(route, response.clone());
+			})
+			.catch(() => {});
+	}
+});
+
+self.addEventListener("activate", async () => {
+	setInterval(async () => {
+		await checkSubscription();
+	}, 300000);
+});
 
 self.addEventListener("message", async (event) => {
 	const { type, payload } = event.data;
@@ -196,12 +219,6 @@ self.addEventListener("notificationclick", (event) => {
 			return clients.openWindow(event.notification.data.url);
 		}),
 	);
-});
-
-self.addEventListener("activate", () => {
-	setInterval(async () => {
-		await checkSubscription();
-	}, 300000);
 });
 
 setInterval(function () {
