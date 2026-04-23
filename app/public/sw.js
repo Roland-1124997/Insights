@@ -36,6 +36,8 @@ const pages = [
 
 const routes = ["/api/umami/analytics", "/api/auth/account/sessions", "/api/articles", "/api/integrations/monitors/resources", "/api/notifications", "/api/storage"];
 
+const images = ["/github.jpg", "/svgs/icon_512-blue.svg", "/svgs/icon_512-white.svg", "/svgs/icon_512.svg"];
+
 const isExactPageRoute = (pathname) => pages.some((page) => page === pathname);
 
 const getSubscriptionStatus = async () => {
@@ -112,7 +114,7 @@ registerRoute(
 );
 
 registerRoute(
-	({ url }) => url.pathname.includes("/icons/"),
+	({ url }) => url.pathname.includes(images),
 	new StaleWhileRevalidate({
 		cacheName: IMAGE_CACHE_NAME,
 		plugins: [
@@ -162,6 +164,15 @@ registerRoute(
 self.addEventListener("install", async () => {
 	const cache = await caches.open(PAGE_CACHE_NAME);
 	const apiCache = await caches.open(API_CACHE_NAME);
+	const imageCache = await caches.open(IMAGE_CACHE_NAME);
+
+	for (const image of images) {
+		fetch(image, { credentials: "same-origin" })
+			.then(async (response) => {
+				if (response.ok) await imageCache.put(image, response.clone());
+			})
+			.catch(() => {});
+	}
 
 	for (const page of pages) {
 		fetch(page, { credentials: "same-origin" })
