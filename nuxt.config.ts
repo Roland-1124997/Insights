@@ -19,6 +19,7 @@ export default defineNuxtConfig({
 			"0 1 1 */1 *": ["revalidate-imap-cache"],
 			"0 12 */5 * *": ["supabase"],
 			"0 3 * * 1": ["notifications"],
+			"0 22 * * *": ["restart-imap-watcher"],
 		},
 		experimental: {
 			tasks: true,
