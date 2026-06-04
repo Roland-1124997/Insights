@@ -109,7 +109,7 @@
 		: "";
 
 	const content = ref(repliedContent || "");
-	const composedContent = useLocalStorage<string>("notification:composed:payload", null);
+	const composedContent = useSaveLocalStorage("notification:composed:payload", null);
 
 	const introduce = `<p><strong>Beste, ${data?.from?.name || "[naam]"}</strong></p><p>hartelijk bedank voor het bericht</p>`;
 	const focus = `<p></p><p></p><p></p>`;

@@ -34,7 +34,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 
 	const setLastVisibleInboxId = (id: string | null) => (lastVisibleInboxId.value = id);
 
-	const storedPayload = useLocalStorage<string | null>("notification:payload", null);
+	const storedPayload = useSaveLocalStorage("notifications:payload", null);
 	const savePayload = async (payload: any) => (storedPayload.value = JSON.stringify(payload));
 	const clearSavedPayload = () => (storedPayload.value = null);
 
