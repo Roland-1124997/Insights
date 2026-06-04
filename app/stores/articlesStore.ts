@@ -34,7 +34,6 @@ export const useArticles = defineStore("useArticles", () => {
 
 	const storedPayload = useSaveLocalStorage("articles:payload", null);
 
-	// import.meta.client ? useLocalStorage<string | null>("articles:payload", null) : ref<string | null>(null);
 	const savePayload = async (payload: any) => (storedPayload.value = JSON.stringify(payload));
 	const clearSavedPayload = () => (storedPayload.value = null);
 

@@ -24,7 +24,7 @@
 							<icon name="akar-icons:chat-dots" class="w-3 h-3" aria-hidden="true" />
 							<span>{{ threadCount }}</span>
 						</div>
-						<h2 class="font-semibold text-gray-900 truncate text-balance">
+						<h2 class="font-bold text-gray-900 truncate text-balance">
 							{{ inbox.from.name || "Onbekende afzender" }}
 						</h2>
 					</div>
@@ -78,7 +78,7 @@
 					</div>
 				</div>
 
-				<p class="text-sm font-medium text-gray-600 text-balance line-clamp-2">
+				<p class="text-sm font-semibold text-gray-600 text-balance line-clamp-2">
 					{{ inbox.subject || "(Geen onderwerp)" }}
 				</p>
 
