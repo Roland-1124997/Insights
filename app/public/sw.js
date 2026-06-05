@@ -2,6 +2,7 @@ import { clientsClaim } from "workbox-core";
 import { precacheAndRoute, cleanupOutdatedCaches } from "workbox-precaching";
 import { registerRoute } from "workbox-routing";
 import { StaleWhileRevalidate, NetworkFirst, CacheFirst } from "workbox-strategies";
+import { CacheableResponsePlugin } from "workbox-cacheable-response";
 
 self.skipWaiting();
 clientsClaim();
@@ -91,11 +92,9 @@ registerRoute(
 	new NetworkFirst({
 		cacheName: PAGE_CACHE_NAME,
 		plugins: [
-			{
-				cacheableResponse: {
-					statuses: [200],
-				},
-			},
+			new CacheableResponsePlugin({
+				statuses: [200],
+			}),
 		],
 	}),
 );
@@ -105,11 +104,9 @@ registerRoute(
 	new CacheFirst({
 		cacheName: PING_CACHE_NAME,
 		plugins: [
-			{
-				cacheableResponse: {
-					statuses: [200],
-				},
-			},
+			new CacheableResponsePlugin({
+				statuses: [200],
+			}),
 		],
 	}),
 );
@@ -119,11 +116,9 @@ registerRoute(
 	new StaleWhileRevalidate({
 		cacheName: IMAGE_CACHE_NAME,
 		plugins: [
-			{
-				cacheableResponse: {
-					statuses: [200],
-				},
-			},
+			new CacheableResponsePlugin({
+				statuses: [200],
+			}),
 		],
 	}),
 );
@@ -136,11 +131,9 @@ registerRoute(
 	new NetworkFirst({
 		cacheName: API_CACHE_NAME,
 		plugins: [
-			{
-				cacheableResponse: {
-					statuses: [200],
-				},
-			},
+			new CacheableResponsePlugin({
+				statuses: [200],
+			}),
 		],
 	}),
 );
@@ -153,11 +146,9 @@ registerRoute(
 	new NetworkFirst({
 		cacheName: USER_CACHE_NAME,
 		plugins: [
-			{
-				cacheableResponse: {
-					statuses: [0, 200, 401, 403],
-				},
-			},
+				new CacheableResponsePlugin({
+					statuses: [0, 200, 401, 403]
+				}),
 		],
 	}),
 );
