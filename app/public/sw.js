@@ -146,9 +146,9 @@ registerRoute(
 	new NetworkFirst({
 		cacheName: USER_CACHE_NAME,
 		plugins: [
-				new CacheableResponsePlugin({
-					statuses: [0, 200, 401, 403]
-				}),
+			new CacheableResponsePlugin({
+				statuses: [0, 200, 401, 403],
+			}),
 		],
 	}),
 );
