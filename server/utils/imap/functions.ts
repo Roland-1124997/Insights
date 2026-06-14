@@ -73,7 +73,7 @@ export const buildResponse = async (message: FetchMessageObject, threadmap: Map<
 		if (index < 3) previewText += element.textContent + " ";
 	});
 
-	html = extendHtml(mail.html || "") || mail.textAsHtml || "";
+	html = mail.html ? extendHtml(mail.html) : mail.textAsHtml ? extendHtml(mail.textAsHtml) : "";
 
 	attachments = mail.attachments;
 	preview = previewText || mail.text || mail.textAsHtml || "";
