@@ -182,46 +182,85 @@
 			action: async () => {
 				const nodeView = editor.$node("nodeView");
 
-				if (!nodeView)
-					addToast({
-						type: "info",
-						message: "Ophalen van repositories...",
-					});
-				else
-					addToast({
-						type: "info",
-						message: "Bijwerken repository gegevens...",
-					});
-
 				const uri = "/api/integrations/github/repositories";
 				const request = useApiHandler<ApiResponse<GithubRepository[]>>(uri);
 
 				const { data: repositories, error } = await request.Get();
 
-				if (!error && repositories?.data) {
-					if (nodeView) {
-						const nodeAttrs = nodeView.node.attrs;
-						const selected = repositories.data.find((repo) => repo.html_url === nodeAttrs.html_url);
+				if (error || !repositories?.data) return addToast({
+					type: "error",
+					message: "Er is een fout opgetreden bij het ophalen van repositories",
+				});
 
-						const attrs = {
-							private: selected?.private || nodeAttrs.private || false,
-							html_url: selected?.html_url || nodeAttrs.html_url || "",
-							homepage: selected?.homepage || nodeAttrs.homepage || "",
-						};
-
-						nodeView.setAttribute(attrs);
-					} else
-						create({
-							name: "Verbind met GitHub",
-							description: "Kies een repository om mee te verbinden",
-							component: "FormSelect",
-							props: { repositories: repositories.data, editor },
-						});
-				} else
+				if (!nodeView) {
 					addToast({
-						type: "error",
-						message: "er is een fout opgetreden bij het ophalen van repositories",
+						type: "info",
+						message: "Ophalen van repositories...",
 					});
+
+					create({
+						name: "Verbind met GitHub",
+						description: "Kies een repository om mee te verbinden",
+						component: "FormSelect",
+						props: { repositories: repositories.data, editor },
+					});
+				} else {
+					create({
+						name: "Bijwerken repository gegevens",
+						description: "Bijwerken van de verbonden repository gegevens",
+						component: "UpdateForm",
+						props: {
+							message: {
+								confirm: "Kopeling bijwerken",
+								change: "Kopeling wijzigen",
+							},
+							onUpdate: () => {
+								close();
+
+								addToast({
+									type: "info",
+									message: "Bijwerken repository gegevens...",
+								});
+
+								const nodeAttrs = nodeView.node.attrs;
+								const selected = repositories.data?.find((repo) => repo.html_url === nodeAttrs.html_url);
+
+								const attrs = {
+									private: selected?.private || nodeAttrs.private || false,
+									html_url: selected?.html_url || nodeAttrs.html_url || "",
+									homepage: selected?.homepage || nodeAttrs.homepage || "",
+								};
+
+								nodeView.setAttribute(attrs);
+
+								new Promise((resolve) => setTimeout(resolve, 1000)).then(() => {
+									addToast({
+										type: "success",
+										message: "De repository gegevens zijn bijgewerkt.",
+									});
+								});
+							},
+
+							onChange: () => {
+								close();
+
+								addToast({
+									type: "info",
+									message: "Ophalen van repositories...",
+								});
+
+								new Promise((resolve) => setTimeout(resolve, 800)).then(() => {
+									create({
+										name: "Verbind met GitHub",
+										description: "Kies een repository om mee te verbinden",
+										component: "FormSelect",
+										props: { repositories: repositories.data, editor },
+									});
+								});
+							},
+						},
+					});
+				}
 			},
 		},
 		{

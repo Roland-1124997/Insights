@@ -22,6 +22,10 @@
 	<template v-else-if="component == 'ImageMeta'">
 		<FormImageMeta :props="props" />
 	</template>
+
+	<template v-else-if="component == 'UpdateForm'">
+		<FormUpdateRepository :props="props" />
+	</template>
 </template>
 
 <script lang="ts" setup>

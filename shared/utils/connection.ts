@@ -67,7 +67,7 @@ export const nodeView = Node.create({
 					content.appendChild(a);
 				}
 
-				if (attrs.homepage) {
+				if (attrs.homepage && attrs.homepage !== "null") {
 					const sep = document.createElement("span");
 					sep.className = "px-1 text-gray-100";
 					sep.textContent = "|";
