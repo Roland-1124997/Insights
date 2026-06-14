@@ -19,6 +19,9 @@ const appendImage = (currentEditor: Editor, file: File, pos?: number) => {
 	fileReader.onload = () => {
 		const { create, close } = useModal();
 
+		const json = currentEditor.getJSON?.() as any;
+		const title = (json?.content?.[0]?.content?.[0]?.text ?? "").replace(" ", "-").replace(/[^a-zA-Z0-9-_]/g, "") || "untitled";
+
 		const result = fileReader.result as string;
 
 		const onConfirm = async (attrs: { alt: string; title: string }) => {
@@ -55,6 +58,7 @@ const appendImage = (currentEditor: Editor, file: File, pos?: number) => {
 			props: {
 				content: {
 					src: result,
+					title: `${title}`,
 				},
 				onConfirm,
 			},
@@ -199,23 +203,23 @@ const replaceImageContent = (content: any, srcToFilename: Map<string, string>) =
 
 const prepareFiles = (filtered: any) => {
 	const sources: Map<string, string> = new Map();
-	const files: Array<{ src: string; file: File }> = [];
+	const files: Array<{ src: string; file: File; title: string }> = [];
 
 	filtered.value.forEach((node: any) => {
 		const src = node.attrs.src;
 		const file = pendingImages.get(src);
 
-		if (file) files.push({ src, file });
+		if (file) files.push({ src, file, title: node.attrs.title });
 	});
 
 	return { files, sources };
 };
 
-const prepareFormData = (files: Array<{ src: string; file: File }>, sources: Map<string, string>) => {
+const prepareFormData = (files: Array<{ src: string; file: File; title: string }>, sources: Map<string, string>) => {
 	const formData = new FormData();
 
-	files.forEach(({ src, file }) => {
-		const filename = `${file.name.replaceAll(" ", "-")}`;
+	files.forEach(({ src, file, title }) => {
+		const filename = `${title.replaceAll(" ", "-")}.${file.name.split(".").pop()}`;
 		formData.append(filename, file);
 		sources.set(src, filename);
 	});

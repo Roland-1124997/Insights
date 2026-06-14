@@ -10,14 +10,8 @@
 				<div class="flex flex-col justify-between w-full space-y-6">
 					<div class="space-y-6">
 						<div class="space-y-1">
-							<UtilsInput
-								:initial-value="props.content.title"
-								iconName="akar-icons:text-align-left"
-								name="title"
-								label="Bijschrift"
-								placeholder="Voeg een bijschrift toe voor deze afbeelding"
-								:required="true" />
-							<p class="text-xs text-gray-500 pl-0.5">Deze tekst wordt onder de afbeelding weergegeven</p>
+							<UtilsInput :initial-value="props.content.title" iconName="akar-icons:text-align-left" name="title" label="Titel " placeholder="Geef de afbeelding een titel" :required="true" />
+							<p class="text-xs text-gray-500 pl-0.5">Wordt gebruikt als bestandsnaam</p>
 						</div>
 
 						<div class="space-y-1">

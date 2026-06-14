@@ -7,7 +7,7 @@ export default defineSupabaseEventHandler(async (event, { server }) => {
 	if (!files || files.length === 0) return useReturnResponse(event, badRequestError);
 
 	for (const file of files) {
-		const { data, error } = await server.storage.from("stores").upload(`/${file.filename?.replaceAll(" ", "-")}`, file.data, {
+		const { data, error } = await server.storage.from("stores").upload(`/${file.name?.replaceAll(" ", "-")}`, file.data, {
 			cacheControl: "3600",
 			upsert: true,
 			contentType: file.type,
