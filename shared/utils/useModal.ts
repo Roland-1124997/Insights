@@ -3,7 +3,7 @@ import { ref, watch } from "vue";
 interface ModalOptions {
 	name: string;
 	description: string;
-	component: "FormSelect" | "FormInputUrl" | "Confirm" | "Email" | "Totp" | "ImageMeta" | "UpdateForm"
+	component: "FormSelect" | "FormInputUrl" | "Confirm" | "Email" | "Totp" | "ImageMeta" | "UpdateForm";
 	props: Record<string, any>;
 	hideOnDesktop?: boolean;
 	hideCloseButton?: boolean;

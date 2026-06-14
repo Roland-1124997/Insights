@@ -32,7 +32,7 @@ export default defineNuxtConfig({
 			chunkSizeWarningLimit: 3000,
 			rollupOptions: {
 				output: {
-					manualChunks(id) {
+					manualChunks(id: any) {
 						return loopThroughChunks(id);
 					},
 				},

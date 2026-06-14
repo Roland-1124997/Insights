@@ -187,10 +187,11 @@
 
 				const { data: repositories, error } = await request.Get();
 
-				if (error || !repositories?.data) return addToast({
-					type: "error",
-					message: "Er is een fout opgetreden bij het ophalen van repositories",
-				});
+				if (error || !repositories?.data)
+					return addToast({
+						type: "error",
+						message: "Er is een fout opgetreden bij het ophalen van repositories",
+					});
 
 				if (!nodeView) {
 					addToast({
