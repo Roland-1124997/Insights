@@ -212,8 +212,8 @@
 						component: "UpdateForm",
 						props: {
 							message: {
-								confirm: "Kopeling bijwerken",
-								change: "Kopeling wijzigen",
+								confirm: "Koppeling bijwerken",
+								change: "Koppeling wijzigen",
 							},
 							onUpdate: () => {
 								close();
