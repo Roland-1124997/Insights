@@ -1,6 +1,6 @@
 <template>
 	<template v-if="component == 'FormSelect'">
-		<FormSelect :editor="props.editor" :content="props.repositories" />
+		<FormSelect :props="props" />
 	</template>
 
 	<template v-else-if="component == 'FormInputUrl'">

@@ -10,6 +10,46 @@
 <script lang="ts" setup>
 	import type { Editor } from "@tiptap/vue-3";
 
+	const fetchRepositories = async () => {
+		const uri = "/api/integrations/github/repositories";
+		const request = useApiHandler<ApiResponse<GithubRepository[]>>(uri);
+
+		const { data: repositories, error } = await request.Get();
+
+		if (error || !repositories?.data)
+			return addToast({
+				type: "error",
+				message: "Er is een fout opgetreden bij het ophalen van repositories",
+			});
+
+		return repositories.data;
+	};
+
+	const github = (repositories: GithubRepository[]) => {
+		return {
+			content: repositories,
+			onConfirm: (selected: Repo) => {
+				if (!selected) return;
+
+				const tagsHtml = (selected.topics || []).map((topic) => `<strong><mark>${topic.toUpperCase()}</mark></strong>`).join(" ");
+				const title = `<h1 class="mb-3 text-3xl font-bold">${selected.name.replaceAll("/", "-")}</h1>`;
+				const connection = `<connection-view private="${selected.private}" html_url="${selected.html_url}" homepage="${selected.homepage}"> </connection-view>`;
+				const description = `<p class="mb-4 text-sm text-gray-700">${selected.description ?? ""}</p>`;
+
+				const html = `${title}<div class="flex items-center mb-4">${tagsHtml}</div>${connection}<img src="/github.jpg" alt="GitHub " contenteditable="false" draggable="true">${description}`;
+
+				editor.commands.setContent(html);
+
+				close();
+
+				addToast({
+					type: "success",
+					message: "De repository is succesvol gekoppeld.",
+				});
+			},
+		};
+	};
+
 	const { addToast } = useToast();
 	const { create, close } = useModal();
 
@@ -182,28 +222,22 @@
 			action: async () => {
 				const nodeView = editor.$node("nodeView");
 
-				const uri = "/api/integrations/github/repositories";
-				const request = useApiHandler<ApiResponse<GithubRepository[]>>(uri);
-
-				const { data: repositories, error } = await request.Get();
-
-				if (error || !repositories?.data)
-					return addToast({
-						type: "error",
-						message: "Er is een fout opgetreden bij het ophalen van repositories",
-					});
-
 				if (!nodeView) {
 					addToast({
 						type: "info",
 						message: "Ophalen van repositories...",
 					});
 
+					const repositories = await fetchRepositories();
+					if (!repositories) return;
+
 					create({
 						name: "Verbind met GitHub",
 						description: "Kies een repository om mee te verbinden",
 						component: "FormSelect",
-						props: { repositories: repositories.data, editor },
+						props: {
+							...github(repositories),
+						},
 					});
 				} else {
 					create({
@@ -215,7 +249,7 @@
 								confirm: "Koppeling bijwerken",
 								change: "Koppeling wijzigen",
 							},
-							onUpdate: () => {
+							onUpdate: async () => {
 								close();
 
 								addToast({
@@ -223,8 +257,11 @@
 									message: "Bijwerken repository gegevens...",
 								});
 
+								const repositories = await fetchRepositories();
+								if (!repositories) return;
+
 								const nodeAttrs = nodeView.node.attrs;
-								const selected = repositories.data?.find((repo) => repo.html_url === nodeAttrs.html_url);
+								const selected = repositories?.find((repo) => repo.html_url === nodeAttrs.html_url);
 
 								const attrs = {
 									private: selected?.private || nodeAttrs.private || false,
@@ -242,7 +279,7 @@
 								});
 							},
 
-							onChange: () => {
+							onChange: async () => {
 								close();
 
 								addToast({
@@ -250,12 +287,17 @@
 									message: "Ophalen van repositories...",
 								});
 
-								new Promise((resolve) => setTimeout(resolve, 800)).then(() => {
+								const repositories = await fetchRepositories();
+								if (!repositories) return;
+
+								new Promise((resolve) => setTimeout(resolve, 400)).then(() => {
 									create({
 										name: "Verbind met GitHub",
 										description: "Kies een repository om mee te verbinden",
 										component: "FormSelect",
-										props: { repositories: repositories.data, editor },
+										props: {
+											...github(repositories),
+										},
 									});
 								});
 							},

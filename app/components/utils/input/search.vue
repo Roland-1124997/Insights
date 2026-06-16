@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 	const { name, initialValue, toolbar } = defineProps({
-		toolbar: { type: Object as PropType<ToolBar>, required: true },
+		toolbar: { type: Object as PropType<ToolBar | undefined>, default: undefined },
 		name: { type: String, required: true },
 		label: { type: String, default: "text" },
 		placeholder: { type: String, default: "" },
@@ -29,6 +29,8 @@
 		disabled: { type: Boolean, default: false },
 		initialValue: { type: String, default: "" },
 	});
+
+	const external = defineModel();
 
 	const { value } = useField<string>(`${name}`);
 	value.value = initialValue;
@@ -38,14 +40,20 @@
 	const localHistory = ref<string>("");
 	const sourcePath = ref<string>(route.path);
 
-	const { history, setSearch } = useSearch({
-		localSearch,
-		callback: async (params) => {
-			await useInitilizeStore(toolbar, params);
-		},
-	});
+	// Conditional: only initialize useSearch if toolbar is provided
+	const hasToolbar = toolbar !== undefined;
+	const searchUtils = hasToolbar
+		? useSearch({
+				localSearch,
+				callback: async (params) => {
+					await useInitilizeStore(toolbar, params);
+				},
+			})
+		: null;
 
-	localHistory.value = history.LastEntry(route.path)?.search || "";
+	if (hasToolbar && searchUtils) {
+		localHistory.value = searchUtils.history.LastEntry(route.path)?.search || "";
+	}
 
 	const onInput = (event: Event) => {
 		sourcePath.value = route.path;
@@ -61,14 +69,20 @@
 		() => route.path,
 		(path) => {
 			sourcePath.value = path;
-			localSearch.value = (route.query.search as string) || history.LastEntry(path)?.search || "";
+			if (hasToolbar && searchUtils) {
+				localSearch.value = (route.query.search as string) || searchUtils.history.LastEntry(path)?.search || "";
+			}
 		},
 	);
 
 	watchDebounced(
 		localSearch,
 		async (newValue) => {
-			await setSearch(newValue, sourcePath.value);
+			if (hasToolbar && searchUtils) {
+				await searchUtils.setSearch(newValue, sourcePath.value);
+			} else {
+				external.value = newValue;
+			}
 		},
 		{ immediate: false, debounce: 1000, maxWait: 5000 },
 	);

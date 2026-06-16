@@ -1,116 +1,126 @@
 <template>
-	<div class="relative w-full mb-3 md:mb-auto">
-		<div class="relative w-full">
-			<button
-				type="button"
-				@click="toggleDropdown"
-				class="w-full p-3 pl-10 text-left text-gray-900 transition border rounded-xl bg-white/80 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/60 focus:border-indigo-500/60 disabled:opacity-60 disabled:cursor-not-allowed"
-				:class="{ 'ring-2 ring-indigo-500/60 border-indigo-500/60': isOpen }">
-				<span v-if="selected" class="block truncate">
-					{{ content.find((r) => r.id === selected)?.full_name }}
-				</span>
-				<span v-else class="block text-gray-600">Kies een repository...</span>
-				<icon
-					name="mdi:chevron-down"
-					class="absolute w-5 h-5 text-gray-900 transition-transform transform -translate-y-1/2 pointer-events-none right-3 top-1/2"
-					:class="{ 'rotate-180': isOpen }"
-					aria-hidden="true" />
-			</button>
+	<div class="w-full mb-3 md:mb-auto">
+		<template v-if="!details">
+			<UtilsInputSearch name="github" placeholder="Zoek in repositories" v-model="external" />
+			<div class="grid gap-3 grid-cols-2 mt-3 xl:grid-cols-3 max-h-[48vh] overflow-y-auto">
+				<button
+					v-for="repo in filteredContent"
+					:key="repo.id"
+					type="button"
+					@click="selectRepo(repo.id)"
+					class="flex flex-col h-full p-4 text-left transition border rounded-2xl focus:outline-none"
+					:class="selected === repo.id ? 'border-gray-200 bg-gray-100 ' : 'border-gray-200 bg-white/80 hover:bg-gray-50'">
+					<div class="flex items-start justify-between gap-3 mb-3">
+						<div>
+							<h3 class="font-semibold text-gray-900 truncate text-balance">{{ repo.name }}</h3>
+							<p class="text-xs text-gray-500">
+								<span v-if="repo.private">Privé</span>
+								<span v-else>Publiek</span>
+							</p>
+						</div>
+					</div>
 
-			<icon name="bxl:github" class="absolute w-5 h-5 text-gray-900 transform -translate-y-1/2 pointer-events-none left-3 top-1/2" aria-hidden="true" />
-
-			<div v-if="isOpen" class="absolute z-50 w-full mt-3 overflow-auto bg-white ring-2 ring-indigo-500/60 border rounded-xl max-h-[13rem] -top-[14.5rem] md:top-auto scroll-snap-y">
-				<ul class="">
-					<li
-						v-for="repo in content"
-						:key="repo.id"
-						@click="selectOption(repo.id)"
-						class="px-3 py-2 transition-colors border-t border-indigo-100 cursor-pointer first:border-t-0 hover:bg-indigo-50 scroll-snap-align"
-						:class="{ 'bg-indigo-100 font-medium': selected === repo.id }">
-						{{ repo.full_name }}
-					</li>
-				</ul>
-			</div>
-		</div>
-
-		<div v-if="details" class="p-2 pt-2 mt-2 text-sm border rounded-lg">
-			<div class="flex flex-wrap gap-2 mb-2">
-				<span v-for="topic in details.topics" :key="topic" class="px-2 py-1 text-xs font-medium text-blue-800 bg-blue-100 rounded-md">
-					{{ topic }}
-				</span>
+					<p class="flex-1 text-sm leading-6 text-gray-600 line-clamp-3">
+						{{ repo.description || "Geen beschrijving beschikbaar." }}
+					</p>
+				</button>
 			</div>
 
-			<p class="pt-1 pb-2 mb-2 text-sm text-gray-600 border-y text-balance">
-				{{ details.description }}
-			</p>
-
-			<div class="flex items-center gap-2 p-1 px-2 mt-1 font-mono text-xs text-gray-100 rounded-lg w-fit bg-neutral-900">
-				<icon name="bxl:github" class="w-4 h-4" aria-hidden="true" />
-				<span v-if="details.private" class="text-gray-300"> Niet beschikbaar </span>
-				<a v-else :href="details.html_url" target="_blank">Bekijk op GitHub </a>
-
-				<span v-if="details.homepage">|</span>
-
-				<icon v-if="details.homepage" name="fluent:link-20-filled" class="w-4 h-4" aria-hidden="true" />
-				<a v-if="details.homepage" :href="details.homepage" target="_blank">Website </a>
+			<div v-if="!filteredContent.length" class="flex flex-col items-center justify-center w-full h-[46vh] mt-3 text-sm text-gray-500 border border-gray-200 rounded-xl">
+				<p class="mb-1 text-base font-semibold text-gray-900">Geen repositories gevonden</p>
+				<p class="mb-3 text-sm text-gray-700 text-balance">Er zijn geen repositories die overeenkomen met je zoekopdracht:</p>
+				<div class="flex items-center justify-center w-full">
+					<div class="flex items-center gap-2 px-3 py-1 text-sm font-medium text-blue-800 bg-blue-100 rounded-md">
+						<icon name="akar-icons:search" class="w-3 h-3" />
+						<p>{{ external }}</p>
+					</div>
+				</div>
 			</div>
-		</div>
+		</template>
+
+		<template v-else>
+			<div class="mt-3">
+				<div class="flex flex-col h-full p-4 text-left transition border border-gray-200 rounded-2xl focus:outline-none bg-white/80">
+					<div class="flex items-start justify-between gap-3 mb-3">
+						<div>
+							<h3 class="text-lg font-semibold text-gray-900 truncate text-balance">{{ details.name }}</h3>
+							<p class="text-xs text-gray-500">{{ details.full_name }}</p>
+						</div>
+						<p class="px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md">
+							<span v-if="details.private">Privé</span>
+							<span v-else>Publiek</span>
+						</p>
+					</div>
+
+					<div v-if="details.topics?.length" class="flex flex-wrap gap-2 mb-4">
+						<span v-for="topic in details.topics" :key="topic" class="px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md">
+							{{ topic }}
+						</span>
+					</div>
+
+					<div>
+						<p class="mb-2 text-sm font-medium text-gray-700">Links</p>
+						<div class="flex gap-2 mb-4">
+							<a :href="details.html_url" target="_blank" class="flex items-center gap-2 px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md">
+								<icon name="akar-icons:github-fill" class="w-4 h-4" aria-hidden="true" />
+								<span class="ml-1">GitHub</span>
+							</a>
+							<a
+								v-if="details.homepage"
+								:href="details.homepage"
+								target="_blank"
+								class="flex items-center gap-2 px-2 py-1 text-xs font-medium text-gray-700 bg-gray-100 border border-gray-200 rounded-md">
+								<icon name="akar-icons:link-chain" class="w-4 h-4" aria-hidden="true" />
+								<span class="ml-1">Website</span>
+							</a>
+						</div>
+					</div>
+
+					<p class="mb-4 text-sm leading-6 text-gray-600">
+						{{ details.description || "Geen beschrijving beschikbaar." }}
+					</p>
+				</div>
+
+				<button
+					type="button"
+					@click="props.onConfirm(details)"
+					class="flex mt-2 items-center justify-center w-full gap-2.5 px-5 py-3.5 text-sm font-semibold text-white transition-all duration-200 bg-blue-600 border-blue-600 rounded-xl outline-none select-none hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400">
+					Koppel repository
+				</button>
+
+				<button
+					type="button"
+					@click="unselectRepo"
+					class="flex items-center justify-center w-full gap-2.5 px-5 py-3.5 text-sm font-semibold text-gray-700 transition-all duration-200 bg-white border border-gray-300 rounded-xl outline-none select-none hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400">
+					Terug naar overzicht
+				</button>
+			</div>
+		</template>
 	</div>
 </template>
 
 <script setup lang="ts">
-	interface Repo {
-		id: number;
-		name: string;
-		full_name: string;
-		html_url: string;
-		description?: string | null;
-		homepage?: string | null;
-		topics?: string[];
-		private?: boolean;
-	}
-
 	const selected = ref<number | null>(null);
-	const details = ref();
-	const isOpen = ref(false);
+	const details = ref<Repo | null>(null);
 
-	const { content, editor } = defineProps<{
-		content: Repo[];
-		editor: Editor;
+	const { props } = defineProps<{
+		props: Record<string, any>;
 	}>();
 
-	const toggleDropdown = () => {
-		isOpen.value = !isOpen.value;
-	};
+	const content = computed<Repo[]>(() => props.content || []);
+	const external = ref<string>("");
 
-	const selectOption = (id: number) => {
-		selected.value = id;
-		isOpen.value = false;
-		selectRepo(id);
-	};
-
-	watch(selected, (value) => {
-		if (value !== null) selectRepo(value);
+	const filteredContent = computed(() => {
+		return content.value.filter((repo) => repo.name.toLowerCase().includes(external.value.toLowerCase()));
 	});
 
 	const selectRepo = (id: number) => {
 		selected.value = id;
-		details.value = content.find((r) => r.id === id) || null;
+		details.value = filteredContent.value.find((r) => r.id === id) || null;
+	};
 
-		const repo = content.find((r) => r.id === id);
-		if (!repo || !editor) return;
-
-		const tagsHtml = (repo.topics || []).map((topic) => `<strong><mark>${topic.toUpperCase()}</mark></strong>`).join(" ");
-
-		const html = `
-			<h1 class="mb-3 text-3xl font-bold">${repo.name.replaceAll("/", "-")}</h1>
-			<div class="flex items-center mb-4">${tagsHtml}</div>
-			<connection-view private="${repo.private}" html_url="${repo.html_url}" homepage="${repo.homepage}"> </connection-view>
-			<img src="/github.jpg" alt="GitHub " contenteditable="false" draggable="true">
-			<p class="mb-4 text-sm text-gray-700">${repo.description ?? ""}</p>
-		`;
-
-		editor.commands.setContent(html);
-		isOpen.value = !isOpen.value;
+	const unselectRepo = () => {
+		selected.value = null;
+		details.value = null;
 	};
 </script>
