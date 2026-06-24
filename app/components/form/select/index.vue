@@ -91,7 +91,7 @@
 				<button
 					type="button"
 					@click="unselectRepo"
-					class="flex items-center justify-center w-full gap-2.5 px-5 py-3.5 text-sm font-semibold text-gray-700 transition-all duration-200 bg-white border border-gray-300 rounded-xl outline-none select-none hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400">
+					class="flex items-center justify-center w-full gap-2.5 mt-3 px-5 py-3.5 text-sm font-semibold text-gray-700 transition-all duration-200 bg-white border border-gray-300 rounded-xl outline-none select-none hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-400">
 					Terug naar overzicht
 				</button>
 			</div>
