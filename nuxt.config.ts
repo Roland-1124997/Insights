@@ -90,10 +90,11 @@ export default defineNuxtConfig({
 			sender: process.env.EMAIL_FROM_ADDRESS,
 		},
 
-		UMAMI_API_KEY: process.env.UMAMI_API_KEY,
-		UMAMI_HOST: process.env.UMAMI_HOST,
-		UMAMI_ID: process.env.UMAMI_ID,
-
+		UMAMI: {
+			SHARE_TOKEN: process.env.UMAMI_SHARE_TOKEN,
+			HOST: `${process.env.UMAMI_HOST}/${process.env.UMAMI_ROUTE}/${process.env.UMAMI_WEBSITE_ID}`,
+		},
+		
 		IMAP_HOST: process.env.IMAP_HOST,
 		IMAP_PORT: process.env.IMAP_PORT,
 		IMAP_SECURE: process.env.IMAP_SECURE,

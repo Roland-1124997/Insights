@@ -1,7 +1,11 @@
-const { UMAMI_API_KEY } = useRuntimeConfig();
+const { UMAMI } = useRuntimeConfig();
 
-const headers = { "x-umami-api-key": UMAMI_API_KEY };
-const baseUrl = `https://api.umami.is/v1/websites/d10b0ef2-b433-4f78-8f78-724e711e541a`;
+const headers: HeadersInit  = { 
+	"x-umami-share-token": UMAMI.SHARE_TOKEN,
+	"x-umami-share-context": "1"
+};
+
+const baseUrl = `${UMAMI.HOST}`;
 
 export const useFetchMetrics = defineCachedFunction(
 	async (key: string, query: AnalyticsQuery) => {
