@@ -16,6 +16,7 @@
 
 <script setup lang="ts">
 	const account = useAccount();
+	const security = useSecurity();
 	const profile = useProfile();
 	const store = useAnalytics();
 	const monitor = useMonitor();
@@ -39,6 +40,7 @@
 
 	store.initialPayload();
 	account.initialPayload();
+	security.initialPayload();
 	profile.initialPayload();
 	monitor.initialPayload();
 	articles.initialPayload();
@@ -61,6 +63,7 @@
 		await syncSubscription();
 
 		if (store.error) store.refresh();
+		if (security.error) security.refresh();
 		if (account.error) account.refresh();
 		if (profile.error) profile.refresh();
 		if (articles.error) articles.refresh();

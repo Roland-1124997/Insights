@@ -220,3 +220,21 @@ export type GithubRepository = {
 		pull: boolean;
 	};
 };
+
+type TableRowDefault = {
+	label: string;
+};
+
+export type TableRowAnalytics = {
+	weergaven: number;
+	bezoekers: number;
+	bezoeken: number;
+	bounces: number;
+	totaltime: number;
+} & TableRowDefault;
+
+export type TableRowKeys = {
+	id: string;
+	sleutel: string;
+	vervaldatum: string;
+} & TableRowDefault;

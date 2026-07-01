@@ -17,7 +17,7 @@
 			</thead>
 			<tbody v-if="data.length >= 1 && !loading" class="bg-white divide-y divide-gray-200">
 				<ClientOnly>
-					<UtilsTableRow v-for="meta in data" :key="meta.label" :data="meta" :categories :name :decorator="decorator" :isSmall :isOpen />
+					<UtilsTableRow v-for="meta in data" :key="meta.label" :data="meta" :categories :name :decorator="decorator" :isSmall :isOpen :actions />
 
 					<template #fallback>
 						<UtilsTableRowSkeleton v-for="i in visable" :key="i" :categories :decorator="decorator" :isSmall :isOpen />
@@ -50,22 +50,19 @@
 			default: false,
 		},
 		name: {
-			type: String as PropType<"pages" | "countries" | "devices">,
+			type: String as PropType<"pages" | "countries" | "devices" | "tokens">,
 			required: true,
 		},
 		data: {
-			type: Array<{
-				label: string;
-				weergaven: number;
-				bezoekers: number;
-				bezoeken: number;
-				bounces: number;
-				totaltime: number;
-			}>,
+			type: Array as PropType<TableRowAnalytics[] | TableRowKeys[]>,
 			required: true,
 		},
 		categories: {
 			type: Array<{ label: string; value: string }>,
+			default: () => [],
+		},
+		actions: {
+			type: Array as PropType<{ color: string; name: string; icon: string; action: (row: TableRowAnalytics | TableRowKeys) => void }[]>,
 			default: () => [],
 		},
 	});
@@ -79,6 +76,9 @@
 			bezoeken: "hidden md:table-cell",
 			bounces: "hidden md:table-cell",
 			totaltime: "hidden md:table-cell",
+			sleutel: "hidden md:table-cell",
+			acties: "hidden md:table-cell",
+			vervaldatum: "hidden md:table-cell",
 		};
 		return classes[value] || "";
 	};
