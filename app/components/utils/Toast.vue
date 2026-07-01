@@ -1,5 +1,5 @@
 <template>
-	<div role="alert" class="fixed z-40 flex flex-col gap-2 right-6 bottom-9 md:right-6 md:bottom-6">
+	<div role="alert" class="fixed z-[110] flex flex-col gap-2 right-6 bottom-9 md:right-6 md:bottom-6">
 		<TransitionGroup name="toast">
 			<div
 				v-for="toast in toasts"
@@ -12,8 +12,8 @@
 					<p class="text-sm font-medium text-black">{{ toast.message }}</p>
 					<div v-if="toast.discard">
 						<div class="flex gap-2 pt-2 mt-2 border-t border-gray-200">
-							<button class="p-2 px-3 text-[#756145] text-xs border border-[#756145] hover:bg-gray-100 rounded-xl" @click="toast.discard">Discard</button>
-							<button class="p-2 px-3 text-white bg-[#756145] text-xs border border-[#756145] rounded-xl" @click="toast.save">Save changes</button>
+							<button class="p-2 px-3 text-[#756145] text-xs border border-[#756145] hover:bg-gray-100 rounded-xl" @click="() => toast.discard?.()">Discard</button>
+							<button class="p-2 px-3 text-white bg-[#756145] text-xs border border-[#756145] rounded-xl" @click="() => toast.save?.()">Save changes</button>
 						</div>
 					</div>
 				</div>

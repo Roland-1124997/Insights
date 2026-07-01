@@ -17,7 +17,10 @@
 						type="submit"
 						:disabled="loading"
 						aria-label="Bevestigen"
-						class="relative inline-flex items-center justify-center w-full gap-2 px-4 py-3 text-white transition bg-red-600 hover:bg-red-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-red-300 disabled:cursor-not-allowed disabled:opacity-60">
+						:class="[
+							`relative inline-flex items-center justify-center w-full gap-2 px-4 py-3 text-white transition rounded-xl focus:outline-none focus:ring-2 disabled:cursor-not-allowed disabled:opacity-60`,
+							props.request.destructive ? 'bg-red-600 hover:bg-red-700 focus:ring-red-300' : 'bg-blue-600 hover:bg-blue-700 focus:ring-blue-300',
+						]">
 						<span v-if="!loading" class="inline-flex items-center gap-2">
 							<Icon name="akar-icons:check" />
 							{{ props.message.confirm }}
@@ -56,6 +59,9 @@
 		props: Record<string, any>;
 	}>();
 
+	props.request.secure = props.request.secure ?? false;
+	props.request.destructive = props.request.destructive ?? true;
+
 	const validationSchema = computed(() => {
 		return verified.value && props.request.secure ? schema.totp.frontend : schema.totp.optional.frontend;
 	}) as any;
@@ -65,8 +71,8 @@
 		method: props.request.method,
 		successMessage: props.message.success,
 
-		onsuccess: async () => {
-			await props.onComplete();
+		onsuccess: async (data: ApiResponse<unknown>) => {
+			await props.onComplete(data);
 		},
 
 		onfailure: async (error, actions) => {

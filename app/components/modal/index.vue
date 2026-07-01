@@ -9,7 +9,7 @@
 				<div tabindex="0" class="mx-6 outline-none md:mb-0 rounded-xl" ref="modal">
 					<Transition name="modalDelay">
 						<div ref="modalDelay" v-if="isFullyVisible">
-							<div class="w-screen max-w-2xl p-5 bg-white min-h-[25vh] h-fit max-h-[95vh] rounded-2xl flex flex-col items-start justify-between">
+							<div class="w-screen max-w-[46rem] p-5 bg-white min-h-[25vh] h-fit max-h-[95vh] rounded-2xl flex flex-col items-start justify-between">
 								<div class="w-full mb-8">
 									<div class="flex items-start justify-between w-full">
 										<h1 class="text-2xl font-bold text-black truncate text-balance">
