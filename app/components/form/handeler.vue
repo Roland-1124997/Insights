@@ -26,6 +26,14 @@
 	<template v-else-if="component == 'UpdateForm'">
 		<FormUpdateRepository :props="props" />
 	</template>
+
+	<template v-else-if="component == 'CreateTokenForm'">
+		<FormTokenCreate :props="props" />
+	</template>
+
+	<template v-else-if="component == 'showToken'">
+		<FormTokenShow :props="props" />
+	</template>
 </template>
 
 <script lang="ts" setup>
