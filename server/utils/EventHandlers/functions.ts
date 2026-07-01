@@ -22,6 +22,32 @@ export const defineBaseEventHandler = (
 		const stored = useStorage(`csrf-tokens`);
 		const isValid = token ? await stored.getItem(token) : false;
 
+		const headerToken = getHeader(event, "x-access-token") ?? "";
+
+		if (headerToken) {
+			const client = await serverSupabaseClient(event);
+			const server = serverSupabaseServiceRole(event);
+
+			const { data: user, error } = await useFetchUserByAccessToken(server, headerToken);
+
+			if (error || !user) return useReturnResponse(event, unauthorizedError);
+
+			if (method !== "GET")
+				return useReturnResponse(event, {
+					status: {
+						success: false,
+						message: "Access token is only allowed for GET requests",
+						code: 403,
+					},
+				});
+
+			return callback(event, {
+				client,
+				user: user as SupaBaseUser,
+				server,
+			});
+		}
+
 		if (ignorePath.includes(path) || ignoredMethods.includes(method) || isValid) {
 			await stored.removeItem(token as string);
 			deleteCookie(event, "csrf-token");

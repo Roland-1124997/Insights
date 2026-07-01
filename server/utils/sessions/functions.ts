@@ -187,3 +187,15 @@ const useFetchSupabaseUser = async (event: H3Event, client: SupabaseClient<Datab
 
 	return { data: supabaseUser, error };
 };
+
+export const useFetchUserByAccessToken = async (client: SupabaseClient<Database>, token: string) => {
+	const { data: access, error } = await client.from("access-tokens").select("user_id").eq("token", token).single();
+
+	if (!error && access.user_id) {
+		const { data } = await client.auth.admin.getUserById(access.user_id);
+
+		return { data: data.user, error: null };
+	}
+
+	return { data: null, error };
+};
