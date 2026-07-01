@@ -10,7 +10,7 @@ export const useAnalytics = defineStore("useAnalytics", () => {
 
 	const shared = ref<string[]>([]);
 
-	const uri = "/api/umami/analytics";
+	const uri: FetchUrl = "/api/integrations/umami";
 	const Request = useApiHandler<ApiResponse<any>>(uri);
 
 	const setShared = async (paths: string[]) => (shared.value = paths);

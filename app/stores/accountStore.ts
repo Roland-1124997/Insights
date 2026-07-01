@@ -34,7 +34,7 @@ export const useAccount = defineStore("useAccount", () => {
 	const { addToast } = useToast();
 	const { create, close } = useModal();
 
-	const uri = "/api/auth/account/sessions";
+	const uri: FetchUrl = "/api/auth/account/sessions";
 	const request = useApiHandler<ApiResponse<UserSession[]>>(uri);
 	const requestFactor = useApiHandler<ApiResponse<{ uri: string; secret: string; qr_code: string }>>("/api/auth/totp");
 

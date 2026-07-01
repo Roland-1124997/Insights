@@ -1,5 +1,3 @@
-// await $fetch(`https://roland-meijer.nl/revalidate/articles`).catch(() => {});
-
 export const useArticles = defineStore("useArticles", () => {
 	const { addToast } = useToast();
 	const { create, close } = useModal();
@@ -7,7 +5,7 @@ export const useArticles = defineStore("useArticles", () => {
 
 	const storage = useStorage();
 
-	const uri = "/api/articles";
+	const uri: FetchUrl = "/api/articles";
 	const Request = useApiHandler<ApiResponse<Article[] | Article>>(uri);
 
 	const articles = ref<Article[] | null>(null);
@@ -128,7 +126,7 @@ export const useArticles = defineStore("useArticles", () => {
 		const onCancel = () => close();
 
 		create({
-			name: `Verwijder artikel ${content.title}`,
+			name: `${content.title}`,
 			description: "Weet je zeker dat je dit artikel wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
 			component: "Confirm",
 			props: {

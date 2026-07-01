@@ -19,7 +19,7 @@ export const useStorage = defineStore("useStorage", () => {
 	const { addToast } = useToast();
 	const { set } = useHistory();
 
-	const uri = "/api/storage";
+	const uri: FetchUrl = "/api/storage";
 	const Request = useApiHandler<ApiResponse<Record<string, FileData[]>>>(uri);
 
 	const count = ref<number>(0);
@@ -183,7 +183,7 @@ export const useStorage = defineStore("useStorage", () => {
 		const onCancel = () => close();
 
 		create({
-			name: file.name,
+			name: `${file.name}`,
 			description: "Weet je zeker dat je dit bestand wilt verwijderen? Dit kan niet ongedaan worden gemaakt.",
 			component: "Confirm",
 			props: {

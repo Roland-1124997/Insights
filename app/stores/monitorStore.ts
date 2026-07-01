@@ -7,7 +7,7 @@ export const useMonitor = defineStore("useMonitor", () => {
 	const { addToast } = useToast();
 	const { set } = useHistory();
 
-	const uri = "/api/integrations/monitors/resources";
+	const uri: FetchUrl = "/api/integrations/betterstack";
 	const Request = useApiHandler<ApiResponse<Monitor>>(uri);
 
 	const count = ref(0);

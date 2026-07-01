@@ -1,5 +1,5 @@
 export const useProfile = defineStore("useProfile", () => {
-	const uri = "/api/profile";
+	const uri: FetchUrl = "/api/profile";
 	const request = useApiHandler<ApiResponse<any>>(uri);
 
 	const profile = ref<any>(null);

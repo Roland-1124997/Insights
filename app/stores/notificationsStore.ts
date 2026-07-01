@@ -14,7 +14,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 	const { addToast } = useToast();
 	const { setBadge } = useBadge();
 
-	const uri = "/api/notifications";
+	const uri: FetchUrl = "/api/integrations/strato/mail";
 	const Request = useApiHandler<ApiResponse<{ messages: Inbox[]; unseen: number }>>(uri);
 
 	const loading = ref<boolean>(true);
@@ -100,6 +100,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 
 			for (let page = 1; page <= query.page; page++) {
 				const { data, error: Error } = await Request.Get({
+					extends: "/inbox",
 					query: { ...query, page },
 				});
 
@@ -143,6 +144,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 		}
 
 		const { data, error: Error } = await Request.Get({
+			extends: "/inbox",
 			query: { ...query },
 		});
 
@@ -190,7 +192,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 
 		set("/berichten", [params]);
 
-		const { data, error: Error } = await useFetch<ApiResponse<any>>("/api/notifications", {
+		const { data, error: Error } = await useFetch<ApiResponse<any>>(`${uri}/inbox`, {
 			query: { ...params },
 		});
 
@@ -349,7 +351,7 @@ export const useNotifications = defineStore("useNotifications", () => {
 				onCancel,
 				onComplete,
 				request: {
-					url: `/api/notifications/${message.uid}`,
+					url: `${uri}/${message.uid}`,
 					method: "DELETE",
 					secure: false,
 				},
