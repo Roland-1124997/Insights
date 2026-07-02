@@ -43,7 +43,7 @@ export const defineBaseEventHandler = (
 
 			return callback(event, {
 				client,
-				user: user as SupaBaseUser,
+				user: {...user, aal: "aal2"  } as SupaBaseUser,
 				server,
 			});
 		}
@@ -86,7 +86,7 @@ export const defineSupabaseEventHandler = (
 
 		const IsFactorVerified = (user.factors && user.factors[0] && user.factors[0].status === "verified") || false;
 
-		if (IsFactorVerified && user.aal != "aal2")
+		if (IsFactorVerified && (user.aal != "aal2"))
 			return useReturnResponse(event, {
 				status: {
 					success: false,
