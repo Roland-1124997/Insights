@@ -12,6 +12,8 @@ export const useSecurity = defineStore("useSecurity", () => {
 	const refresh = async () => {
 		loading.value = true;
 
+		await new Promise((resolve) => setTimeout(resolve, 300));
+
 		const { data, error: Error } = await request.Get();
 
 		if (!Error && data?.data) {
