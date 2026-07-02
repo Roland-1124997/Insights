@@ -10,11 +10,14 @@
 					</p>
 				</div>
 
-				<UtilsButtonImportant description="maak nieuwe token aan" icon-name="akar-icons:edit" @click="security.Create()" />
+				<div class="flex items-center gap-2">
+					<UtilsButtonImportant description="ververs de lijst" icon-name="akar-icons:arrow-cycle" @click="security.refresh()" :loading="security.loading" :isButton="true" />
+					<UtilsButtonImportant description="maak nieuwe token aan" icon-name="akar-icons:edit" @click="security.Create()" />
+				</div>
 			</div>
 
 			<div>
-				<UtilsTable name="tokens" :data="data.values" :categories="data.categories" :actions />
+				<UtilsTable name="tokens" :data="data.values" :categories="data.categories" :actions :visable="5" :loading="security.loading" />
 			</div>
 		</article>
 	</section>
